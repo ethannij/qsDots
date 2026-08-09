@@ -1,0 +1,6 @@
+{
+  "qt-qml.qmlls.additionalImportPaths": [
+    "/run/user/1000/quickshell/vfs/6d68716a9dcac27db5adb3b8b55b6664"
+  ],
+  "qt-qml.qmlls.useNoCMakeCalls": true
+}

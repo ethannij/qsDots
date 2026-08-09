@@ -1,0 +1,63 @@
+import QtQuick
+import QtQuick.Layouts
+import qs.theme
+import qs.services
+import qs.config
+import qs.modules.elements
+
+Item {
+
+    implicitHeight: root.implicitHeight
+    implicitWidth: root.implicitWidth
+
+    RowLayout {
+        id: root
+        spacing: Config.widgetSpacing
+
+        PillShape {
+            id: volumePill
+
+            Text {
+                text: Audio.icon
+                color: Colors.md3.tertiary
+
+                font {
+                    family: Config.fontFamilyPropo
+                    pointSize: Config.fontSizeIcon
+                }
+            }
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: {
+                    if (!Audio.ready)
+                        return " -";
+                    if (Audio.muted)
+                        return " Muted";
+                    return " " + Audio.vol + "%";
+                }
+
+                color: Audio.muted ? Colors.md3.error : Colors.md3.tertiary
+
+                font {
+                    family: Config.fontFamilyPropo
+                    pointSize: Config.fontSize
+                }
+            }
+
+            interactive: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Audio.toggleMute()
+            onWheel: wheel => {
+                if (wheel.angleDelta.y > 0)
+                    Audio.volumeUp();
+                else if (wheel.angleDelta.y < 0)
+                    Audio.volumeDown();
+            }
+        }
+    }
+
+    HoverTip {
+        anchorItem: volumePill
+        text: Audio.ready ?Audio.sink.description : ""
+    }
+}
