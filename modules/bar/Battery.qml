@@ -38,7 +38,6 @@ RowLayout {
                 }
             }
             interactive: true
-            cursorShape: Qt.PointingHandCursor
             HoverTip {
                 anchorItem: batteryItem
                 text: batteryItem.modelData.model

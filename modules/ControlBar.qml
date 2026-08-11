@@ -1,18 +1,17 @@
 import Quickshell
+import Quickshell.Io
 import QtQuick.Layouts
 import QtQuick
 import qs.config
-import qs.modules
 import qs.modules.bar
-import qs.modules.pill
-import qs.modules.pill.behaviors
 
-/*Variants {
+Variants {
     model: Quickshell.screens
     PanelWindow {
         id: bar
         required property var modelData
         screen: modelData
+        visible: true
 
         anchors {
             top: true
@@ -51,49 +50,22 @@ import qs.modules.pill.behaviors
             Item {
                 Layout.margins: Config.widgetSpacing
             }
-            
+
             NotifButton {}
         }
-        Clock {
-            id: clock
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                visible: Config.showClock
-                z: 1
-            
-            }
-    }
-    
-} */
-
-Variants {
-    model: Quickshell.screens
-    PanelWindow {
-        id: bar
-        required property var modelData
-        screen: modelData
-
-        anchors {
-            top: true
-            left: true
-            right: true
-        }
-
-        margins {
-            top: Config.barMarginV
-        }
-
-        color: "transparent"
-        implicitHeight: Config.barHeight + Config.barMarginV * 2
-
         MorphPill {
-            id: morph
+            id: morphPill
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            visible: Config.showClock
+            z: 1
         }
-
-        VolumeBehavior {}
-        WorkspacesBehavior {}
+        IpcHandler {
+            id: ipcbar
+            target: "ipcBar"
+            function toggleBar(): void {
+                bar.visible = !bar.visible;
+            }
+        }
     }
-
 }

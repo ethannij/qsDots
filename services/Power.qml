@@ -31,9 +31,9 @@ Singleton {
         if (charging)
             return Colors.md3.secondary;
         if (level <= 15)
-            return Colors.md3.tertiary;
+            return Colors.md3.error;
         if (level <= 30)
-            return Colors.md3.tertiary_container;
+            return Colors.md3.tertiary;
         return Colors.md3.on_surface_variant;
     }
 

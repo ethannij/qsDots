@@ -7,7 +7,7 @@ import qs.modules.elements
 import qs.config
 
 PillShape {
-    id: worksapces
+    id: workspaces
 
     RowLayout {
         spacing: Config.widgetSpacing / 3
@@ -69,7 +69,6 @@ PillShape {
                 }
 
                 interactive: true
-                cursorShape: Qt.PointingHandCursor
                 onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + (index + 1) + " })")
                 onWheel: wheel => {
                     if (wheel.angleDelta.y > 0)
