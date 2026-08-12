@@ -1,0 +1,44 @@
+import QtQuick
+import Quickshell
+import qs.theme
+import qs.config
+import qs.modules.elements
+import qs.services
+
+PillShape {
+    id: root
+
+    readonly property var notif: Notifications.latest
+
+    Text {
+        text: {
+            if (!root.notif)
+                return "No notifications"
+            const app = root.notif.appName || ""
+            const summary = root.notif.summary || ""
+            const icon = root.notif.icon || ""
+            if (summary && icon)
+                return icon + ": " + summary + " 󰂚"
+            return summary + " 󰂚" || app + " 󰂚" || icon + " 󰂚" || "Notification"
+        }
+
+        elide: Text.ElideRight
+        maximumLineCount: 1
+        width: Math.min(implicitWidth, 280)
+
+        font {
+            family: Config.fontFamilyPropo
+            pointSize: Config.fontSize
+            weight: Config.fontWeight
+        }
+
+        color: Colors.md3.tertiary
+    }
+
+    interactive: !!root.notif
+    onClicked: {
+        if (root.notif)
+            root.notif.dismiss()
+    }
+
+}

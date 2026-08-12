@@ -5,6 +5,7 @@ import qs.config
 Item {
     id: root
 
+    property bool chrome: true
     property color color: Colors.md3.surface
     property bool hasBorder: true
     property color borderColor: hasBorder ? Colors.md3.shadow : "transparent"
@@ -19,6 +20,7 @@ Item {
     implicitHeight: content.implicitHeight + padV * 2
 
     Rectangle {
+        visible: root.chrome
         anchors.fill: parent
         color: root.color
         border.width: root.borderWidth

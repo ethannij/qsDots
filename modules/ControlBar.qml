@@ -19,8 +19,8 @@ Variants {
             right: true
         }
         color: "transparent"
-        implicitHeight: barRow.implicitHeight + Config.barMarginV * 2
-        RowLayout {
+        implicitHeight: morphPill.implicitHeight + Config.barMarginV * 2
+       /* RowLayout {
             id: barRow
             anchors.fill: parent
             anchors.topMargin: Config.barMarginV
@@ -51,12 +51,11 @@ Variants {
                 Layout.margins: Config.widgetSpacing
             }
 
-            NotifButton {}
-        }
+            NotifButton {} 
+        } */
         MorphPill {
             id: morphPill
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
             visible: Config.showClock
             z: 1
         }

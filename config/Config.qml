@@ -34,7 +34,7 @@ Singleton {
     readonly property int widgetSpacing: 2
     readonly property int moduleGap: widgetSpacing * 2
     readonly property int borderWidth: 1
-    readonly property int radiusPill: 50
+    readonly property int radiusPill: 12
     readonly property int radiusBox: 8
     readonly property double volumeStep: 0.05
     readonly property int volumeMin: 0
