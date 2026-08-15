@@ -29,6 +29,16 @@ Item {
         }
     }
 
+    Timer {
+        id: dismissTimer
+        interval: 2000
+        repeat: false
+        running: false
+        onTriggered: {
+            PillController.dismiss()
+        }
+    }
+
     IpcHandler {
         id: ipc
         target: "hyprlandIpc"
@@ -44,7 +54,7 @@ Item {
        }
 
        if (root.holdActivated) {
-        PillController.dismiss()
+        dismissTimer.start()
        } else {
         Quickshell.execDetached(["bash", "-c", "$HOME/.config/rofi/modules/launcher/launcher.sh || pkill rofi"])
        }

@@ -9,6 +9,9 @@ import qs.config
 PillShape {
     id: workspaces
 
+    // Width tween fights MorphPill shell sizing; keep off when hosted as a face.
+    property bool animateWidths: true
+
     RowLayout {
         spacing: Config.widgetSpacing / 3
 
@@ -31,7 +34,7 @@ PillShape {
                     font.weight: Config.fontWeight
                 }
 
-                // Setting expeded widths to prevent animation jittering
+                // Setting expanded widths to prevent animation jittering
                 readonly property real labelW: wsFont.advanceWidth(String(index + 1))
                 readonly property real collapsedW: labelW + Config.workspacePadH * 1.5
                 readonly property real expandedW: labelW + Config.workspacePadH * 3
@@ -43,6 +46,7 @@ PillShape {
                 color: isActive ? Colors.md3.primary_container : isHover ? Colors.md3.secondary_container : Colors.md3.surface_variant
 
                 Behavior on Layout.preferredWidth {
+                    enabled: workspaces.animateWidths
                     NumberAnimation {
                         duration: Config.animMs
                         easing.type: Easing.InOutCubic
@@ -52,20 +56,30 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutQuad
+                        easing.type: Easing.InOutCubic
                     }
                 }
+
+                
 
                 Text {
                     id: label
                     text: wsButton.index + 1
-                    color: wsButton.isActive ? Colors.md3.on_primary_container : wsButton.isHover ? Colors.md3.on_secondary_container : (ws ? Colors.md3.tertiary : "transparent")
+                    color: wsButton.isActive ? Colors.md3.on_primary_container : wsButton.isHover ? Colors.md3.on_secondary_container : ws ?Colors.md3.tertiary : Colors.md3.tertiary
 
+                    opacity: wsButton.isActive ? 1 : wsButton.isHover ? 1 : (ws ? 1 : 0)
                     font {
                         family: Config.fontFamilyPropo
                         pointSize: Config.fontSize
                         weight: wsButton.isActive ? Config.fontWeightBold : Config.fontWeight
                     }
+
+                    Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
                 }
 
                 interactive: true

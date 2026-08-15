@@ -6,9 +6,11 @@ import qs.config
 import qs.modules.elements
 
 Item {
+    id: volumeItem
 
     implicitHeight: root.implicitHeight
     implicitWidth: root.implicitWidth
+    property alias chrome: volumePill.chrome
 
     RowLayout {
         id: root
@@ -57,6 +59,7 @@ Item {
     }
 
     HoverTip {
+        visible: volumeItem.enabled
         anchorItem: volumePill
         text: Audio.ready ?Audio.sink.description : ""
     }

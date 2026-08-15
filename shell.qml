@@ -6,5 +6,6 @@ import qs.modules.panel
 
 ShellRoot {
     ControlBar {}
+    
     //Notifications {}
 }

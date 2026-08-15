@@ -48,7 +48,7 @@ Item {
         anchors.fill: parent
         enabled: root.interactive
         visible: root.interactive
-        hoverEnabled: root.interactive
+        hoverEnabled: root.interactive && root.enabled
         onClicked: (mouse) => root.clicked(mouse)
         onWheel: (wheel) => root.wheel(wheel)
     }

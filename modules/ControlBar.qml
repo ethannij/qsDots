@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick
 import qs.config
 import qs.modules.bar
+import qs.services
 
 Variants {
     model: Quickshell.screens
@@ -13,6 +14,11 @@ Variants {
         screen: modelData
         visible: true
 
+        property alias barVisible: bar.visible
+
+        exclusionMode: ExclusionMode.Normal
+        exclusiveZone: morphPill.restHeight + Config.barMarginV
+
         anchors {
             top: true
             left: true
@@ -20,39 +26,7 @@ Variants {
         }
         color: "transparent"
         implicitHeight: morphPill.implicitHeight + Config.barMarginV * 2
-       /* RowLayout {
-            id: barRow
-            anchors.fill: parent
-            anchors.topMargin: Config.barMarginV
-            anchors.leftMargin: Config.barMarginH
-            anchors.rightMargin: Config.barMarginH
-            spacing: 0
-
-            Workspaces {}
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            Volume {}
-
-            Item {
-                Layout.margins: Config.widgetSpacing
-            }
-            Battery {}
-
-            Item {
-                Layout.margins: Config.widgetSpacing
-            }
-
-            Tray {}
-
-            Item {
-                Layout.margins: Config.widgetSpacing
-            }
-
-            NotifButton {} 
-        } */
+ 
         MorphPill {
             id: morphPill
             anchors.centerIn: parent

@@ -26,7 +26,7 @@ Item {
             gravity: Edges.Bottom | Edges.Right
         }
         color: root.color
-        visible: anchorItem.containsMouse
+        visible: !!anchorItem && anchorItem.enabled && anchorItem.containsMouse && root.visible
 
     
     Rectangle {
@@ -39,7 +39,7 @@ Item {
 
     Text {
         anchors.centerIn: parent
-        visible: anchorItem.containsMouse
+        visible: !!anchorItem && anchorItem.enabled && anchorItem.containsMouse && root.visible
         id: tooltipText
         color: Colors.md3.on_surface
         text: root.text
