@@ -43,10 +43,7 @@ Item {
         id: tooltipText
         color: Colors.md3.on_surface
         text: root.text
-        font {
-            family: Config.fontFamilyPropo
-            pointSize: Config.fontSizeTip
-        }
+        font: StylizedFont.tooltip
     }
 }
 }

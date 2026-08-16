@@ -12,11 +12,7 @@ PillShape {
         id: clockText
         text: clockItem.showDate ? Qt.formatDateTime(Time.date, Config.dateFormat) : Qt.formatDateTime(Time.date, Config.clockFormat)
         //text: clockItem.containsMouse ? "Hello" : "World"
-        font {
-            family: Config.fontFamilyPropo
-            pointSize: Config.fontSize
-            weight: Config.fontWeightBold
-        }
+        font: StylizedFont.bold
         color: Colors.md3.primary
     }
 

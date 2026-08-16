@@ -1,28 +1,35 @@
 pragma Singleton
 import Quickshell
-import QtQuick
 Singleton {
+    // Timing
+    readonly property int animMs: 300
+    readonly property int ttlMs: 1500
+    readonly property int holdMs: 200
+
+    // Spacing scale
+    readonly property int spaceXs: 2
+    readonly property int spaceSm: 5
+    readonly property int spaceMd: 10
+    readonly property int spaceLg: 16
+    readonly property int spaceXl: 20
+
     // Bar
     readonly property int barHeight: 36
     readonly property int barMarginH: 14
-    readonly property int barMarginV: 10
-    readonly property int barItemGap: 2
-    readonly property int ttlMs: 1500
-    readonly property int holdMs: 200
+    readonly property int barMarginV: spaceMd
+    readonly property int barItemGap: spaceXs
+    readonly property int barVerticalPadding: barMarginV * 2
 
     // Control Panel
     readonly property int controlPanelW: 600
     readonly property int controlPanelH: 500
-
-    // Font/Typography
-    readonly property string fontFamilyPropo: "JetBrainsMono Nerd Font Propo"
-    readonly property string fontFamilyMono: "JetBrainsMono Nerd Font Mono"
-    readonly property int fontSize: 14
-    readonly property int fontSizeIcon: 16
-    readonly property int fontSizeLabel: 16
-    readonly property int fontSizeTip: 10
-    readonly property string fontWeightBold: "1000"
-    readonly property string fontWeight: "400"
+    readonly property int controlPanelPadding: spaceMd
+    readonly property int controlPanelHeaderHeight: 40
+    readonly property int controlPanelHeaderInset: spaceMd
+    readonly property int controlPanelBodyTopGap: 12
+    readonly property int controlPanelFooterInset: spaceMd
+    readonly property int controlPanelFooterBottomInset: spaceMd
+    readonly property int controlPanelStatsSpacing: spaceLg
 
     // Clock
     readonly property string clockFormat: "h:mm AP"
@@ -32,11 +39,14 @@ Singleton {
     readonly property int workspaceCount: 5
     readonly property int workspaceSpacing: 7
     readonly property int workspacePadH: 18
-    readonly property int animMs: 300
+    readonly property real workspaceItemGap: widgetSpacing / 3
+    readonly property real workspaceCollapsedExtraWidth: workspacePadH * 1.5
+    readonly property real workspaceExpandedExtraWidth: workspacePadH * 3
 
     // Bar Widgets (Volume, Battery, etc.)
-    readonly property int widgetSpacing: 2
+    readonly property int widgetSpacing: spaceXs
     readonly property int moduleGap: widgetSpacing * 2
+    readonly property int trayIconSize: 16
     readonly property int borderWidth: 1
     readonly property int radiusPill: 12
     readonly property int radiusBox: 8
@@ -48,8 +58,13 @@ Singleton {
     readonly property int hoverTipPadH: 10
     readonly property int hoverTipPadV: 5
 
-    readonly property int pillPadH: 10
-    readonly property int pillPadV: 5
+    readonly property int pillPadH: spaceMd
+    readonly property int pillPadV: spaceSm
+    readonly property real pillFaceWidthScale: 1.5
+
+    // Session menu
+    readonly property int sessionMenuPadding: spaceMd
+    readonly property int sessionMenuEntrySpacing: spaceXs
 
     // Feature Toggles
     readonly property bool showVolume: true

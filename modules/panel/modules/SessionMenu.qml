@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.config
 import qs.theme
@@ -25,11 +24,7 @@ Item {
             text: "󰐥"
             color: mouse.containsMouse ? Colors.md3.on_surface_variant : Colors.md3.error
 
-            font {
-                family: Config.fontFamilyPropo
-                pointSize: Config.fontSize
-                weight: Config.fontWeight
-            }
+            font: StylizedFont.body
 
         }
 
@@ -49,12 +44,11 @@ Item {
 
         color: Colors.md3.secondary_container
         border.color: Colors.md3.on_surface
-        implicitHeight: column.height + Config.pillPadH
-        implicitWidth: column.width + Config.pillPadH
+        implicitHeight: column.height + Config.sessionMenuPadding
+        implicitWidth: column.width + Config.sessionMenuPadding
         anchors.top: button.bottom
         anchors.right: button.right
         opacity: 0
-        visible: true
         radius: Config.radiusBox
 
         Behavior on opacity {
@@ -67,7 +61,7 @@ Item {
         Column {
             id: column
 
-            spacing: 2
+            spacing: Config.sessionMenuEntrySpacing
 
             anchors.centerIn: parent
             Repeater {
@@ -83,11 +77,7 @@ Item {
                         anchors.centerIn: parent
                         text: entry.modelData.label
                         color: entryMouse.containsMouse ? Colors.md3.primary : Colors.md3.on_surface
-                        font {
-                            family: Config.fontFamilyPropo
-                            pointSize: Config.fontSize
-                            weight: Config.fontWeight
-                        }
+                        font: StylizedFont.body
                     }
                     MouseArea {
                         id: entryMouse

@@ -13,7 +13,7 @@ PillShape {
     property bool animateWidths: true
 
     RowLayout {
-        spacing: Config.widgetSpacing / 3
+        spacing: Config.workspaceItemGap
 
         Repeater {
             model: Config.workspaceCount
@@ -29,15 +29,13 @@ PillShape {
                 // Define font metrics for labels to prevent animation jittering
                 FontMetrics {
                     id: wsFont
-                    font.family: Config.fontFamilyPropo
-                    font.pointSize: Config.fontSize
-                    font.weight: Config.fontWeight
+                    font: StylizedFont.body
                 }
 
                 // Setting expanded widths to prevent animation jittering
                 readonly property real labelW: wsFont.advanceWidth(String(index + 1))
-                readonly property real collapsedW: labelW + Config.workspacePadH * 1.5
-                readonly property real expandedW: labelW + Config.workspacePadH * 3
+                readonly property real collapsedW: labelW + Config.workspaceCollapsedExtraWidth
+                readonly property real expandedW: labelW + Config.workspaceExpandedExtraWidth
 
                 Layout.preferredWidth: (isActive || isHover) ? expandedW : collapsedW
                 Layout.preferredHeight: wsFont.height
@@ -68,11 +66,7 @@ PillShape {
                     color: wsButton.isActive ? Colors.md3.on_primary_container : wsButton.isHover ? Colors.md3.on_secondary_container : ws ?Colors.md3.tertiary : Colors.md3.tertiary
 
                     opacity: wsButton.isActive ? 1 : wsButton.isHover ? 1 : (ws ? 1 : 0)
-                    font {
-                        family: Config.fontFamilyPropo
-                        pointSize: Config.fontSize
-                        weight: wsButton.isActive ? Config.fontWeightBold : Config.fontWeight
-                    }
+                    font: wsButton.isActive ? StylizedFont.bold : StylizedFont.body
 
                     Behavior on opacity {
                     NumberAnimation {

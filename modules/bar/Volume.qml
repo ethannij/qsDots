@@ -22,11 +22,7 @@ Item {
             Text {
                 text: Audio.icon
                 color: Colors.md3.tertiary
-
-                font {
-                    family: Config.fontFamilyPropo
-                    pointSize: Config.fontSizeIcon
-                }
+                font: StylizedFont.icon
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
@@ -39,11 +35,7 @@ Item {
                 }
 
                 color: Audio.muted ? Colors.md3.error : Colors.md3.tertiary
-
-                font {
-                    family: Config.fontFamilyPropo
-                    pointSize: Config.fontSize
-                }
+                font: StylizedFont.body
             }
 
             interactive: true

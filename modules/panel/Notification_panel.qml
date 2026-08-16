@@ -146,10 +146,7 @@ PanelWindow {
 
                 anchors.centerIn: parent
                 color: Colors.md3.on_surface
-                font {
-                    family: Config.fontFamilyPropo
-                    pointSize: Config.fontSizeIcon
-                }
+                font: StylizedFont.icon
             }
         }
 

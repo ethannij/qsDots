@@ -1,5 +1,4 @@
 import QtQuick
-import Quickshell
 import qs.theme
 import qs.config
 import qs.modules.elements
@@ -19,19 +18,14 @@ PillShape {
             const icon = root.notif.icon || ""
             if (summary && icon)
                 return icon + ": " + summary + " 󰂚"
-            return summary + " 󰂚" || app + " 󰂚" || icon + " 󰂚" || "Notification"
+            return (summary || app || icon || "Notification") + " 󰂚"
         }
 
         elide: Text.ElideRight
         maximumLineCount: 1
-        width: Math.min(implicitWidth, 280)
+        width: Math.min(implicitWidth, 1000)
 
-        font {
-            family: Config.fontFamilyPropo
-            pointSize: Config.fontSize
-            weight: Config.fontWeight
-        }
-
+        font: StylizedFont.body
         color: Colors.md3.tertiary
     }
 

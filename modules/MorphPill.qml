@@ -51,7 +51,7 @@ Item {
     property bool expanded: false
 
 
-    readonly property real targetW: PillController.panelOpen ? Config.controlPanelW : face.implicitWidth * 1.5
+    readonly property real targetW: PillController.panelOpen ? Config.controlPanelW : face.implicitWidth * Config.pillFaceWidthScale
     readonly property real targetH: PillController.panelOpen ? Config.controlPanelH : face.implicitHeight
 
     width: shellW
@@ -97,7 +97,6 @@ Item {
     HoverHandler {
         onHoveredChanged: {
             PillController.pinned = hovered
-            morphPill.expanded = true
         }
 
     }

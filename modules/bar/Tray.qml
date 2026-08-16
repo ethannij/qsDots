@@ -23,7 +23,7 @@ PillShape {
             IconImage {
                 id: icon
                 source: row.modelData.icon
-                implicitSize: Config.fontSizeIcon
+                implicitSize: Config.trayIconSize
 
                 MouseArea {
                     anchors.fill: parent

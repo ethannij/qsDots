@@ -5,7 +5,7 @@ import qs.theme
 
 Item {
     id: root
-    property int gpuUsage: GPU.gpuUsage
+    property int gpuUsage: SystemStats.gpuUsage
     property alias color: text.color
     implicitWidth: text.implicitWidth
     implicitHeight: text.implicitHeight
@@ -13,11 +13,7 @@ Item {
     Text {
         id: text
         text: "󰘚 " + root.gpuUsage + "%"
-        font {
-            family: Config.fontFamilyPropo
-            pointSize: Config.fontSize
-            weight: Config.fontWeight
-        }
+        font: StylizedFont.body
         color: Colors.md3.on_surface
     }
 }

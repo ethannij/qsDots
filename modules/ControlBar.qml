@@ -1,10 +1,8 @@
 import Quickshell
 import Quickshell.Io
-import QtQuick.Layouts
 import QtQuick
 import qs.config
-import qs.modules.bar
-import qs.services
+
 
 Variants {
     model: Quickshell.screens
@@ -25,7 +23,7 @@ Variants {
             right: true
         }
         color: "transparent"
-        implicitHeight: morphPill.implicitHeight + Config.barMarginV * 2
+        implicitHeight: morphPill.implicitHeight + Config.barVerticalPadding
  
         MorphPill {
             id: morphPill

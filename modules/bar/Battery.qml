@@ -20,22 +20,14 @@ RowLayout {
                 id: powerIcon
                 text: Power.deviceIcon(batteryItem.modelData)
                 color: Power.batteryColor(batteryItem.modelData)
-
-                font {
-                    family: Config.fontFamilyPropo
-                    pointSize: Config.fontSizeIcon
-                }
+                font: StylizedFont.icon
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 id: powerText
                 text: " " +Math.round(batteryItem.modelData.percentage * 100) + "%"
                 color: Power.batteryColor(batteryItem.modelData)
-
-                font {
-                    family: Config.fontFamilyPropo
-                    pointSize: Config.fontSize
-                }
+                font: StylizedFont.body
             }
             interactive: true
             HoverTip {
