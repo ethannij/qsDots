@@ -21,7 +21,6 @@ Item {
             return volume;
         case "notification":
             return notification;
-        case "controlpanel": return controlpanel;
         case "clock":
         default:
             return clock;
@@ -36,7 +35,6 @@ Item {
             return volume;
         case "notification":
             return notification;
-        case "controlpanel": return controlpanel;
         default:
             return clock;
         }
@@ -53,15 +51,14 @@ Item {
     property bool expanded: false
 
 
-    readonly property real targetW: face.implicitWidth * 1.5
-    readonly property real targetH: face.implicitHeight
+    readonly property real targetW: PillController.panelOpen ? Config.controlPanelW : face.implicitWidth * 1.5
+    readonly property real targetH: PillController.panelOpen ? Config.controlPanelH : face.implicitHeight
 
     width: shellW
     height: shellH
     implicitWidth: shellW
     implicitHeight: shellH
-    property real expandedW: shellW * 1.3
-    property real expandedH: shellH * 1.5
+
 
     Behavior on shellW {
         enabled: morphPill.ready
@@ -123,9 +120,9 @@ Item {
 
     Clock {
         id: clock
-        enabled: PillController.activeFace === "clock"
+        enabled: !PillController.panelOpen && PillController.activeFace === "clock"
 
-        opacity: PillController.activeFace === "clock" ? 1 : 0
+        opacity: !PillController.panelOpen && PillController.activeFace === "clock" ? 1 : 0
         anchors.centerIn: parent
         chrome: false
         Behavior on opacity {
@@ -139,8 +136,8 @@ Item {
     Workspaces {
         id: workspaces
 
-        enabled: PillController.activeFace === "workspaces"
-        opacity: PillController.activeFace === "workspaces" ? 1 : 0
+        enabled: !PillController.panelOpen && PillController.activeFace === "workspaces"
+        opacity: !PillController.panelOpen && PillController.activeFace === "workspaces" ? 1 : 0
         anchors.centerIn: parent
         chrome: false
         animateWidths: PillController.activeFace === "workspaces"
@@ -155,8 +152,8 @@ Item {
     Volume {
         id: volume
 
-        enabled: PillController.activeFace === "volume"
-        opacity: PillController.activeFace === "volume" ? 1 : 0
+        enabled: !PillController.panelOpen && PillController.activeFace === "volume"
+        opacity: !PillController.panelOpen && PillController.activeFace === "volume" ? 1 : 0
         anchors.centerIn: parent
         chrome: false
         Behavior on opacity {
@@ -170,8 +167,8 @@ Item {
     Notification {
         id: notification
 
-        enabled: PillController.activeFace === "notification"
-        opacity: PillController.activeFace === "notification" ? 1 : 0
+        enabled: !PillController.panelOpen && PillController.activeFace === "notification"
+        opacity: !PillController.panelOpen && PillController.activeFace === "notification" ? 1 : 0
         anchors.centerIn: parent
         chrome: false
         Behavior on opacity {
@@ -183,17 +180,7 @@ Item {
     }
 
     ControlPanel {
-        id: controlpanel
-        enabled: PillController.activeFace === "controlpanel"
-        opacity: PillController.activeFace === "controlpanel" ? 1 : 0
-        anchors.centerIn: parent
-        chrome: false
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Config.animMs
-                easing.type: Easing.InOutCubic
-            }
-        }
+        z: 1
     }
 
     VolumeBehavior {}
@@ -206,7 +193,7 @@ Item {
         z: -1
         hoverEnabled: true
         onClicked: {
-            PillController.showFace("controlpanel")
+            PillController.togglePanel()
         }
 
     }

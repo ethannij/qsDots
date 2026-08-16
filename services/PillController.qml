@@ -17,12 +17,10 @@ Singleton {
     property string panelFace: ""
     property string activeSession: ""
     property bool pinned: false
-    readonly property var stickyFaces: ["controlpanel"]
-    readonly property bool sticky: stickyFaces.indexOf(activeFace) !== -1
     property bool panelOpen: false
 
     function showFace(name) {
-        if (panelOpen || sticky && stickyFaces.indexOf(name) === -1)
+        if (panelOpen)
             return ;
 
         if (name === "clock") {
@@ -32,14 +30,14 @@ Singleton {
         }
         previousFace = activeFace;
         activeFace = name;
-        if (panelOpen || pinned || stickyFaces.indexOf(name) === -1)
+        if (panelOpen || pinned)
             faceTimer.stop();
         else
             faceTimer.restart();
     }
 
     function dismiss() {
-        if (panelOpen || pinned || sticky)
+        if (panelOpen || pinned)
             return ;
 
         activeFace = "clock";
@@ -49,13 +47,32 @@ Singleton {
     function forceDismiss() {
         faceTimer.stop()
         activeFace = "clock"
+        panelOpen = false
     }
 
     onPinnedChanged: {
-        if (panelOpen || pinned || sticky)
+        if (panelOpen || pinned)
             faceTimer.stop();
         else if (activeFace !== defaultFace)
             faceTimer.restart();
+    }
+
+    function togglePanel() {
+        if (panelOpen) {
+            closePanel();
+        }
+        else { 
+            showPanel();
+        }
+    }
+
+    function showPanel() {
+        panelOpen = true
+        faceTimer.stop()
+    }
+
+    function closePanel() {
+        panelOpen = false
     }
 
     Timer {
@@ -64,7 +81,7 @@ Singleton {
         interval: 2000
         repeat: false
         onTriggered: {
-            if (handler.panelOpen || handler.sticky || handler.pinned)
+            if (handler.panelOpen || handler.pinned)
                 return ;
 
             handler.dismiss();

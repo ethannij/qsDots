@@ -10,6 +10,10 @@ Singleton {
     readonly property int ttlMs: 1500
     readonly property int holdMs: 200
 
+    // Control Panel
+    readonly property int controlPanelW: 600
+    readonly property int controlPanelH: 500
+
     // Font/Typography
     readonly property string fontFamilyPropo: "JetBrainsMono Nerd Font Propo"
     readonly property string fontFamilyMono: "JetBrainsMono Nerd Font Mono"
