@@ -8,24 +8,16 @@ import qs.theme
 import qs.modules.bar
 import qs.modules.panel.modules
 
-
 Item {
     id: controlPanel
-    anchors.fill: parent
-    anchors.margins: Config.controlPanelPadding
+    width: Config.controlPanelW - Config.controlPanelPadding * 2
+    height: Config.controlPanelH - Config.controlPanelPadding * 2
+    anchors.centerIn: parent
     enabled: PillController.panelOpen
     opacity: PillController.panelOpen ? 1 : 0
+    visible: opacity > 0
 
-    property string page: "home"
-
-    Connections {
-        target: PillController
-        function onPanelOpenChanged() {
-            if (!PillController.panelOpen)
-                controlPanel.page = "home"
-        }
-    }
-    
+    property string page: PillController.page
 
     Behavior on opacity {
         NumberAnimation {
@@ -34,8 +26,16 @@ Item {
         }
     }
 
+    onOpacityChanged: {
+        if (opacity === 0 && !PillController.panelOpen)
+            PillController.page = "home"
+    }
+
     Item {
         id: header
+
+        z: 2
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -43,58 +43,27 @@ Item {
         anchors.leftMargin: Config.controlPanelHeaderInset
         anchors.rightMargin: Config.controlPanelHeaderInset
 
-        Text {
-            id: notifBell
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: controlPanel.page === "notifications" ? "󰂞" : "󰂚"
-            font: StylizedFont.icon
-            color: bellMouse.containsMouse || controlPanel.page === "notifications" ? Colors.md3.primary : Colors.md3.on_surface
+        visible: PillController.panelOpen
 
-            MouseArea {
-                id: bellMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: (mouse) => {
-                    if (mouse.button === Qt.RightButton)
-                        Notifications.clearAll();
-                    else if (mouse.button === Qt.LeftButton)
-                        controlPanel.page = controlPanel.page === "notifications" ? "home" : "notifications"
-            }}
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: Config.spaceMd
+            anchors.verticalCenter: parent.verticalCenter
+            text: Quickshell.env("USER")
+            font: StylizedFont.body
+            color: Colors.md3.on_surface
         }
 
-        Text {
-            id: notifCount
-    anchors.left: notifBell.right
-    anchors.leftMargin: Config.spaceXs
-    anchors.verticalCenter: notifBell.verticalCenter
-    visible: Notifications.list.values.length > 0
-    text: Notifications.count
-    font: StylizedFont.tooltip
-    color: Colors.md3.tertiary
-}
+        Clock {
+            chrome: false
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
-        Text {
-        anchors.left: notifCount.right
-        anchors.leftMargin: Config.spaceMd
-        anchors.verticalCenter: parent.verticalCenter
-        text: Quickshell.env("USER")
-        font: StylizedFont.body
-        color: Colors.md3.on_surface
-    }
-
-    Clock {
-        chrome: false
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-    }
-
-    SessionMenu {
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-    }
+        SessionMenu {
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+        }
     }
 
     Item {
@@ -105,25 +74,117 @@ Item {
         anchors.bottom: footer.top
         anchors.topMargin: Config.controlPanelBodyTopGap
         anchors.bottomMargin: Config.controlPanelBodyTopGap * 2
+        visible: PillController.panelOpen
 
         Item {
             anchors.fill: parent
-            visible: controlPanel.page === "home"
+            visible: PillController.page === "home" && PillController.panelOpen
             enabled: visible
 
+            MediaPlayer {
+                id: mediaPlayer
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width * 0.85
+            }
+        }
+
+        NotifButton {
+            anchors.verticalCenter: parent.verticalCenter
+            x: PillController.page === "home" ? 0 : parent.width - width
+            visible: PillController.page !== "system"
+            // TODO: Add DND function
+        }
+
+        Rectangle {
+            id: arrowRight
+            visible: PillController.page === "home"
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: Config.spaceMd
+            height: Config.spaceMd
+            color: "transparent"
             Text {
                 anchors.centerIn: parent
-                text: "HOME"
-                font: StylizedFont.display
+                text: ">"
+                font: StylizedFont.icon
                 color: Colors.md3.on_surface
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: PillController.page = "system"
             }
         }
 
         NotificationList {
-            anchors.fill: parent
-            visible: controlPanel.page === "notifications"
+            id: notificationList
+            visible: PillController.page === "notifications"
             enabled: visible
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 0.85
         }
+
+        Rectangle {
+            id: leftArrowHome
+            width: Config.spaceMd
+            height: Config.spaceMd
+            color: "transparent"
+            visible: PillController.page === "system"
+            x: 0
+            anchors.verticalCenter: parent.verticalCenter
+            Text {
+                anchors.centerIn: parent
+                text: "<"
+                font: StylizedFont.icon
+                color: Colors.md3.on_surface
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: PillController.page = "home"
+            }
+        }
+
+        Item {
+            id: systemControl
+            visible: PillController.page === "system"
+            enabled: visible
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 0.85
+
+            // System Controls
+            // - Wifi (clickable to expand wifi menu)
+            // - Bluetooth (clickable to expand bluetooth menu)
+            // - Sound (Slider + Choose Source)
+
+            VolumeControl {
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            // - Mic
+            // - Brightness (Slider + HyprSunset)
+            // - Battery display of connected devices
+            // - LED Toggle
+            // - Keep System Awake
+            // - GameMode Toggle (disable animations)
+            // - System Update (show packages to update, spawn terminal)
+            // - ?? DND button
+            // - Screenshot/Screen Record
+            // - Theme/Wallpaper Picker
+
+
+        }
+        
     }
 
     Item {
@@ -133,25 +194,26 @@ Item {
         anchors.right: parent.right
         anchors.bottomMargin: Config.controlPanelFooterBottomInset
         anchors.leftMargin: Config.controlPanelFooterInset
+        visible: PillController.panelOpen
 
         Row {
             spacing: Config.controlPanelStatsSpacing
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-        CPUInfo {
-            id: cpuInfo
-            color: Colors.md3.primary
-        }
+            CPUInfo {
+                id: cpuInfo
+                color: Colors.md3.primary
+            }
 
-        MemInfo {
-            id: memInfo
-            color: Colors.md3.secondary
-        }
+            MemInfo {
+                id: memInfo
+                color: Colors.md3.secondary
+            }
 
-        GPUInfo {
-            id: gpuInfo
-            color: Colors.md3.tertiary
-        }
+            GPUInfo {
+                id: gpuInfo
+                color: Colors.md3.tertiary
+            }
         }
 
         RowLayout {
@@ -187,20 +249,16 @@ Item {
                 }
             }
         }
-
-        }
-    
-    
-
+    }
 
     IpcHandler {
         id: ipcPanel
         target: "ipcPanel"
         function toggleControlPanel(): void {
             if (PillController.panelOpen)
-                PillController.closePanel()
+                PillController.closePanel();
             else
                 PillController.showPanel();
-           }
+        }
     }
-    }
+}

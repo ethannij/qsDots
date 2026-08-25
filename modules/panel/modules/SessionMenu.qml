@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import qs.config
 import qs.theme
+import qs.services
 pragma ComponentBehavior: Bound
 
 Item {
@@ -48,7 +49,7 @@ Item {
         implicitWidth: column.width + Config.sessionMenuPadding
         anchors.top: button.bottom
         anchors.right: button.right
-        opacity: 0
+        opacity: PillController.sessionMenuOpen ? 1 : 0
         radius: Config.radiusBox
 
         Behavior on opacity {
@@ -104,7 +105,7 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            background.opacity = background.opacity === 0 ? 1 : 0
+            PillController.sessionMenuOpen = !PillController.sessionMenuOpen
         }
     }
 

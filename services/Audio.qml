@@ -32,6 +32,12 @@ Singleton {
         root.sink.audio.volume = Math.max(sink.audio.volume - Config.volumeStep, Config.volumeMin);
     }
 
+    function setVolume(value) {
+        if (!ready)
+            return;
+        root.sink.audio.volume = Math.min(Math.max(value, Config.volumeMin), Config.volumeMax);
+    }
+
     readonly property string icon: {
         if (!ready)
             return String.fromCodePoint(0xF0581);

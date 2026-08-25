@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import qs.modules.panel
 pragma Singleton
 
 // Control which face is active in pill
@@ -11,6 +12,8 @@ Singleton {
     property bool pinned: false
     property bool panelOpen: false
     property bool trayOpen: false
+    property string page: "home"
+    property bool sessionMenuOpen: false
 
     function showFace(name) {
         if (panelOpen)
@@ -66,6 +69,7 @@ Singleton {
     function closePanel() {
         panelOpen = false
         trayOpen = false
+        sessionMenuOpen = false
         faceTimer.restart()
     }
 
@@ -73,6 +77,7 @@ Singleton {
         if (!PillController.panelOpen) {
             ControlPanel.page = "home"
             trayOpen = false
+            sessionMenuOpen = false
         }
     }
 

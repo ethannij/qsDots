@@ -16,10 +16,6 @@ PillShape {
             id: row
             required property var modelData
 
-            Item {
-                Layout.margins: Config.widgetSpacing
-            }
-
             IconImage {
                 id: icon
                 source: row.modelData.icon
@@ -29,7 +25,7 @@ PillShape {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-                    onClicked: mouse => {
+                    onClicked: (mouse) => {
                         if (mouse.button === Qt.LeftButton) {
                             row.modelData.activate();
                         } else if (mouse.button === Qt.MiddleButton) {

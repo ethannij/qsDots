@@ -13,6 +13,7 @@ Item {
     property real radius: Config.radiusPill
     property int padH: Config.pillPadH
     property int padV: Config.pillPadV
+    property alias mouse: mouse
 
     default property alias content: content.data
 

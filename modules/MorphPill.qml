@@ -6,12 +6,10 @@ import qs.theme
 import qs.config
 import qs.modules.panel
 
-
 Item {
     id: morphPill
 
     readonly property real restHeight: clock.implicitHeight
-
 
     readonly property Item face: {
         switch (PillController.activeFace) {
@@ -50,15 +48,13 @@ Item {
     property bool ready: false
     property bool expanded: false
 
+    readonly property real targetW: PillController.panelOpen ? Config.controlPanelW : restContent.implicitWidth * Config.pillFaceWidthScale
+    readonly property real targetH: PillController.panelOpen ? Config.controlPanelH : restContent.implicitHeight
 
-    readonly property real targetW: PillController.panelOpen ? Config.controlPanelW : face.implicitWidth * Config.pillFaceWidthScale
-    readonly property real targetH: PillController.panelOpen ? Config.controlPanelH : face.implicitHeight
-
-    width: shellW
-    height: shellH
-    implicitWidth: shellW
-    implicitHeight: shellH
-
+    width: Math.round(shellW)
+    height: Math.round(shellH)
+    implicitWidth: width
+    implicitHeight: height
 
     Behavior on shellW {
         enabled: morphPill.ready
@@ -88,28 +84,34 @@ Item {
     }
 
     Component.onCompleted: {
-        const s = sizeFor(PillController.activeFace);
-        shellW = s.width;
-        shellH = s.height;
+        shellW = targetW;
+        shellH = targetH;
         ready = true;
     }
 
     HoverHandler {
         onHoveredChanged: {
-            PillController.pinned = hovered
+            PillController.pinned = hovered;
         }
-
     }
 
+    readonly property bool shellBusy: heightAnim.running || Math.abs(shellW - targetW) > 0.5
+
+    property bool latchedHighlight: false
+
+    onShellBusyChanged: {
+        if (shellBusy)
+            latchedHighlight = PillController.panelOpen || mouse.containsMouse;
+    }
     Rectangle {
         id: rect
         anchors.fill: parent
         color: Colors.md3.surface
-        border.color: mouse.containsMouse ? Colors.md3.primary : Colors.md3.shadow
-        radius: Config.radiusPill
         border.width: Config.borderWidth
-
+        radius: Config.radiusPill
+        border.color: (parent.shellBusy ? parent.latchedHighlight : (PillController.panelOpen || mouse.containsMouse)) ? Colors.md3.primary : Colors.md3.shadow
         Behavior on border.color {
+            enabled: !morphPill.shellBusy
             ColorAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
@@ -117,63 +119,89 @@ Item {
         }
     }
 
-    Clock {
-        id: clock
-        enabled: !PillController.panelOpen && PillController.activeFace === "clock"
-
-        opacity: !PillController.panelOpen && PillController.activeFace === "clock" ? 1 : 0
+    Row {
+        id: restContent
+        enabled: !PillController.panelOpen
+        opacity: PillController.panelOpen ? 0 : 1
+        visible: opacity > 0
         anchors.centerIn: parent
-        chrome: false
+        spacing: Config.spaceSm
+        layer.enabled: opacity > 0 && opacity < 1
+
         Behavior on opacity {
             NumberAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
             }
         }
-    }
 
-    Workspaces {
-        id: workspaces
-
-        enabled: !PillController.panelOpen && PillController.activeFace === "workspaces"
-        opacity: !PillController.panelOpen && PillController.activeFace === "workspaces" ? 1 : 0
-        anchors.centerIn: parent
-        chrome: false
-        animateWidths: PillController.activeFace === "workspaces"
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Config.animMs
-                easing.type: Easing.InOutCubic
-            }
+        MediaChip {
+            visible: Media.active
+            chrome: false
+            anchors.verticalCenter: parent.verticalCenter
         }
-    }
 
-    Volume {
-        id: volume
+        Item {
+            id: faceHost
+            width: morphPill.face.implicitWidth
+            height: morphPill.face.implicitHeight
+            clip: true
 
-        enabled: !PillController.panelOpen && PillController.activeFace === "volume"
-        opacity: !PillController.panelOpen && PillController.activeFace === "volume" ? 1 : 0
-        anchors.centerIn: parent
-        chrome: false
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Config.animMs
-                easing.type: Easing.InOutCubic
+            Clock {
+                id: clock
+                enabled: PillController.activeFace === "clock"
+                opacity: enabled ? 1 : 0
+                anchors.centerIn: parent
+                chrome: false
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
             }
-        }
-    }
 
-    Notification {
-        id: notification
+            Workspaces {
+                id: workspaces
+                enabled: PillController.activeFace === "workspaces"
+                opacity: enabled ? 1 : 0
+                anchors.centerIn: parent
+                chrome: false
+                animateWidths: PillController.activeFace === "workspaces"
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+            }
 
-        enabled: !PillController.panelOpen && PillController.activeFace === "notification"
-        opacity: !PillController.panelOpen && PillController.activeFace === "notification" ? 1 : 0
-        anchors.centerIn: parent
-        chrome: false
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Config.animMs
-                easing.type: Easing.InOutCubic
+            Volume {
+                id: volume
+                enabled: PillController.activeFace === "volume"
+                opacity: enabled ? 1 : 0
+                anchors.centerIn: parent
+                chrome: false
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+            }
+
+            Notification {
+                id: notification
+                enabled: PillController.activeFace === "notification"
+                opacity: enabled ? 1 : 0
+                anchors.centerIn: parent
+                chrome: false
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
             }
         }
     }
@@ -192,8 +220,7 @@ Item {
         z: -1
         hoverEnabled: true
         onClicked: {
-            PillController.togglePanel()
+            PillController.togglePanel();
         }
-
     }
 }

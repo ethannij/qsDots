@@ -3,6 +3,7 @@ import qs.theme
 import qs.config
 import qs.modules.elements
 import qs.services
+import qs.modules.panel
 
 PillShape {
     id: root
@@ -31,8 +32,10 @@ PillShape {
 
     interactive: !!root.notif
     onClicked: {
-        if (root.notif)
-            root.notif.dismiss()
+        if (root.notif) {
+            PillController.panelOpen = true
+            ControlPanel.page = "notifications"
+        }
     }
 
 }
