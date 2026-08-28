@@ -28,7 +28,7 @@ Item {
 
     onOpacityChanged: {
         if (opacity === 0 && !PillController.panelOpen)
-            PillController.page = "home"
+            PillController.page = "home";
     }
 
     Item {
@@ -165,10 +165,21 @@ Item {
             // System Controls
             // - Wifi (clickable to expand wifi menu)
             // - Bluetooth (clickable to expand bluetooth menu)
-            // - Sound (Slider + Choose Source)
 
-            VolumeControl {
+            VolumeSlider {
+                id: volumeSlider
                 anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Widgets {
+                anchors.top: volumeSlider.top
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            BrightnessSlider {
+                id: brightnessSlider
+                anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
             }
             // - Mic
@@ -182,9 +193,7 @@ Item {
             // - Screenshot/Screen Record
             // - Theme/Wallpaper Picker
 
-
         }
-        
     }
 
     Item {

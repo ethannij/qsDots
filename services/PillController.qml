@@ -11,8 +11,10 @@ Singleton {
     property string defaultFace: "clock"
     property bool pinned: false
     property bool panelOpen: false
+    //property bool panelOpen: true
     property bool trayOpen: false
     property string page: "home"
+    //property string page: "system"
     property bool sessionMenuOpen: false
 
     function showFace(name) {

@@ -8,14 +8,25 @@ Item {
     id: root
 
     property bool holdActivated: false
+    property bool readySeen: false
 
     Connections {
         target: Hyprland
-        function onFocusedWorkspaceChanged() {root.show()}
+        function onFocusedWorkspaceChanged() {
+            if (!Hyprland.focusedWorkspace)
+                return;
+            if (!root.readySeen) {
+                Qt.callLater(() => {
+                    root.readySeen = true;
+                });
+                return;
+            }
+            root.show();
+        }
     }
 
     function show() {
-        PillController.showFace("workspaces")
+        PillController.showFace("workspaces");
     }
 
     Timer {
@@ -24,8 +35,8 @@ Item {
         repeat: false
         running: false
         onTriggered: {
-            root.holdActivated = true
-            PillController.showFace("workspaces")
+            root.holdActivated = true;
+            PillController.showFace("workspaces");
         }
     }
 
@@ -35,7 +46,7 @@ Item {
         repeat: false
         running: false
         onTriggered: {
-            PillController.dismiss()
+            PillController.dismiss();
         }
     }
 
@@ -43,21 +54,21 @@ Item {
         id: ipc
         target: "hyprlandIpc"
 
+        function superDown(): void {
+            root.holdActivated = false;
+            holdTimer.start();
+        }
+        function superUp(): void {
+            if (holdTimer.running) {
+                holdTimer.stop();
+            }
 
-    function superDown(): void {
-                root.holdActivated = false
-                holdTimer.start()
+            if (root.holdActivated) {
+                dismissTimer.start();
+            } else {
+                Quickshell.execDetached(["bash", "-c", "$HOME/.config/rofi/modules/launcher/launcher.sh || pkill rofi"]);
+            }
+            root.holdActivated = false;
+        }
     }
-    function superUp(): void {
-       if (holdTimer.running) {
-        holdTimer.stop()
-       }
-
-       if (root.holdActivated) {
-        dismissTimer.start()
-       } else {
-        Quickshell.execDetached(["bash", "-c", "$HOME/.config/rofi/modules/launcher/launcher.sh || pkill rofi"])
-       }
-       root.holdActivated = false
-    }
-}}
+}

@@ -7,13 +7,20 @@ import qs.config
 Singleton {
     id: root
     property var sink: Pipewire.defaultAudioSink
+    property list<var> sinks: Pipewire.nodes.values.filter(node => node.isSink && node.audio && !node.isStream)
 
     readonly property bool ready: sink && sink.ready
     readonly property bool muted: ready && sink.audio.muted
     readonly property int vol: ready ? Math.round(sink.audio.volume * 100) : 0
 
     readonly property string description: ready ? sink.description : ""
-
+    
+    function setDefaultSink(node) {
+        if (!node)
+            return;
+        Pipewire.preferredDefaultAudioSink = node;
+    }
+    
     function toggleMute() {
         if (!ready)
             return;
@@ -55,6 +62,7 @@ Singleton {
     }
 
     PwObjectTracker {
-        objects: [root.sink]
+        objects: [root.sink, root.sinks]
     }
+
 }

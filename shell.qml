@@ -2,18 +2,16 @@
 import Quickshell
 import QtQuick
 import qs.modules
-import QtQuick.Controls
-import qs.config
-import qs.theme
 import qs.services
-import qs.modules.elements
+import QtQuick.Controls
 
 ShellRoot {
+    id: root
     ControlBar {}
 
     FloatingWindow {
         id: testWindow
-        visible: false
+        visible: true
         implicitWidth: 300
         implicitHeight: 300
         title: "Test Window"
@@ -21,6 +19,19 @@ ShellRoot {
         Rectangle {
             anchors.fill: parent
             color: "black"
+
+            Button {
+                id: button
+                anchors.centerIn: parseInt
+                text: "Inhibit Idle"
+                onClicked: IdleInhibitor.inhibitIdle = !IdleInhibitor.inhibitIdle
+            }
+
+            Text {
+                anchors.top: button.bottom
+                text: "State: " + (IdleInhibitor.inhibitIdle ? "true" : "false") 
+                color: "white"
+            }
         }
     }
 }

@@ -29,11 +29,11 @@ Item {
         radius: root.radius
     }
 
-    Row {
-        id: content
-        anchors.centerIn: parent
-        spacing: Config.widgetSpacing
-    }
+   Row {
+    id: content
+    anchors.centerIn: parent
+    spacing: Config.widgetSpacing
+}
 
     signal clicked(var mouse)
     signal wheel(var wheel)
