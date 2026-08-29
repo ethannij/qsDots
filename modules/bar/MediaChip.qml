@@ -33,7 +33,7 @@ PillShape {
                 text: "󰝚  " + (Media.title || "Nothing playing")
                 elide: Text.ElideRight
                 maximumLineCount: 1
-                width: Math.min(implicitWidth, 1000)
+                width: Math.min(implicitWidth, 400)
                 font: StylizedFont.body
                 color: titleMouse.containsMouse ? Colors.md3.primary : Colors.md3.tertiary
 
@@ -50,7 +50,7 @@ PillShape {
                 id: navClip
                 width: root.expanded ? Config.spaceMd + navRow.implicitWidth : 0
                 height: Math.max(titleText.height, navRow.implicitHeight)
-                clip: true
+                clip: false
 
                 Behavior on width {
                     NumberAnimation {
@@ -102,6 +102,7 @@ PillShape {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+                anchors.bottomMargin: 2
                 height: 4
                 radius: height / 2
                 color: Colors.md3.surface_container_highest

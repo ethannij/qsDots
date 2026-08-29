@@ -14,7 +14,8 @@ Variants {
         exclusionMode: ExclusionMode.Normal
         exclusiveZone: morphPill.restHeight + Config.barMarginV
         color: "transparent"
-        implicitHeight: morphPill.implicitHeight + Config.barVerticalPadding
+        //implicitHeight: morphPill.implicitHeight + Config.barVerticalPadding
+        implicitHeight: Config.controlPanelH + Config.barVerticalPadding
 
         anchors {
             top: true
@@ -28,7 +29,9 @@ Variants {
 
         MorphPill {
             id: morphPill
-            anchors.centerIn: parent
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: Config.barMarginV
             visible: Config.showClock
             z: 1
         }

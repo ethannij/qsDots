@@ -24,7 +24,7 @@ PillShape {
 
         elide: Text.ElideRight
         maximumLineCount: 1
-        width: Math.min(implicitWidth, 1000)
+        width: Math.min(implicitWidth, 600)
 
         font: StylizedFont.body
         color: Colors.md3.tertiary

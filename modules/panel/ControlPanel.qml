@@ -12,19 +12,9 @@ Item {
     id: controlPanel
     width: Config.controlPanelW - Config.controlPanelPadding * 2
     height: Config.controlPanelH - Config.controlPanelPadding * 2
-    anchors.centerIn: parent
-    enabled: PillController.panelOpen
-    opacity: PillController.panelOpen ? 1 : 0
     visible: opacity > 0
 
     property string page: PillController.page
-
-    Behavior on opacity {
-        NumberAnimation {
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
-        }
-    }
 
     onOpacityChanged: {
         if (opacity === 0 && !PillController.panelOpen)
@@ -42,8 +32,6 @@ Item {
         height: Config.controlPanelHeaderHeight
         anchors.leftMargin: Config.controlPanelHeaderInset
         anchors.rightMargin: Config.controlPanelHeaderInset
-
-        visible: PillController.panelOpen
 
         Text {
             anchors.left: parent.left
@@ -74,11 +62,10 @@ Item {
         anchors.bottom: footer.top
         anchors.topMargin: Config.controlPanelBodyTopGap
         anchors.bottomMargin: Config.controlPanelBodyTopGap * 2
-        visible: PillController.panelOpen
 
         Item {
             anchors.fill: parent
-            visible: PillController.page === "home" && PillController.panelOpen
+            visible: PillController.page === "home"
             enabled: visible
 
             MediaPlayer {
@@ -183,11 +170,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
             // - Mic
-            // - Brightness (Slider + HyprSunset)
             // - Battery display of connected devices
-            // - LED Toggle
-            // - Keep System Awake
-            // - GameMode Toggle (disable animations)
             // - System Update (show packages to update, spawn terminal)
             // - ?? DND button
             // - Screenshot/Screen Record
@@ -203,7 +186,6 @@ Item {
         anchors.right: parent.right
         anchors.bottomMargin: Config.controlPanelFooterBottomInset
         anchors.leftMargin: Config.controlPanelFooterInset
-        visible: PillController.panelOpen
 
         Row {
             spacing: Config.controlPanelStatsSpacing
