@@ -17,8 +17,17 @@ PillShape {
     }
 
     interactive: true
-    cursorShape: Qt.PointingHandCursor
-    onClicked: {
-        clockItem.showDate = !clockItem.showDate;
+    
+    HoverHandler {
+        id: hover
+        enabled: PillController.activeFace === "clock"
+        cursorShape: Qt.PointingHandCursor
     }
+
+    TapHandler {
+        id: tap
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: clockItem.showDate = !clockItem.showDate;
+    }
+
 }

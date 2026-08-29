@@ -91,7 +91,7 @@ Item {
 
     onShellBusyChanged: {
         if (shellBusy)
-            latchedHighlight = PillController.panelOpen || mouse.containsMouse;
+            latchedHighlight = PillController.panelOpen || hover.hovered;
     }
 
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
@@ -158,6 +158,7 @@ Item {
     }
 
     HoverHandler {
+        id: hover
         onHoveredChanged: {
             PillController.pinned = hovered;
         }
@@ -169,13 +170,21 @@ Item {
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Config.radiusPill
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || mouse.containsMouse)) ? Colors.md3.primary : Colors.md3.shadow
+        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
 
         Behavior on border.color {
             enabled: !morphPill.shellBusy
             ColorAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
+            }
+        }
+
+        TapHandler {
+            id: tap
+            onTapped: {
+                enabled: morphPill.ready
+                PillController.togglePanel()
             }
         }
     }
@@ -187,7 +196,7 @@ Item {
         visible: true
         anchors.centerIn: parent
         spacing: Config.spaceSm
-        layer.enabled: true
+        layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
 
         MediaChip {
             visible: Media.active
@@ -197,11 +206,26 @@ Item {
 
         Item {
             id: faceHost
-            width: morphPill.hostW
-            height: morphPill.hostH
+            width: morphPill.face.implicitWidth
+            height: morphPill.face.implicitHeight
             implicitWidth: width
             implicitHeight: height
-            clip: true
+            clip: false
+
+            Behavior on width {
+                enabled: morphPill.ready && morphPill.morph === 0  && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.InOutCubic
+                }
+            }
+            Behavior on height {
+                enabled: morphPill.ready && morphPill.morph === 0  && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.InOutCubic
+                }
+            }
 
             Clock {
                 id: clock
@@ -257,12 +281,4 @@ Item {
     VolumeBehavior {}
     WorkspacesBehavior {}
     NotificationBehavior {}
-
-    MouseArea {
-        id: mouse
-        anchors.fill: parent
-        z: -1
-        hoverEnabled: true
-        onClicked: PillController.togglePanel()
-    }
 }

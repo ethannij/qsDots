@@ -35,14 +35,18 @@ PillShape {
                 maximumLineCount: 1
                 width: Math.min(implicitWidth, 400)
                 font: StylizedFont.body
-                color: titleMouse.containsMouse ? Colors.md3.primary : Colors.md3.tertiary
+                color: titleHover.hovered ? Colors.md3.primary : Colors.md3.tertiary
 
-                MouseArea {
-                    id: titleMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
+                HoverHandler {
+                    id: titleHover
+                    parent: titleText
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: root.expanded = !root.expanded
+                }
+                TapHandler {
+                    id: titleTap
+                    parent: titleText
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: root.expanded = !root.expanded
                 }
             }
 
@@ -179,16 +183,20 @@ PillShape {
         signal clicked
 
         font: StylizedFont.icon
-        color: btnMouse.containsMouse && available ? Colors.md3.primary : Colors.md3.tertiary
+        color: btnTap && available ? Colors.md3.primary : Colors.md3.tertiary
         opacity: available ? 1 : 0.35
 
-        MouseArea {
-            id: btnMouse
-            anchors.fill: parent
-            hoverEnabled: true
-            enabled: btn.available
+        HoverHandler {
+            id: btnHover
+            parent: btn
             cursorShape: btn.available ? Qt.PointingHandCursor : Qt.ArrowCursor
-            onClicked: btn.clicked()
+        }
+
+        TapHandler {
+            id: btnTap
+            parent: btn
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            onTapped: btn.clicked()
         }
     }
 }

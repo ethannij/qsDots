@@ -5,12 +5,26 @@ import Quickshell.Hyprland
 import qs.theme
 import qs.modules.elements
 import qs.config
+import qs.services
 
 PillShape {
     id: workspaces
 
-    // Width tween fights MorphPill shell sizing; keep off when hosted as a face.
     property bool animateWidths: true
+
+    WheelHandler {
+        id: wheel
+        parent: workspaces
+        enabled: PillController.activeFace === "workspaces"
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onWheel: event => {
+            if (event.angleDelta.y > 0)
+                 Hyprland.dispatch("hl.dsp.focus({ workspace = 'e+1'})");
+            if (event.angleDelta.y < 0)
+                Hyprland.dispatch("hl.dsp.focus({ workspace = 'e-1'})");
+            event.accepted = true;
+        }
+    }
 
     RowLayout {
         spacing: Config.workspaceItemGap
@@ -24,7 +38,7 @@ PillShape {
                 // Get functionality from Hyprland module
                 property var ws: Hyprland.workspaces.values.find(w => w.id === (index + 1))
                 property bool isActive: Hyprland.focusedWorkspace?.id === (index + 1)
-                property bool isHover: wsButton.containsMouse
+                property bool isHover: hover.hovered
 
                 // Define font metrics for labels to prevent animation jittering
                 FontMetrics {
@@ -39,7 +53,6 @@ PillShape {
 
                 Layout.preferredWidth: (isActive || isHover) ? expandedW : collapsedW
                 Layout.preferredHeight: wsFont.height
-
 
                 color: isActive ? Colors.md3.primary_container : isHover ? Colors.md3.secondary_container : Colors.md3.surface_variant
 
@@ -58,31 +71,34 @@ PillShape {
                     }
                 }
 
-                
-
                 Text {
                     id: label
                     text: wsButton.index + 1
-                    color: wsButton.isActive ? Colors.md3.on_primary_container : wsButton.isHover ? Colors.md3.on_secondary_container : ws ?Colors.md3.tertiary : Colors.md3.tertiary
+                    color: wsButton.isActive ? Colors.md3.on_primary_container : wsButton.isHover ? Colors.md3.on_secondary_container : wsButton.ws ? Colors.md3.tertiary : Colors.md3.tertiary
 
-                    opacity: wsButton.isActive ? 1 : wsButton.isHover ? 1 : (ws ? 1 : 0)
+                    opacity: wsButton.isActive ? 1 : wsButton.isHover ? 1 : (wsButton.ws ? 1 : 0)
                     font: wsButton.isActive ? StylizedFont.bold : StylizedFont.body
 
                     Behavior on opacity {
-                    NumberAnimation {
-                        duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        NumberAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing.InOutCubic
+                        }
                     }
-                }
                 }
 
                 interactive: true
-                onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + (index + 1) + " })")
-                onWheel: wheel => {
-                    if (wheel.angleDelta.y > 0)
-                        Hyprland.dispatch("hl.dsp.focus({ workspace = 'e+1'})");
-                    else if (wheel.angleDelta.y < 0)
-                        Hyprland.dispatch("hl.dsp.focus({ workspace = 'e-1' })");
+                HoverHandler {
+                    id: hover
+                    parent: wsButton
+                    enabled: PillController.activeFace === "workspaces"
+                }
+
+                TapHandler {
+                    id: tap
+                    parent: wsButton
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: Hyprland.dispatch("hl.dsp.focus({ workspace = " + (wsButton.index + 1) + " })")
                 }
             }
         }

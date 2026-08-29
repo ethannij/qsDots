@@ -50,6 +50,7 @@ Item {
         id: wifiMenu
         visible: root.wifiMenuOpen
     }
+ 
 
     Grid {
         id: grid
@@ -64,6 +65,8 @@ Item {
         Repeater {
             model: root.widgets
 
+            
+
             PillShape {
                 id: widget
 
@@ -74,18 +77,32 @@ Item {
                 radius: height / 2
 
                 interactive: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    if (modelData.cmd)
-                        Quickshell.execDetached(modelData.cmd);
-                    else
-                        modelData.action();
+
+                color: hover.hovered ? Colors.md3.primary_container : Colors.md3.surface_variant
+
+                 HoverHandler {
+                    id: hover
+                    parent: widget
+                    cursorShape: Qt.PointingHandCursor
                 }
-                color: mouse.containsMouse ? Colors.md3.primary_container : Colors.md3.surface_variant
+
+                TapHandler {
+                    id: tap
+                    parent: widget
+                    onTapped: {
+                        if (widget.modelData.cmd)
+                            Quickshell.execDetached(widget.modelData.cmd);
+                        else
+                            widget.modelData.action();
+                    }
+                }
+
+                
 
                 Item {
                     implicitWidth: icon.implicitSize
                     implicitHeight: icon.implicitSize
+
 
                     IconImage {
                         id: icon

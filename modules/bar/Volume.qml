@@ -39,14 +39,31 @@ Item {
             }
 
             interactive: true
-            cursorShape: Qt.PointingHandCursor
-            onClicked: Audio.toggleMute()
-            onWheel: wheel => {
-                if (wheel.angleDelta.y > 0)
-                    Audio.volumeUp();
-                else if (wheel.angleDelta.y < 0)
-                    Audio.volumeDown();
+
+            HoverHandler {
+                id: hover
+                enabled: PillController.activeFace === "volume"
+                cursorShape: Qt.PointingHandCursor
             }
+
+            TapHandler {
+                id: tap
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+                onTapped: Audio.toggleMute()
+            }
+            WheelHandler {
+                id: wheel
+                enabled: PillController.activeFace === "volume"
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                onWheel: (event) => {
+                    if (event.angleDelta.y > 0)
+                        Audio.volumeUp();
+                    if (event.angleDelta.y < 0)
+                        Audio.volumeDown();
+                    event.accepted = true
+                }
+            }
+            
         }
     }
 

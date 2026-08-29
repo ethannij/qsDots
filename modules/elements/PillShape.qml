@@ -13,7 +13,6 @@ Item {
     property real radius: Config.radiusPill
     property int padH: Config.pillPadH
     property int padV: Config.pillPadV
-    property alias mouse: mouse
 
     default property alias content: content.data
 
@@ -35,22 +34,7 @@ Item {
     spacing: Config.widgetSpacing
 }
 
-    signal clicked(var mouse)
-    signal wheel(var wheel)
-    signal hover(var hover)
     property bool interactive: false
-    property alias cursorShape: mouse.cursorShape
-    property alias containsMouse: mouse.containsMouse
 
     property bool hovered: false
-
-    MouseArea {
-        id: mouse
-        anchors.fill: parent
-        enabled: root.interactive
-        visible: root.interactive
-        hoverEnabled: root.interactive && root.enabled
-        onClicked: (mouse) => root.clicked(mouse)
-        onWheel: (wheel) => root.wheel(wheel)
-    }
 }

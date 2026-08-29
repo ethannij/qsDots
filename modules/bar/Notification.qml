@@ -31,11 +31,15 @@ PillShape {
     }
 
     interactive: !!root.notif
-    onClicked: {
-        if (root.notif) {
-            PillController.panelOpen = true
-            ControlPanel.page = "notifications"
+    TapHandler {
+        id: tap
+        enabled: PillController.activeFace === "notification"
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: {
+            if (root.notif) {
+                PillController.panelOpen = true
+                ControlPanel.page = "notifications"
+            }
         }
     }
-
 }
