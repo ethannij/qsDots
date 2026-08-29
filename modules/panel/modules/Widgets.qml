@@ -42,7 +42,7 @@ Item {
         {
             "icon": Qt.resolvedUrl("../../img/widgets/gamemode/gamemode.svg"),
             "title": "Game Mode",
-            "action": Gamemode.toggle
+            "cmd": ["qs", "ipc", "call", "gamemodeIpc", "toggleGamemode"]
         }
     ]
 
@@ -104,6 +104,8 @@ Item {
                                 return WLED.on ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
                             if (widget.modelData.title === "Idle Inhibitor")
                                 return IdleInhibitor.inhibitIdle ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
+                            if (widget.modelData.title === "Game Mode")
+                                return Gamemode.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
                             return Colors.md3.on_surface_variant;
                         }
                         colorization: 1

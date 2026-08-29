@@ -57,7 +57,7 @@ Item {
     implicitHeight: height
 
     Behavior on shellW {
-        enabled: morphPill.ready
+        enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
             duration: Config.animMs
             easing.type: Easing.InOutCubic
@@ -74,7 +74,7 @@ Item {
 
     onTargetWChanged: shellW = targetW
     onTargetHChanged: {
-        if (!morphPill.ready) {
+        if (!morphPill.ready || Config.animMs <= 0) {
             shellH = targetH;
             return;
         }
@@ -129,6 +129,7 @@ Item {
         layer.enabled: opacity > 0 && opacity < 1
 
         Behavior on opacity {
+            enabled: Config.animMs > 0
             NumberAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
@@ -203,7 +204,15 @@ Item {
                     }
                 }
             }
+
+            
         }
+        Idle {
+                id: idle
+                anchors.verticalCenter: parent.verticalCenter
+                enabled: IdleInhibitor.inhibitIdle
+                visible: enabled
+            }
     }
 
     ControlPanel {

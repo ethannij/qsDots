@@ -6,6 +6,8 @@ import qs.theme
 
 Item {
     id: root
+    implicitHeight: column.implicitHeight
+    implicitWidth: column.implicitWidth
 
     Rectangle {
         anchors.fill: parent
@@ -16,6 +18,7 @@ Item {
     }
 
     ColumnLayout {
+        id: column
         anchors.fill: parent
         anchors.margins: Config.spaceMd
         spacing: Config.spaceMd

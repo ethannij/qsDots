@@ -1,8 +1,10 @@
 pragma Singleton
 import Quickshell
+import qs.services
+
 Singleton {
     // Timing
-    readonly property int animMs: 300
+    readonly property int animMs: Gamemode.active ? 0 : 300
     readonly property int ttlMs: 1500
     readonly property int holdMs: 200
 
@@ -15,8 +17,8 @@ Singleton {
 
     // Bar
     readonly property int barHeight: 36
-    readonly property int barMarginH: 14
-    readonly property int barMarginV: spaceMd
+    readonly property int barMarginH: Gamemode.active ? 0 : 14
+    readonly property int barMarginV: Gamemode.active ? 0 : spaceMd
     readonly property int barItemGap: spaceXs
     readonly property int barVerticalPadding: barMarginV * 2
 
@@ -42,14 +44,14 @@ Singleton {
     readonly property real workspaceItemGap: widgetSpacing / 3
     readonly property real workspaceCollapsedExtraWidth: workspacePadH * 1.5
     readonly property real workspaceExpandedExtraWidth: workspacePadH * 3
-
+    
     // Bar Widgets (Volume, Battery, etc.)
     readonly property int widgetSpacing: spaceXs
     readonly property int moduleGap: widgetSpacing * 2
     readonly property int trayIconSize: 16
     readonly property int borderWidth: 1
-    readonly property int radiusPill: 12
-    readonly property int radiusBox: 8
+    readonly property int radiusPill: Gamemode.active ? 0 : 12
+    readonly property int radiusBox: Gamemode.active ? 0 : 8
     readonly property double volumeStep: 0.05
     readonly property int volumeMin: 0
     readonly property int volumeMax: 1

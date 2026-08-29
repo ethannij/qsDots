@@ -11,7 +11,7 @@ ShellRoot {
 
     FloatingWindow {
         id: testWindow
-        visible: true
+        visible: false
         implicitWidth: 300
         implicitHeight: 300
         title: "Test Window"

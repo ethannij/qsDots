@@ -24,6 +24,15 @@ Item {
         }
     }
 
+    Component.onCompleted: {
+        if(Audio.ready)
+            Qt.callLater(() => {
+                root.readySeen = true;
+            });
+    }
+
+
+
     function show() {
         PillController.showFace("volume");
     }
