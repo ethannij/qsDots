@@ -12,7 +12,7 @@ ShellRoot {
 
     FloatingWindow {
         id: testWindow
-        visible: true
+        visible: false
         implicitWidth: 300
         implicitHeight: 300
         title: "Test Window"
@@ -25,7 +25,7 @@ ShellRoot {
             Text {
                 id: text
                 anchors.centerIn: parent
-                text: Monitors.monitorNames[0]
+                text: Monitors.activeMonitor.id ? "1": "0"
                 color: "white"
                 font.pointSize: 40
                 font.bold: true

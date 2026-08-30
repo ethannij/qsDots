@@ -15,7 +15,7 @@ Singleton {
     readonly property real gammaUpperLimit: 100
 
     property int defaultColorTemperature: 6500
-    property int nightColorTemperature: 5500
+    property int nightColorTemperature: 4500
     property int gamma: 100
     property int gammaRestore: 100
     property int gammaStep: 5
@@ -48,6 +48,7 @@ Singleton {
 
     property bool isNight: hour >= fromHour || hour <= toHour
 
+    // switch to case statements
     property url brightnessIconURL: {
         if (gamma <= 25)
             return Qt.resolvedUrl("../modules/img/brightness/brightness_1.svg");
@@ -82,14 +83,14 @@ Singleton {
         root.temperatureActive = true;
         root.temperatureState = "on";
         root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature 5500`]); // TODO: make this dynamic
+        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.nightColorTemperature}`]); // TODO: make this dynamic
     }
 
     function disableTemperature() {
         root.temperatureActive = false;
         root.temperatureState = "off";
         root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature 6500`]); // TODO: make this dynamic
+        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.defaultColorTemperature}`]); // TODO: make this dynamic
     }
 
     function automaticTemperature() {

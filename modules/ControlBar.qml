@@ -1,12 +1,17 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import Quickshell.Wayland
 import qs.config
+import qs.services
+import qs.theme
 
 Variants {
     model: Quickshell.screens
     PanelWindow {
         id: bar
+        WlrLayershell.namespace: "quickshell:bar"
+        WlrLayershell.layer: WlrLayer.Top
         required property var modelData
         screen: modelData
         property alias barVisible: bar.visible
@@ -14,8 +19,7 @@ Variants {
         exclusionMode: ExclusionMode.Normal
         exclusiveZone: morphPill.restHeight + Config.barMarginV
         color: "transparent"
-        //implicitHeight: morphPill.implicitHeight + Config.barVerticalPadding
-        implicitHeight: Config.controlPanelH + Config.barVerticalPadding
+        implicitHeight: modelData.height
 
         anchors {
             top: true
@@ -24,7 +28,22 @@ Variants {
         }
 
         mask: Region {
-            item: morphPill
+            item: PillController.panelOpen ? background : morphPill
+        }
+
+        Rectangle {
+            id: background
+            anchors.fill: parent
+            color: Colors.md3.surface
+            opacity: PillController.panelOpen ? 0.5 : 0
+            z: -1
+
+
+            MouseArea {
+                anchors.fill: parent
+                enabled: PillController.panelOpen
+                onClicked: PillController.panelOpen = false
+            }
         }
 
         MorphPill {

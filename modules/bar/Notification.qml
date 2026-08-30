@@ -38,8 +38,13 @@ PillShape {
         onTapped: {
             if (root.notif) {
                 PillController.panelOpen = true
-                ControlPanel.page = "notifications"
+                PillController.page = "notifications"
             }
         }
+    }
+
+    HoverHandler {
+        id: hover
+        cursorShape: Qt.PointingHandCursor
     }
 }

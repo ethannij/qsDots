@@ -17,10 +17,27 @@ Item {
     visible: opacity > 0
 
     property string page: PillController.page
+    property bool panelOpen: PillController.panelOpen
+    property bool layerEnabled: false
 
     onOpacityChanged: {
         if (opacity === 0 && !PillController.panelOpen)
             PillController.page = "home";
+    }
+
+    onPanelOpenChanged: {
+        if (PillController.panelOpen)
+            createLayer();
+        if (!PillController.panelOpen)
+            destroyLayer();
+    }
+
+    function createLayer(): void {
+        layerEnabled = true;
+    }
+
+    function destroyLayer(): void {
+        layerEnabled = false;
     }
 
 
