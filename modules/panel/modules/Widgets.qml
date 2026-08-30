@@ -89,6 +89,7 @@ Item {
                 TapHandler {
                     id: tap
                     parent: widget
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
                     onTapped: {
                         if (widget.modelData.cmd)
                             Quickshell.execDetached(widget.modelData.cmd);

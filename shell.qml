@@ -4,6 +4,7 @@ import QtQuick
 import qs.modules
 import qs.services
 import QtQuick.Controls
+import Quickshell.Hyprland
 
 ShellRoot {
     id: root
@@ -24,21 +25,11 @@ ShellRoot {
             Text {
                 id: text
                 anchors.centerIn: parent
-                text: "SCROLL ON ME"
+                text: Monitors.monitorNames[0]
                 color: "white"
                 font.pointSize: 40
                 font.bold: true
             }
-            WheelHandler {
-                id: wheel
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                onWheel: (event) => {
-                    console.log(event.angleDelta.y)
-                    event.accepted = true
-                }
-
-            }
-
         }
     }
 }

@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
+import Quickshell.Hyprland
 import qs.services
 import Quickshell.Io
 import qs.config
@@ -20,6 +22,7 @@ Item {
         if (opacity === 0 && !PillController.panelOpen)
             PillController.page = "home";
     }
+
 
     Item {
         id: header
