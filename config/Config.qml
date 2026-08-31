@@ -72,4 +72,7 @@ Singleton {
     readonly property bool showVolume: true
     readonly property bool showBattery: true
     readonly property bool showClock: true
+
+    // Icon Sized
+    readonly property int iconSize: 30
 }

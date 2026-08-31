@@ -1,4 +1,6 @@
 import QtQuick
+import Quickshell.Widgets
+import QtQuick.Effects
 import qs.services
 import qs.config
 import qs.theme
@@ -6,47 +8,87 @@ import qs.theme
 Item {
     id: notifButton
 
-    property color buttonColor: Colors.md3.on_surface
-    property color buttonActiveColor: Colors.md3.primary
-
     property bool active: PillController.page === "notifications"
 
-    implicitWidth: notifBell.implicitWidth + (notifCount.visible ? Config.spaceXs + notifCount.implicitWidth : 0)
-    implicitHeight: Math.max(notifBell.implicitHeight, notifCount.implicitHeight)
+    implicitHeight: notifIconColumn.implicitHeight * 1.2
+    implicitWidth: notifIconColumn.implicitWidth * 1.2
 
-    Row {
-        spacing: Config.spaceXs
-        layoutDirection: notifButton.active ? Qt.RightToLeft : Qt.LeftToRight
+    property url notificationIconDynamic: {
+        if (Notifications.list.values.length > 0 && !Notifications.doNotDisturb)
+            return Qt.resolvedUrl("../../img/widgets/notifications/notification_unread.svg");
+        if (Notifications.list.values.length === 0 && !Notifications.doNotDisturb)
+            return Qt.resolvedUrl("../../img/widgets/notifications/notification.svg");
+        if (Notifications.doNotDisturb)
+            return Qt.resolvedUrl("../../img/widgets/notifications/notification_paused.svg");
+    }
 
-        Text {
-            id: notifBell
-            anchors.verticalCenter: parent.verticalCenter
-            text: PillController.page === "notifications" ? "󰂞" : "󰂚"
-            font: StylizedFont.icon
-            color: bellMouse.containsMouse || PillController.page === "notifications" ? notifButton.buttonActiveColor : notifButton.buttonColor
+    Rectangle {
+        id: rect
+        anchors.fill: parent
+        radius: width * 0.3
+        color: hover.hovered ? Colors.md3.surface_variant : "transparent"
 
-            MouseArea {
-                id: bellMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: mouse => {
-                    if (mouse.button === Qt.RightButton)
-                        Notifications.clearAll();
-                    else if (mouse.button === Qt.LeftButton)
-                        PillController.page = PillController.page === "notifications" ? "home" : "notifications";
-                }
-            }
+        HoverHandler {
+            id: hover
+            cursorShape: Qt.PointingHandCursor
         }
 
-        Text {
-            id: notifCount
-            anchors.verticalCenter: notifBell.verticalCenter
-            visible: Notifications.list.values.length > 0
-            text: Notifications.count
-            font: StylizedFont.tooltip
-            color: Colors.md3.tertiary
+        TapHandler {
+            id: tapLeft
+            acceptedButtons: Qt.LeftButton
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            onTapped: PillController.page = PillController.page === "notifications" ? "home" : "notifications"
+        }
+
+        TapHandler {
+            id: tapRight
+            acceptedButtons: Qt.RightButton
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            onTapped: Notifications.clearAll();
+        }
+
+        TapHandler {
+            id: tapMiddle
+            acceptedButtons: Qt.MiddleButton
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            onTapped: Notifications.doNotDisturb = !Notifications.doNotDisturb
+        }
+
+        Column {
+            id: notifIconColumn
+            spacing: Config.spaceXs
+            anchors.centerIn: parent
+
+            Item {
+                implicitWidth: notifIcon.implicitWidth
+                implicitHeight: notifIcon.implicitHeight
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                IconImage {
+                    id: notifIcon
+                    anchors.centerIn: parent
+                    source: notifButton.notificationIconDynamic
+                    implicitSize: Config.iconSize
+                    backer.fillMode: Image.PreserveAspectCrop
+                }
+
+                MultiEffect {
+                    id: notifIconEffect
+                    source: notifIcon
+                    anchors.fill: notifIcon
+                    colorization: 1
+                    colorizationColor: hover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+                }
+            }
+
+            Text {
+                id: notifCount
+                visible: Notifications.list.values.length > 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: Notifications.count
+                font: StylizedFont.tooltip
+                color: Colors.md3.tertiary
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ Singleton {
     readonly property alias list: server.trackedNotifications
     readonly property int count: list.values.length
     property var latest: null
+    property bool doNotDisturb: false
 
     function clearAll() {
         const items = root.list.values.slice();

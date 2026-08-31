@@ -7,8 +7,8 @@ Item {
     Connections {
         target: Notifications
         function onLatestChanged() {
-            if (Notifications.latest) {
-                PillController.showFace("notification")
+            if (Notifications.latest && !Notifications.doNotDisturb) {
+                PillController.showFace("notification");
             }
         }
     }

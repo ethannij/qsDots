@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
-import Quickshell.Hyprland
 import qs.services
 import Quickshell.Io
+import Quickshell.Widgets
+import QtQuick.Effects
 import qs.config
 import qs.theme
 import qs.modules.bar
@@ -39,7 +39,6 @@ Item {
     function destroyLayer(): void {
         layerEnabled = false;
     }
-
 
     Item {
         id: header
@@ -97,6 +96,7 @@ Item {
             }
         }
 
+
         NotifButton {
             anchors.verticalCenter: parent.verticalCenter
             x: PillController.page === "home" ? 0 : parent.width - width
@@ -109,21 +109,37 @@ Item {
             visible: PillController.page === "home"
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            width: Config.spaceMd
-            height: Config.spaceMd
-            color: "transparent"
-            Text {
-                anchors.centerIn: parent
-                text: ">"
-                font: StylizedFont.icon
-                color: Colors.md3.on_surface
+            width: arrowRightIcon.implicitSize * 1.2
+            height: arrowRightIcon.implicitSize * 1.2
+            radius: width * 0.3
+            color: arrowRightHover.hovered ? Colors.md3.surface_variant : "transparent"
+            IconImage {
+                id: arrowRightIcon
+                source: Qt.resolvedUrl("../img/widgets/ui/pageright.svg")
+                anchors.fill: parent
+                implicitSize: Config.iconSize
+                backer.fillMode: Image.PreserveAspectCrop
             }
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
+            MultiEffect {
+                id: arrowRightEffect
+                anchors.fill: arrowRightIcon
+                source: arrowRightIcon
+                colorization: 1
+                colorizationColor: arrowRightHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+            }
+
+            HoverHandler {
+                id: arrowRightHover
                 cursorShape: Qt.PointingHandCursor
-                onClicked: PillController.page = "system"
+                enabled: parent.visible
+            }
+
+            TapHandler {
+                id: arrowRightTap
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+                onTapped: PillController.page = "system"
+                enabled: parent.visible
             }
         }
 
@@ -138,25 +154,41 @@ Item {
         }
 
         Rectangle {
-            id: leftArrowHome
-            width: Config.spaceMd
-            height: Config.spaceMd
-            color: "transparent"
+            id: arrowLeft
             visible: PillController.page === "system"
-            x: 0
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            Text {
-                anchors.centerIn: parent
-                text: "<"
-                font: StylizedFont.icon
-                color: Colors.md3.on_surface
+            width: arrowLeftIcon.implicitSize * 1.2
+            height: arrowLeftIcon.implicitSize * 1.2
+            radius: width * 0.3
+            color: arrowLeftHover.hovered ? Colors.md3.surface_variant : "transparent"
+            IconImage {
+                id: arrowLeftIcon
+                source: Qt.resolvedUrl("../img/widgets/ui/pageleft.svg")
+                anchors.fill: parent
+                implicitSize: Config.iconSize
+                backer.fillMode: Image.PreserveAspectCrop
             }
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
+            MultiEffect {
+                id: arrowLeftEffect
+                anchors.fill: arrowLeftIcon
+                source: arrowLeftIcon
+                colorization: 1
+                colorizationColor: arrowLeftHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+            }
+
+            HoverHandler {
+                id: arrowLeftHover
                 cursorShape: Qt.PointingHandCursor
-                onClicked: PillController.page = "home"
+                enabled: parent.visible
+            }
+
+            TapHandler {
+                id: arrowLeftTap
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+                onTapped: PillController.page = "home"
+                enabled: parent.visible
             }
         }
 
