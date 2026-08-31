@@ -38,11 +38,8 @@ Item {
                 font: StylizedFont.body
             }
 
-            interactive: true
-
             HoverHandler {
                 id: hover
-                enabled: PillController.activeFace === "volume"
                 cursorShape: Qt.PointingHandCursor
             }
 
@@ -53,23 +50,21 @@ Item {
             }
             WheelHandler {
                 id: wheel
-                enabled: PillController.activeFace === "volume"
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                onWheel: (event) => {
+                onWheel: event => {
                     if (event.angleDelta.y > 0)
                         Audio.volumeUp();
                     if (event.angleDelta.y < 0)
                         Audio.volumeDown();
-                    event.accepted = true
+                    event.accepted = true;
                 }
             }
-            
         }
     }
 
     HoverTip {
         visible: volumeItem.enabled
         anchorItem: volumePill
-        text: Audio.ready ?Audio.sink.description : ""
+        text: Audio.ready ? Audio.sink.description : ""
     }
 }

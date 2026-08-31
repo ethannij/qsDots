@@ -28,13 +28,9 @@ Item {
         radius: root.radius
     }
 
-   Row {
-    id: content
-    anchors.centerIn: parent
-    spacing: Config.widgetSpacing
-}
-
-    property bool interactive: false
-
-    property bool hovered: false
+    Row {
+        id: content
+        anchors.centerIn: parent
+        spacing: Config.widgetSpacing
+    }
 }

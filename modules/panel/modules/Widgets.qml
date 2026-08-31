@@ -50,7 +50,6 @@ Item {
         id: wifiMenu
         visible: root.wifiMenuOpen
     }
- 
 
     Grid {
         id: grid
@@ -65,8 +64,6 @@ Item {
         Repeater {
             model: root.widgets
 
-            
-
             PillShape {
                 id: widget
 
@@ -75,12 +72,9 @@ Item {
                 implicitWidth: icon.implicitWidth + Config.spaceXl * 3
                 implicitHeight: icon.implicitHeight + Config.spaceXl
                 radius: height / 2
-
-                interactive: true
-
                 color: hover.hovered ? Colors.md3.primary_container : Colors.md3.surface_variant
 
-                 HoverHandler {
+                HoverHandler {
                     id: hover
                     parent: widget
                     cursorShape: Qt.PointingHandCursor
@@ -98,12 +92,9 @@ Item {
                     }
                 }
 
-                
-
                 Item {
                     implicitWidth: icon.implicitSize
                     implicitHeight: icon.implicitSize
-
 
                     IconImage {
                         id: icon

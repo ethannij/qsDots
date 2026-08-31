@@ -87,7 +87,6 @@ PillShape {
                     }
                 }
 
-                interactive: true
                 HoverHandler {
                     id: hover
                     parent: wsButton

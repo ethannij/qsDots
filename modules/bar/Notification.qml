@@ -30,10 +30,8 @@ PillShape {
         color: Colors.md3.tertiary
     }
 
-    interactive: !!root.notif
     TapHandler {
         id: tap
-        enabled: PillController.activeFace === "notification"
         gesturePolicy: TapHandler.ReleaseWithinBounds
         onTapped: {
             if (root.notif) {

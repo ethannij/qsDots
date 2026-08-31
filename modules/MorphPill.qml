@@ -231,6 +231,7 @@ Item {
                 id: clock
                 readonly property bool faceActive: PillController.activeFace === "clock"
                 enabled: faceActive && restContent.enabled
+                visible: faceActive
                 anchors.centerIn: parent
                 chrome: false
             }
@@ -239,6 +240,7 @@ Item {
                 id: workspaces
                 readonly property bool faceActive: PillController.activeFace === "workspaces"
                 enabled: faceActive && restContent.enabled
+                visible: faceActive
                 anchors.centerIn: parent
                 chrome: false
                 animateWidths: faceActive && morphPill.morph === 0
@@ -248,6 +250,7 @@ Item {
                 id: volume
                 readonly property bool faceActive: PillController.activeFace === "volume"
                 enabled: faceActive && restContent.enabled
+                visible: faceActive
                 anchors.centerIn: parent
                 chrome: false
             }
@@ -256,6 +259,7 @@ Item {
                 id: notification
                 readonly property bool faceActive: PillController.activeFace === "notification"
                 enabled: faceActive && restContent.enabled
+                visible: faceActive
                 anchors.centerIn: parent
                 chrome: false
             }
