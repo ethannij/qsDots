@@ -12,6 +12,7 @@ Variants {
         id: bar
         WlrLayershell.namespace: "quickshell:bar"
         WlrLayershell.layer: WlrLayer.Top
+        focusable: true
         required property var modelData
         screen: modelData
         property alias barVisible: bar.visible
@@ -37,6 +38,12 @@ Variants {
             color: Colors.md3.surface
             opacity: PillController.panelOpen ? 0.5 : 0
             z: -1
+
+            Item {
+                anchors.fill: parent
+                focus: true
+                Keys.onEscapePressed: PillController.closePanel()
+            }
 
 
             MouseArea {

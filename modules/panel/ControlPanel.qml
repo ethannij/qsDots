@@ -25,21 +25,6 @@ Item {
             PillController.page = "home";
     }
 
-    onPanelOpenChanged: {
-        if (PillController.panelOpen)
-            createLayer();
-        if (!PillController.panelOpen)
-            destroyLayer();
-    }
-
-    function createLayer(): void {
-        layerEnabled = true;
-    }
-
-    function destroyLayer(): void {
-        layerEnabled = false;
-    }
-
     Item {
         id: header
 
