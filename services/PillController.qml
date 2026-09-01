@@ -3,23 +3,29 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 
-// Control which face is active in pill
+// Controller api for entire pill
 Singleton {
     id: handler
 
+    // Default properties for pill faces
     property string activeFace: "clock"
     property string defaultFace: "clock"
     property bool pinned: false
+
+    // Panel Properties
     property bool panelOpen: false
     property bool trayOpen: false
     property string page: "home"
     property bool launcherOpen: false
     property bool sessionMenuOpen: false
+    readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : "none"
 
+    // Input handling for super key
     property bool superTap: false
     property bool superHold: false
     property double superPressedAt: 0
 
+    // Keybinds
     Timer {
         id: holdTimer
         interval: 180
@@ -37,7 +43,7 @@ Singleton {
         onPressed: {
             handler.superTap = true;
             handler.superHold = false;
-            handler.superPressedAt = Date.now()
+            handler.superPressedAt = Date.now();
             holdTimer.restart();
         }
         onReleased: {
@@ -58,6 +64,8 @@ Singleton {
             handler.superTap = false;
         }
     }
+
+    // Functions for pill face control
 
     function showFace(name) {
         if (panelOpen || launcherOpen)
@@ -95,6 +103,21 @@ Singleton {
         else if (activeFace !== defaultFace)
             faceTimer.restart();
     }
+
+    Timer {
+        id: faceTimer
+
+        interval: 2000
+        repeat: false
+        onTriggered: {
+            if (handler.panelOpen || handler.pinned)
+                return;
+
+            handler.dismiss();
+        }
+    }
+
+    // Functions for overlay control
 
     function togglePanel() {
         if (panelOpen) {
@@ -135,16 +158,8 @@ Singleton {
         }
     }
 
-    Timer {
-        id: faceTimer
-
-        interval: 2000
-        repeat: false
-        onTriggered: {
-            if (handler.panelOpen || handler.pinned)
-                return;
-
-            handler.dismiss();
-        }
+    function closeOverlay() {
+        closePanel();
+        closeLauncher();
     }
 }

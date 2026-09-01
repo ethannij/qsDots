@@ -8,44 +8,56 @@ import qs.theme
 import qs.services
 
 Item {
+    // Widget Grid Container, define widgets and behaviors here
     id: root
 
+    // Set the size of the widget grid
     implicitWidth: grid.implicitWidth
     implicitHeight: grid.implicitHeight
 
-    property bool wifiMenuOpen: false
 
-    property var widgets: [
-        {
-            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wifi/wifi_4.svg")),
-            "title": "Wifi"
-        },
-        {
-            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bluetooth/bluetooth_on.svg")),
-            "title": "Bluetooth"
-        },
-        {
-            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wled/wled.svg")),
-            "title": "WLED",
-            "action": WLED.toggle,
-            "state": WLED.on
-        },
-        {
-            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/idle/idle.svg")),
-            "title": "Idle Inhibitor",
-            "cmd": ["qs", "ipc", "call", "inhibitIdleIpc", "toggleIdle"],
-            "state": IdleInhibitor.inhibitIdle
-        },
-        {
-            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/gamemode/gamemode.svg")),
-            "title": "Game Mode",
-            "cmd": ["qs", "ipc", "call", "gamemodeIpc", "toggleGamemode"]
+    // To add widgets, first define the widget as a QtObject
+    QtObject {
+        id: wifi
+        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wifi/wifi_4.svg"))
+        property bool active: false
+        function trigger() {
+        } // Placeholder for wifi functionality
+    }
+
+    QtObject {
+        id: bluetooth
+        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bluetooth/bluetooth_on.svg"))
+        property bool active: false
+        function trigger() {
+        } // Placeholder for bluetooth functionality
+    }
+
+    QtObject {
+        id: wled
+        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wled/wled.svg"))
+        property bool active: WLED.on
+        function trigger() {
+            WLED.toggle();
         }
-    ]
+    }
 
-    WifiMenu {
-        id: wifiMenu
-        visible: root.wifiMenuOpen
+    QtObject {
+        id: idle
+        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/idle/idle.svg"))
+        property bool active: IdleInhibitor.inhibitIdle
+        function trigger() {
+            Quickshell.execDetached(["qs", "ipc", "call", "inhibitIdleIpc", "toggleIdle"]);
+        }
+    }
+
+    QtObject {
+        id: gamemode
+        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/gamemode/gamemode.svg"))
+        property bool active: Gamemode.active
+        function trigger() {
+            Quickshell.execDetached(["qs", "ipc", "call", "gamemodeIpc", "toggleGamemode"]);
+        }
     }
 
     Grid {
@@ -58,51 +70,15 @@ Item {
         columns: 4
         rows: 2
 
+        // Add QtObjects to repeater to add to widget grid
         Repeater {
-            model: root.widgets
+            model: [wifi, bluetooth, wled, idle, gamemode]
 
-            PillShape {
-                id: widget
-
+            QuickToggle {
                 required property var modelData
-
-                implicitWidth: icon.implicitWidth + Config.spaceXl * 3
-                implicitHeight: icon.implicitHeight + Config.spaceXl
-                radius: height / 2
-                color: hover.hovered ? Colors.md3.primary_container : Colors.md3.surface_variant
-
-                HoverHandler {
-                    id: hover
-                    parent: widget
-                    cursorShape: Qt.PointingHandCursor
-                }
-
-                TapHandler {
-                    id: tap
-                    parent: widget
-                    gesturePolicy: TapHandler.ReleaseWithinBounds
-                    onTapped: {
-                        if (widget.modelData.cmd)
-                            Quickshell.execDetached(widget.modelData.cmd);
-                        else
-                            widget.modelData.action();
-                    }
-                }
-
-                ColorizedIcon {
-                    id: icon
-                    source: widget.modelData.icon
-                    color: {
-                        if (widget.modelData.title === "WLED")
-                            return WLED.on ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                        if (widget.modelData.title === "Idle Inhibitor")
-                            return IdleInhibitor.inhibitIdle ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                        if (widget.modelData.title === "Game Mode")
-                            return Gamemode.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                        return Colors.md3.on_surface_variant;
-                    }
-                    size: Config.iconSize
-                }
+                source: modelData.icon
+                active: modelData.active
+                onTapped: modelData.trigger()
             }
         }
     }

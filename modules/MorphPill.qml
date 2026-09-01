@@ -4,6 +4,7 @@ import qs.services
 import qs.modules.behaviors
 import qs.theme
 import qs.config
+import qs.modules.elements
 import qs.modules.panel
 import qs.modules.launcher
 
@@ -12,9 +13,6 @@ Item {
 
     readonly property real restHeight: clock.implicitHeight
     readonly property bool ready: restW > 0 && restH > 0
-
-    property string overlay: "none"
-
     property bool latchedHighlight: false
 
     readonly property Item face: {
@@ -55,8 +53,6 @@ Item {
         restH = liveRestH
 
     onMorphChanged: if (morph === 0) {
-        if (!PillController.panelOpen && !PillController.launcherOpen)
-            overlay = "none";
         restW = liveRestW;
         restH = liveRestH;
     }
@@ -112,15 +108,6 @@ Item {
         target: PillController
         function onActiveFaceChanged() {
             morphPill.runFaceAnim();
-        }
-        
-        function onPanelOpenChanged() {
-            if (PillController.panelOpen) 
-                morphPill.overlay = "panel"
-        }
-        function onLauncherOpenChanged() {
-            if (PillController.launcherOpen)
-                morphPill.overlay = "launcher"
         }
     }
 
@@ -197,8 +184,8 @@ Item {
         TapHandler {
             id: tap
             onTapped: {
-                enabled: morphPill.ready
-                if (morphPill.overlay !== "none")
+                enabled: morphPill.ready;
+                if (PillController.overlay !== "none")
                     return;
                 PillController.showPanel();
             }
@@ -207,7 +194,7 @@ Item {
 
     Row {
         id: restContent
-        enabled: morphPill.overlay === "none"
+        enabled: PillController.overlay === "none"
         opacity: morphPill.restOpacity
         visible: true
         anchors.centerIn: parent
@@ -229,14 +216,14 @@ Item {
             clip: false
 
             Behavior on width {
-                enabled: morphPill.ready && morphPill.morph === 0  && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMs
                     easing.type: Easing.InOutCubic
                 }
             }
             Behavior on height {
-                enabled: morphPill.ready && morphPill.morph === 0  && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMs
                     easing.type: Easing.InOutCubic
@@ -288,26 +275,29 @@ Item {
         }
     }
 
-    ControlPanel {
-        id: panel
+    OverlayLayer {
+        name: "panel"
+        morph: morphPill.morph
+        contentOpacity: morphPill.panelOpacity
         anchors.top: parent.top
         anchors.topMargin: Config.controlPanelPadding
         anchors.horizontalCenter: parent.horizontalCenter
-        z: 1
-        opacity: morphPill.panelOpacity && morphPill.overlay === "panel"
-        enabled: morphPill.morph >= 0.85 && morphPill.overlay === "panel"
-        visible: opacity > 0
+
+        ControlPanel {
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
 
-    Launcher {
-        id: launcher
+    OverlayLayer {
+        name: "launcher"
+        morph: morphPill.morph
+        contentOpacity: morphPill.panelOpacity
         anchors.fill: parent
         anchors.margins: Config.controlPanelPadding
-        z: 1
-        opacity: morphPill.panelOpacity && morphPill.overlay === "launcher"
-        enabled: morphPill.morph >= 0.85 && morphPill.overlay === "launcher"
-        visible: opacity > 0
 
+        Launcher {
+            anchors.fill: parent
+        }
     }
 
     VolumeBehavior {}

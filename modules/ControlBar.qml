@@ -13,7 +13,7 @@ Variants {
         id: bar
         WlrLayershell.namespace: "quickshell:bar"
         WlrLayershell.layer: WlrLayer.Top
-        WlrLayershell.keyboardFocus: morphPill.overlay !== "none" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: PillController.overlay !== "none" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         required property var modelData
         screen: modelData
         property alias barVisible: bar.visible
@@ -24,9 +24,9 @@ Variants {
         implicitHeight: modelData.height
 
         Shortcut {
-            enabled: morphPill.overlay !== "none"
+            enabled: PillController.overlay !== "none"
             sequence: "Escape"
-            onActivated: bar.closeOverlay()
+            onActivated: PillController.closeOverlay()
         }
 
         anchors {
@@ -36,41 +36,34 @@ Variants {
         }
 
         mask: Region {
-            item: morphPill.overlay !== "none" ? background : morphPill
-        }
-
-        function closeOverlay() {
-            PillController.closePanel()
-            PillController.closeLauncher()
-            if (!PillController.panelOpen && !PillController.launcherOpen)
-                morphPill.overlay = "none"
+            item: PillController.overlay !== "none" ? background : morphPill
         }
 
         Rectangle {
             id: background
             anchors.fill: parent
             color: Colors.md3.surface
-            opacity: morphPill.overlay !== "none" ? 0.5 : 0
+            opacity: PillController.overlay !== "none" ? 0.5 : 0
             z: -1
 
             Item {
                 anchors.fill: parent
                 focus: true
                 Keys.onEscapePressed: {
-                    if (morphPill.overlay === "panel")
+                    if (PillController.overlay === "panel")
                         PillController.closePanel();
-                    if (morphPill.overlay === "launcher")
+                    if (PillController.overlay === "launcher")
                         PillController.closeLauncher();
                 }
             }
 
             MouseArea {
                 anchors.fill: parent
-                enabled: morphPill.overlay !== "none"
+                enabled: PillController.overlay !== "none"
                 onClicked: {
-                    if (morphPill.overlay === "panel")
+                    if (PillController.overlay === "panel")
                         PillController.closePanel();
-                    if (morphPill.overlay === "launcher")
+                    if (PillController.overlay === "launcher")
                         PillController.closeLauncher();
                 }
             }
