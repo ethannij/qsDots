@@ -9,6 +9,7 @@ import qs.config
 import qs.theme
 import qs.modules.bar
 import qs.modules.panel.modules
+import qs.modules.elements
 
 Item {
     id: controlPanel
@@ -81,45 +82,29 @@ Item {
             }
         }
 
-
         NotifButton {
             anchors.verticalCenter: parent.verticalCenter
             x: PillController.page === "home" ? 0 : parent.width - width
             visible: PillController.page !== "system"
-            // TODO: Add DND function
         }
 
-        Rectangle {
+        IconButton {
             id: arrowRight
             visible: PillController.page === "home"
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            width: arrowRightIcon.implicitSize * 1.2
-            height: arrowRightIcon.implicitSize * 1.2
-            radius: width * 0.3
-            color: arrowRightHover.hovered ? Colors.md3.surface_variant : "transparent"
-            IconImage {
-                id: arrowRightIcon
-                source: Qt.resolvedUrl("../img/widgets/ui/pageright.svg")
-                anchors.fill: parent
-                implicitSize: Config.iconSize
-                backer.fillMode: Image.PreserveAspectCrop
-            }
-
-            MultiEffect {
-                id: arrowRightEffect
-                anchors.fill: arrowRightIcon
-                source: arrowRightIcon
-                colorization: 1
-                colorizationColor: arrowRightHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
-            }
+            source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/pageright.svg"))
+            size: Config.iconSize * 1.2
+            backgroundWidth: size
+            backgroundHeight: size
+            backgroundColor: arrowRightHover.hovered ? Colors.md3.surface_variant : "transparent"
+            iconColor: arrowRightHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
 
             HoverHandler {
                 id: arrowRightHover
                 cursorShape: Qt.PointingHandCursor
                 enabled: parent.visible
             }
-
             TapHandler {
                 id: arrowRightTap
                 gesturePolicy: TapHandler.ReleaseWithinBounds
@@ -138,37 +123,23 @@ Item {
             width: parent.width * 0.85
         }
 
-        Rectangle {
+        IconButton {
             id: arrowLeft
             visible: PillController.page === "system"
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width: arrowLeftIcon.implicitSize * 1.2
-            height: arrowLeftIcon.implicitSize * 1.2
-            radius: width * 0.3
-            color: arrowLeftHover.hovered ? Colors.md3.surface_variant : "transparent"
-            IconImage {
-                id: arrowLeftIcon
-                source: Qt.resolvedUrl("../img/widgets/ui/pageleft.svg")
-                anchors.fill: parent
-                implicitSize: Config.iconSize
-                backer.fillMode: Image.PreserveAspectCrop
-            }
-
-            MultiEffect {
-                id: arrowLeftEffect
-                anchors.fill: arrowLeftIcon
-                source: arrowLeftIcon
-                colorization: 1
-                colorizationColor: arrowLeftHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
-            }
+            source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/pageleft.svg"))
+            size: Config.iconSize * 1.2
+            backgroundWidth: size
+            backgroundHeight: size
+            backgroundColor: arrowLeftHover.hovered ? Colors.md3.surface_variant : "transparent"
+            iconColor: arrowLeftHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
 
             HoverHandler {
                 id: arrowLeftHover
                 cursorShape: Qt.PointingHandCursor
                 enabled: parent.visible
             }
-
             TapHandler {
                 id: arrowLeftTap
                 gesturePolicy: TapHandler.ReleaseWithinBounds
@@ -176,7 +147,6 @@ Item {
                 enabled: parent.visible
             }
         }
-
         Item {
             id: systemControl
             visible: PillController.page === "system"
@@ -209,7 +179,6 @@ Item {
             // - Mic
             // - Battery display of connected devices
             // - System Update (show packages to update, spawn terminal)
-            // - ?? DND button
             // - Screenshot/Screen Record
             // - Theme/Wallpaper Picker
 

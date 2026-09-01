@@ -38,16 +38,8 @@ Item {
                 font: StylizedFont.body
             }
 
-            HoverHandler {
-                id: hover
-                cursorShape: Qt.PointingHandCursor
-            }
+            onTapped: Audio.toggleMute()
 
-            TapHandler {
-                id: tap
-                gesturePolicy: TapHandler.ReleaseWithinBounds
-                onTapped: Audio.toggleMute()
-            }
             WheelHandler {
                 id: wheel
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -60,11 +52,5 @@ Item {
                 }
             }
         }
-    }
-
-    HoverTip {
-        visible: volumeItem.enabled
-        anchorItem: volumePill
-        text: Audio.ready ? Audio.sink.description : ""
     }
 }

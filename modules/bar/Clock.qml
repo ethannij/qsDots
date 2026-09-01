@@ -14,16 +14,5 @@ PillShape {
         font: StylizedFont.bold
         color: Colors.md3.primary
     }
-
-    HoverHandler {
-        id: hover
-        cursorShape: Qt.PointingHandCursor
-    }
-
-    TapHandler {
-        id: tap
-        gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: clockItem.showDate = !clockItem.showDate;
-    }
-
+    onTapped: clockItem.showDate = !clockItem.showDate
 }

@@ -1,6 +1,6 @@
+import Quickshell
 import QtQuick
-import Quickshell.Widgets
-import QtQuick.Effects
+import qs.modules.elements
 import qs.services
 import qs.config
 import qs.theme
@@ -15,11 +15,11 @@ Item {
 
     property url notificationIconDynamic: {
         if (Notifications.list.values.length > 0 && !Notifications.doNotDisturb)
-            return Qt.resolvedUrl("../../img/widgets/notifications/notification_unread.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/notifications/notification_unread.svg"));
         if (Notifications.list.values.length === 0 && !Notifications.doNotDisturb)
-            return Qt.resolvedUrl("../../img/widgets/notifications/notification.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/notifications/notification.svg"));
         if (Notifications.doNotDisturb)
-            return Qt.resolvedUrl("../../img/widgets/notifications/notification_paused.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/notifications/notification_paused.svg"));
     }
 
     Rectangle {
@@ -44,7 +44,7 @@ Item {
             id: tapRight
             acceptedButtons: Qt.RightButton
             gesturePolicy: TapHandler.ReleaseWithinBounds
-            onTapped: Notifications.clearAll();
+            onTapped: Notifications.clearAll()
         }
 
         TapHandler {
@@ -59,26 +59,10 @@ Item {
             spacing: Config.spaceXs
             anchors.centerIn: parent
 
-            Item {
-                implicitWidth: notifIcon.implicitWidth
-                implicitHeight: notifIcon.implicitHeight
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                IconImage {
-                    id: notifIcon
-                    anchors.centerIn: parent
-                    source: notifButton.notificationIconDynamic
-                    implicitSize: Config.iconSize
-                    backer.fillMode: Image.PreserveAspectCrop
-                }
-
-                MultiEffect {
-                    id: notifIconEffect
-                    source: notifIcon
-                    anchors.fill: notifIcon
-                    colorization: 1
-                    colorizationColor: hover.hovered ? Colors.md3.primary : Colors.md3.on_surface
-                }
+            ColorizedIcon {
+                size: Config.iconSize
+                source: notifButton.notificationIconDynamic
+                color: hover.hovered ? Colors.md3.primary : Colors.md3.on_surface
             }
 
             Text {

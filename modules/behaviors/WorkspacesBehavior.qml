@@ -7,7 +7,6 @@ import qs.services
 Item {
     id: root
 
-    property bool holdActivated: false
     property bool readySeen: false
 
     Connections {
@@ -27,26 +26,5 @@ Item {
 
     function show() {
         PillController.showFace("workspaces");
-    }
-
-    Timer {
-        id: holdTimer
-        interval: 180
-        repeat: false
-        running: false
-        onTriggered: {
-            root.holdActivated = true;
-            PillController.showFace("workspaces");
-        }
-    }
-
-    Timer {
-        id: dismissTimer
-        interval: 2000
-        repeat: false
-        running: false
-        onTriggered: {
-            PillController.dismiss();
-        }
     }
 }

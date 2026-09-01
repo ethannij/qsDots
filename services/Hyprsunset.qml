@@ -51,18 +51,18 @@ Singleton {
     // switch to case statements
     property url brightnessIconURL: {
         if (gamma <= 25)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_1.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_1.svg"));
         if (gamma <= 33)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_2.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_2.svg"));
         if (gamma <= 45)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_3.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_3.svg"));
         if (gamma <= 60)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_4.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_4.svg"));
         if (gamma <= 75)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_5.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_5.svg"));
         if (gamma <= 90)
-            return Qt.resolvedUrl("../modules/img/brightness/brightness_6.svg");
-        return Qt.resolvedUrl("../modules/img/brightness/brightness_7.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_6.svg"));
+        return Qt.resolvedUrl(Quickshell.shellPath("modules/img/brightness/brightness_7.svg"));
     }
 
     property list<url> temperatureIconURLs: [Qt.resolvedUrl("../modules/img/colorTemp/colTemp_off.svg"), Qt.resolvedUrl("../modules/img/colorTemp/colTemp_on.svg"), Qt.resolvedUrl("../modules/img/colorTemp/colTemp_auto.svg")]

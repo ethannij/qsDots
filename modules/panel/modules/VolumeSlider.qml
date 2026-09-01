@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 import qs.modules.elements
 import qs.services
@@ -27,7 +28,6 @@ Item {
             id: mouse
             anchors.fill: parent
             hoverEnabled: false
-            cursorShape: Qt.PointingHandCursor
             z: -1
 
             onWheel: (wheel) =>{
@@ -41,12 +41,12 @@ Item {
 
     property url iconURL: {
         if (Audio.muted)
-            return Qt.resolvedUrl("../../img/audio/off.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/off.svg"));
         if (Audio.vol === 0)
-            return Qt.resolvedUrl("../../img/audio/mute.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/mute.svg"));
         if (Audio.vol < 67)
-            return Qt.resolvedUrl("../../img/audio/low.svg");
-        return Qt.resolvedUrl("../../img/audio/high.svg");
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/low.svg"));
+        return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/high.svg"));
     }
 
     Text {

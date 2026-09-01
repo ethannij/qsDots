@@ -69,8 +69,6 @@ Singleton {
     readonly property int sessionMenuEntrySpacing: spaceXs
 
     // Feature Toggles
-    readonly property bool showVolume: true
-    readonly property bool showBattery: true
     readonly property bool showClock: true
 
     // Icon Sized

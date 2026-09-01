@@ -1,9 +1,12 @@
+import Quickshell
+import Quickshell.Widgets
 import QtQuick
 import QtQuick.Controls
 import qs.theme
 import qs.config
-import Quickshell.Widgets
-import QtQuick.Effects
+import qs.modules.elements
+
+
 
 Item {
     id: root
@@ -17,7 +20,6 @@ Item {
     property alias xPos: track.x
     property alias yPos: track.y
     property alias orientation: slider.orientation
-    property alias iconColor: iconColorization.colorizationColor
     property alias snapMode: slider.snapMode
 
     property bool handleVisible: true
@@ -70,20 +72,11 @@ Item {
             radius: height / 2
             color: "transparent"
 
-            IconImage {
-                id: handleImage
+            ColorizedIcon {
+                id: handleIcon
                 source: root.imageURL
-                anchors.centerIn: parent
-                backer.fillMode: Image.PreserveAspectCrop
-                implicitSize: root.sliderSize
-            }
-
-            MultiEffect {
-                id: iconColorization
-                anchors.fill: handleImage
-                source: handleImage
-                colorization: 1
-                colorizationColor: Colors.md3.on_primary
+                color: Colors.md3.on_primary
+                size: root.sliderSize
             }
 
             Behavior on x {

@@ -1,8 +1,5 @@
 import QtQuick
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
-import QtQuick.Effects
 import QtQuick.Layouts
 import qs.modules.panel.modules
 import qs.config
@@ -20,27 +17,27 @@ Item {
 
     property var widgets: [
         {
-            "icon": Qt.resolvedUrl("../../img/widgets/wifi/wifi_4.svg"),
+            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wifi/wifi_4.svg")),
             "title": "Wifi"
         },
         {
-            "icon": Qt.resolvedUrl("../../img/widgets/bluetooth/bluetooth_on.svg"),
+            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bluetooth/bluetooth_on.svg")),
             "title": "Bluetooth"
         },
         {
-            "icon": Qt.resolvedUrl("../../img/widgets/wled/wled.svg"),
+            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wled/wled.svg")),
             "title": "WLED",
             "action": WLED.toggle,
             "state": WLED.on
         },
         {
-            "icon": Qt.resolvedUrl("../../img/widgets/idle/idle.svg"),
+            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/idle/idle.svg")),
             "title": "Idle Inhibitor",
             "cmd": ["qs", "ipc", "call", "inhibitIdleIpc", "toggleIdle"],
             "state": IdleInhibitor.inhibitIdle
         },
         {
-            "icon": Qt.resolvedUrl("../../img/widgets/gamemode/gamemode.svg"),
+            "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/gamemode/gamemode.svg")),
             "title": "Game Mode",
             "cmd": ["qs", "ipc", "call", "gamemodeIpc", "toggleGamemode"]
         }
@@ -92,33 +89,19 @@ Item {
                     }
                 }
 
-                Item {
-                    implicitWidth: icon.implicitSize
-                    implicitHeight: icon.implicitSize
-
-                    IconImage {
-                        id: icon
-                        anchors.centerIn: parent
-                        source: widget.modelData.icon
-                        backer.fillMode: Image.PreserveAspectCrop
-                        implicitSize: 30
-                        visible: false
+                ColorizedIcon {
+                    id: icon
+                    source: widget.modelData.icon
+                    color: {
+                        if (widget.modelData.title === "WLED")
+                            return WLED.on ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
+                        if (widget.modelData.title === "Idle Inhibitor")
+                            return IdleInhibitor.inhibitIdle ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
+                        if (widget.modelData.title === "Game Mode")
+                            return Gamemode.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
+                        return Colors.md3.on_surface_variant;
                     }
-                    MultiEffect {
-                        id: iconColorization
-                        anchors.fill: icon
-                        source: icon
-                        colorizationColor: {
-                            if (widget.modelData.title === "WLED")
-                                return WLED.on ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                            if (widget.modelData.title === "Idle Inhibitor")
-                                return IdleInhibitor.inhibitIdle ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                            if (widget.modelData.title === "Game Mode")
-                                return Gamemode.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant;
-                            return Colors.md3.on_surface_variant;
-                        }
-                        colorization: 1
-                    }
+                    size: Config.iconSize
                 }
             }
         }

@@ -3,7 +3,6 @@ import qs.theme
 import qs.config
 import qs.modules.elements
 import qs.services
-import qs.modules.panel
 
 PillShape {
     id: root
@@ -30,19 +29,10 @@ PillShape {
         color: Colors.md3.tertiary
     }
 
-    TapHandler {
-        id: tap
-        gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: {
-            if (root.notif) {
-                PillController.panelOpen = true
-                PillController.page = "notifications"
-            }
+    onTapped: {
+        if (root.notif) {
+            PillController.panelOpen = true
+            PillController.page = "notifications"
         }
-    }
-
-    HoverHandler {
-        id: hover
-        cursorShape: Qt.PointingHandCursor
     }
 }

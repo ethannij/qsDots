@@ -101,7 +101,6 @@ Item {
 
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
     readonly property real panelOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
-    readonly property real launcherOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
 
     Component.onCompleted: {
         snapHostToFace();
@@ -305,7 +304,7 @@ Item {
         anchors.fill: parent
         anchors.margins: Config.controlPanelPadding
         z: 1
-        opacity: morphPill.launcherOpacity && morphPill.overlay === "launcher"
+        opacity: morphPill.panelOpacity && morphPill.overlay === "launcher"
         enabled: morphPill.morph >= 0.85 && morphPill.overlay === "launcher"
         visible: opacity > 0
 

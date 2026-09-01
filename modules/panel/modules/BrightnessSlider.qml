@@ -35,10 +35,9 @@ Item {
             id: mouse
             anchors.fill: parent
             hoverEnabled: false
-            cursorShape: Qt.PointingHandCursor
             z: -1
 
-            onWheel: (wheel) =>{
+            onWheel: wheel => {
                 if (wheel.angleDelta.y > 0)
                     Hyprsunset.gammaUp();
                 else if (wheel.angleDelta.y < 0)
@@ -47,30 +46,16 @@ Item {
         }
     }
 
-    Rectangle {
+    IconButton {
         id: tempIcon
         anchors.top: slider.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: Config.spaceMd
-        implicitWidth: icon.implicitWidth + Config.spaceMd
-        implicitHeight: icon.implicitHeight + Config.spaceMd
-        color: mouseIcon.containsMouse ? Colors.md3.surface_variant : "transparent"
-        radius: height
+        backgroundColor: mouseIcon.containsMouse ? Colors.md3.surface_variant : "transparent"
+        iconColor: Colors.md3.on_surface
+        source: Hyprsunset.activeTemperatureIconURL
+        radius: width
 
-        IconImage {
-            id: icon
-            anchors.centerIn: parent
-            source: Hyprsunset.activeTemperatureIconURL
-            backer.fillMode: Image.PreserveAspectCrop
-            implicitSize: 30
-        }
-        MultiEffect {
-            id: iconColorization
-            anchors.fill: icon
-            source: icon
-            colorization: 1
-            colorizationColor: Colors.md3.on_surface
-        }
         MouseArea {
             id: mouseIcon
             anchors.fill: parent

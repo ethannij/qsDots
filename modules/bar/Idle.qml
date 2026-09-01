@@ -1,29 +1,28 @@
+import Quickshell
 import QtQuick
-import QtQuick.Effects
-import Quickshell.Widgets
-import qs.services
-import qs.config
+import qs.modules.elements
 import qs.theme
+import qs.config
 
-    Item {
-        id: indicactor
-        implicitHeight: icon.implicitHeight
-        implicitWidth: icon.implicitWidth
 
-        IconImage {
-            id: icon
-            anchors.centerIn: parent
-            source: Qt.resolvedUrl("../../modules/img/widgets/idle/idle.svg")
-            backer.fillMode: Image.PreserveAspectCrop
-            implicitSize: Config.barHeight * 0.5
-            visible: false
-        }
+Item {
+    id: root
+    implicitWidth: indicator.implicitWidth
+    implicitHeight: indicator.implicitHeight
 
-        MultiEffect {
-            id: iconColorization
-            anchors.fill: icon
-            source: icon
-            colorization: 1
-            colorizationColor: Colors.md3.tertiary
-        }
+    ColorizedIcon {
+        id: indicator
+        source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/idle/idle.svg"))
+        color: Colors.md3.tertiary
+        size: Config.barHeight * 0.5
     }
+
+    HoverHandler {
+        id: hover
+        cursorShape: Qt.PointingHandCursor
+    }
+    TapHandler {
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: Quickshell.execDetached(["qs", "ipc", "call", "inhibitIdleIpc", "toggleIdle"])
+    }
+}

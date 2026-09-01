@@ -13,11 +13,26 @@ Item {
     property real radius: Config.radiusPill
     property int padH: Config.pillPadH
     property int padV: Config.pillPadV
+    property bool interactive: true
 
     default property alias content: content.data
+    readonly property alias hovered: hover.hovered
+    signal tapped
 
     implicitWidth: content.implicitWidth + padH * 2
     implicitHeight: content.implicitHeight + padV * 2
+
+    HoverHandler {
+        id: hover
+        enabled: root.interactive
+        cursorShape: Qt.PointingHandCursor
+    }
+    
+    TapHandler {
+        enabled: root.interactive
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: root.tapped()
+    }
 
     Rectangle {
         visible: root.chrome

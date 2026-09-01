@@ -2,7 +2,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import qs.modules.panel
 
 // Control which face is active in pill
 Singleton {
@@ -116,14 +115,6 @@ Singleton {
         trayOpen = false;
         sessionMenuOpen = false;
         faceTimer.restart();
-    }
-
-    function onPanelOpenChanged() {
-        if (!PillController.panelOpen) {
-            ControlPanel.page = "home";
-            trayOpen = false;
-            sessionMenuOpen = false;
-        }
     }
 
     function showLauncher() {
