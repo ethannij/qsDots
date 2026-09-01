@@ -15,6 +15,7 @@ Singleton {
     property bool trayOpen: false
     property string page: "home"
     property bool launcherOpen: false
+    property bool sessionMenuOpen: false
 
     property bool superTap: false
     property bool superHold: false
