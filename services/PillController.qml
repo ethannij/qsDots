@@ -1,7 +1,8 @@
+pragma Singleton
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import qs.modules.panel
-pragma Singleton
 
 // Control which face is active in pill
 Singleton {
@@ -11,44 +12,85 @@ Singleton {
     property string defaultFace: "clock"
     property bool pinned: false
     property bool panelOpen: false
-    //property bool panelOpen: true
     property bool trayOpen: false
     property string page: "home"
-    //property string page: "system"
-    property bool sessionMenuOpen: false
+    property bool launcherOpen: false
+
+    property bool superTap: false
+    property bool superHold: false
+    property double superPressedAt: 0
+
+    Timer {
+        id: holdTimer
+        interval: 180
+        onTriggered: {
+            handler.superHold = true;
+            PillController.showFace("workspaces");
+        }
+    }
+
+    GlobalShortcut {
+        id: launcherShortcut
+        name: "launcher"
+        description: "Toggle Launcher on Super Tap"
+
+        onPressed: {
+            handler.superTap = true;
+            handler.superHold = false;
+            handler.superPressedAt = Date.now()
+            holdTimer.restart();
+        }
+        onReleased: {
+            holdTimer.stop();
+            if (!handler.superTap || handler.panelOpen || handler.superHold)
+                return;
+            handler.toggleLauncher();
+        }
+    }
+
+    GlobalShortcut {
+        name: "launcherInterrupt"
+        onPressed: {
+            if (!launcherShortcut.pressed)
+                return;
+            if (Date.now() - launcherShortcut.superPressedAt < 30)
+                return;
+            handler.superTap = false;
+        }
+    }
 
     function showFace(name) {
-        if (panelOpen)
-            return ;
+        if (panelOpen || launcherOpen)
+            return;
 
         if (name === "clock") {
             faceTimer.stop();
             activeFace = name;
-            return ;
+            return;
         }
         activeFace = name;
-        if (panelOpen || pinned)
+        if (panelOpen || pinned || launcherOpen)
             faceTimer.stop();
         else
             faceTimer.restart();
     }
 
     function dismiss() {
-        if (panelOpen || pinned)
-            return ;
+        if (panelOpen || pinned || launcherOpen)
+            return;
 
         activeFace = "clock";
         faceTimer.stop();
     }
 
     function forceDismiss() {
-        faceTimer.stop()
-        activeFace = "clock"
-        panelOpen = false
+        faceTimer.stop();
+        activeFace = "clock";
+        panelOpen = false;
     }
 
     onPinnedChanged: {
-        if (panelOpen || pinned)
+        if (panelOpen || pinned || launcherOpen)
             faceTimer.stop();
         else if (activeFace !== defaultFace)
             faceTimer.restart();
@@ -57,29 +99,47 @@ Singleton {
     function togglePanel() {
         if (panelOpen) {
             closePanel();
-        }
-        else { 
+        } else {
             showPanel();
         }
     }
 
     function showPanel() {
-        panelOpen = true
-        faceTimer.stop()
+        panelOpen = true;
+        closeLauncher();
+        faceTimer.stop();
     }
 
     function closePanel() {
-        panelOpen = false
-        trayOpen = false
-        sessionMenuOpen = false
-        faceTimer.restart()
+        panelOpen = false;
+        trayOpen = false;
+        sessionMenuOpen = false;
+        faceTimer.restart();
     }
 
     function onPanelOpenChanged() {
         if (!PillController.panelOpen) {
-            ControlPanel.page = "home"
-            trayOpen = false
-            sessionMenuOpen = false
+            ControlPanel.page = "home";
+            trayOpen = false;
+            sessionMenuOpen = false;
+        }
+    }
+
+    function showLauncher() {
+        launcherOpen = true;
+        faceTimer.stop();
+    }
+
+    function closeLauncher() {
+        launcherOpen = false;
+        faceTimer.restart();
+    }
+
+    function toggleLauncher() {
+        if (launcherOpen) {
+            closeLauncher();
+        } else {
+            showLauncher();
         }
     }
 
@@ -90,10 +150,9 @@ Singleton {
         repeat: false
         onTriggered: {
             if (handler.panelOpen || handler.pinned)
-                return ;
+                return;
 
             handler.dismiss();
         }
     }
-
 }

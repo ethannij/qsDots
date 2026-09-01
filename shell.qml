@@ -2,6 +2,7 @@
 import Quickshell
 import QtQuick
 import qs.modules
+import qs.modules.launcher
 import qs.services
 import QtQuick.Controls
 import Quickshell.Hyprland
@@ -14,7 +15,7 @@ ShellRoot {
 
     FloatingWindow {
         id: launcher
-        visible: true
+        visible: false
         implicitWidth: 300
         implicitHeight: 300
         title: "Test Window"
@@ -71,7 +72,6 @@ ShellRoot {
                         } else if (event.key == Qt.Key_C && ctrl) {
                             event.acepted = true;
                         }
-
                     }
                 }
             }

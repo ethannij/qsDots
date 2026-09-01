@@ -49,26 +49,4 @@ Item {
             PillController.dismiss();
         }
     }
-
-    IpcHandler {
-        id: ipc
-        target: "hyprlandIpc"
-
-        function superDown(): void {
-            root.holdActivated = false;
-            holdTimer.start();
-        }
-        function superUp(): void {
-            if (holdTimer.running) {
-                holdTimer.stop();
-            }
-
-            if (root.holdActivated) {
-                dismissTimer.start();
-            } else {
-                Quickshell.execDetached(["bash", "-c", "$HOME/.config/rofi/modules/launcher/launcher.sh || pkill rofi"]);
-            }
-            root.holdActivated = false;
-        }
-    }
 }

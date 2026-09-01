@@ -5,12 +5,15 @@ import qs.modules.behaviors
 import qs.theme
 import qs.config
 import qs.modules.panel
+import qs.modules.launcher
 
 Item {
     id: morphPill
 
     readonly property real restHeight: clock.implicitHeight
     readonly property bool ready: restW > 0 && restH > 0
+
+    property string overlay: "none"
 
     property bool latchedHighlight: false
 
@@ -27,7 +30,7 @@ Item {
         }
     }
 
-    property real morph: PillController.panelOpen ? 1 : 0
+    property real morph: PillController.panelOpen || PillController.launcherOpen ? 1 : 0
 
     Behavior on morph {
         enabled: morphPill.ready && Config.animMs > 0
@@ -52,6 +55,8 @@ Item {
         restH = liveRestH
 
     onMorphChanged: if (morph === 0) {
+        if (!PillController.panelOpen && !PillController.launcherOpen)
+            overlay = "none";
         restW = liveRestW;
         restH = liveRestH;
     }
@@ -91,11 +96,12 @@ Item {
 
     onShellBusyChanged: {
         if (shellBusy)
-            latchedHighlight = PillController.panelOpen || hover.hovered;
+            latchedHighlight = PillController.panelOpen || PillController.launcherOpen || hover.hovered;
     }
 
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
     readonly property real panelOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
+    readonly property real launcherOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
 
     Component.onCompleted: {
         snapHostToFace();
@@ -107,6 +113,15 @@ Item {
         target: PillController
         function onActiveFaceChanged() {
             morphPill.runFaceAnim();
+        }
+        
+        function onPanelOpenChanged() {
+            if (PillController.panelOpen) 
+                morphPill.overlay = "panel"
+        }
+        function onLauncherOpenChanged() {
+            if (PillController.launcherOpen)
+                morphPill.overlay = "launcher"
         }
     }
 
@@ -170,7 +185,7 @@ Item {
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Config.radiusPill
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
+        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
 
         Behavior on border.color {
             enabled: !morphPill.shellBusy
@@ -184,7 +199,9 @@ Item {
             id: tap
             onTapped: {
                 enabled: morphPill.ready
-                PillController.togglePanel()
+                if (morphPill.overlay !== "none")
+                    return;
+                PillController.showPanel();
             }
         }
     }
@@ -278,8 +295,18 @@ Item {
         anchors.topMargin: Config.controlPanelPadding
         anchors.horizontalCenter: parent.horizontalCenter
         z: 1
-        opacity: morphPill.panelOpacity
-        enabled: morphPill.morph >= 0.85
+        opacity: morphPill.panelOpacity && morphPill.overlay === "panel"
+        enabled: morphPill.morph >= 0.85 && morphPill.overlay === "panel"
+    }
+
+    Launcher {
+        id: launcher
+        anchors.fill: parent
+        anchors.margins: Config.controlPanelPadding
+        z: 1
+        opacity: morphPill.launcherOpacity && morphPill.overlay === "launcher"
+        enabled: morphPill.morph >= 0.85 && morphPill.overlay === "launcher"
+
     }
 
     VolumeBehavior {}
