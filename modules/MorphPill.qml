@@ -208,7 +208,7 @@ Item {
 
     Row {
         id: restContent
-        enabled: morphPill.morph === 0
+        enabled: morphPill.overlay === "none"
         opacity: morphPill.restOpacity
         visible: true
         anchors.centerIn: parent
@@ -297,6 +297,7 @@ Item {
         z: 1
         opacity: morphPill.panelOpacity && morphPill.overlay === "panel"
         enabled: morphPill.morph >= 0.85 && morphPill.overlay === "panel"
+        visible: opacity > 0
     }
 
     Launcher {
@@ -306,6 +307,7 @@ Item {
         z: 1
         opacity: morphPill.launcherOpacity && morphPill.overlay === "launcher"
         enabled: morphPill.morph >= 0.85 && morphPill.overlay === "launcher"
+        visible: opacity > 0
 
     }
 
