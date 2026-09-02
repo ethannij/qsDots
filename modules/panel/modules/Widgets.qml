@@ -1,10 +1,8 @@
 import QtQuick
 import Quickshell
 import QtQuick.Layouts
-import qs.modules.panel.modules
 import qs.config
 import qs.modules.elements
-import qs.theme
 import qs.services
 
 Item {

@@ -28,7 +28,7 @@ Singleton {
     // Keybinds
     Timer {
         id: holdTimer
-        interval: 180
+        interval: 100
         onTriggered: {
             handler.superHold = true;
             PillController.showFace("workspaces");
