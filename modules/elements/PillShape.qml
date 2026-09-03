@@ -18,6 +18,7 @@ Item {
     default property alias content: content.data
     readonly property alias hovered: hover.hovered
     signal tapped
+    signal tappedAlternate
 
     implicitWidth: content.implicitWidth + padH * 2
     implicitHeight: content.implicitHeight + padV * 2
@@ -32,6 +33,13 @@ Item {
         enabled: root.interactive
         gesturePolicy: TapHandler.ReleaseWithinBounds
         onTapped: root.tapped()
+    }
+
+    TapHandler {
+        enabled: root.interactive
+        acceptedButtons: Qt.RightButton
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: root.tappedAlternate()
     }
 
     Rectangle {

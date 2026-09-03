@@ -13,14 +13,17 @@ Item {
     implicitWidth: grid.implicitWidth
     implicitHeight: grid.implicitHeight
 
-
     // To add widgets, first define the widget as a QtObject
     QtObject {
         id: wifi
         property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wifi/wifi_4.svg"))
-        property bool active: false
+        property bool active: Networks.wifiEnabled
         function trigger() {
-        } // Placeholder for wifi functionality
+            Networks.toggleWifi();
+        }
+        function triggerAlternate() {
+            Quickshell.execDetached(["qs", "ipc", "call", "wifi", "toggle"]);
+        }
     }
 
     QtObject {
@@ -77,6 +80,7 @@ Item {
                 source: modelData.icon
                 active: modelData.active
                 onTapped: modelData.trigger()
+                onTappedAlternate: modelData.triggerAlternate()
             }
         }
     }

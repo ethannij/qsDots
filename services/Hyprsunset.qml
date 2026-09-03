@@ -15,7 +15,7 @@ Singleton {
     readonly property real gammaUpperLimit: 100
 
     property int defaultColorTemperature: 6500
-    property int nightColorTemperature: 4500
+    property int nightColorTemperature: 5000
     property int gamma: 100
     property int gammaRestore: 100
     property int gammaStep: 5

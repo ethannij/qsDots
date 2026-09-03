@@ -3,13 +3,12 @@ import QtQuick.Layouts
 import Quickshell
 import qs.services
 import Quickshell.Io
-import Quickshell.Widgets
-import QtQuick.Effects
 import qs.config
 import qs.theme
 import qs.modules.bar
 import qs.modules.panel.modules
 import qs.modules.elements
+import qs.modules.windows
 
 Item {
     id: controlPanel
@@ -247,6 +246,8 @@ Item {
             }
         }
     }
+
+    WifiMenu {}
 
     IpcHandler {
         id: ipcPanel

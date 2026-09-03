@@ -37,6 +37,12 @@ Singleton {
         weight: 400
     })
 
+    readonly property font title: Qt.font({
+        family: proportionalFamily,
+        pointSize: 24,
+        weight: 400
+    })
+
     readonly property font tooltip: Qt.font({
         family: proportionalFamily,
         pointSize: 10,
