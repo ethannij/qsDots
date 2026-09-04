@@ -87,7 +87,7 @@ Item {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             Quickshell.execDetached(entry.modelData.cmd)
-                            background.visible = false
+                            PillController.sessionMenuOpen = false
                         }
                         visible: background.opacity > 0
                     }

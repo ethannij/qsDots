@@ -24,6 +24,7 @@ Singleton {
     property string temperatureState: "auto"
 
     property int hour: Time.date.getHours()
+    property int minute: Time.date.getMinutes()
 
     // Debug hour cycler to test automatic behavior
     /*property int hour: 0
@@ -45,8 +46,10 @@ Singleton {
     */
     property int fromHour: 21
     property int toHour: 9
+    property int fromMinute: 30
+    property int toMinute: 0
 
-    property bool isNight: hour >= fromHour || hour <= toHour
+    property bool isNight: (hour >= fromHour || hour <= toHour) && (minute > fromMinute || minute < toMinute)
 
     // switch to case statements
     property url brightnessIconURL: {
@@ -160,5 +163,8 @@ Singleton {
         function decreaseGamma(): void {
             root.gammaDown();
         }
+    }
+    Component.onCompleted: {
+        evaluateTemperature();
     }
 }
