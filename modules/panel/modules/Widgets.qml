@@ -28,10 +28,14 @@ Item {
 
     QtObject {
         id: bluetooth
-        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bluetooth/bluetooth_on.svg"))
-        property bool active: false
+        property url icon: Bluetooth.statusIcon
+        property bool active: Bluetooth.enabled
         function trigger() {
-        } // Placeholder for bluetooth functionality
+            Bluetooth.enabled = !Bluetooth.enabled;
+        } 
+        function triggerAlternate() {
+            Quickshell.execDetached(["qs", "ipc", "call", "bluetooth", "toggle"]);
+        }
     }
 
     QtObject {

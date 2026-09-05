@@ -21,7 +21,7 @@ Singleton {
     property int gammaStep: 5
     property bool firstEvaluation: true
     property bool temperatureActive: false
-    property string temperatureState: "auto"
+    property string temperatureState: "off"
 
     property int hour: Time.date.getHours()
     property int minute: Time.date.getMinutes()
@@ -46,10 +46,8 @@ Singleton {
     */
     property int fromHour: 21
     property int toHour: 9
-    property int fromMinute: 30
-    property int toMinute: 0
 
-    property bool isNight: (hour >= fromHour || hour <= toHour) && (minute > fromMinute || minute < toMinute)
+    property bool isNight: (hour >= fromHour || hour <= toHour)
 
     // switch to case statements
     property url brightnessIconURL: {
