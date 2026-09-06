@@ -7,6 +7,7 @@ import qs.config
 import qs.modules.elements
 import qs.modules.panel
 import qs.modules.launcher
+import qs.modules.windows
 
 Item {
     id: morphPill
@@ -28,7 +29,7 @@ Item {
         }
     }
 
-    property real morph: PillController.panelOpen || PillController.launcherOpen ? 1 : 0
+    property real morph: PillController.overlay !== "none" ? 1 : 0
 
     Behavior on morph {
         enabled: morphPill.ready && Config.animMs > 0
@@ -92,7 +93,7 @@ Item {
 
     onShellBusyChanged: {
         if (shellBusy)
-            latchedHighlight = PillController.panelOpen || PillController.launcherOpen || hover.hovered;
+            latchedHighlight = PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || hover.hovered;
     }
 
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
@@ -171,7 +172,7 @@ Item {
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Config.radiusPill
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
+        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
 
         Behavior on border.color {
             enabled: !morphPill.shellBusy
@@ -296,6 +297,30 @@ Item {
         anchors.margins: Config.controlPanelPadding
 
         Launcher {
+            anchors.fill: parent
+        }
+    }
+
+    OverlayLayer {
+        name: "bluetooth"
+        morph: morphPill.morph
+        contentOpacity: morphPill.panelOpacity
+        anchors.fill: parent
+        anchors.margins: Config.controlPanelPadding
+
+        BluetoothMenu {
+            anchors.fill: parent
+        }
+    }
+
+    OverlayLayer {
+        name: "wifi"
+        morph: morphPill.morph
+        contentOpacity: morphPill.panelOpacity
+        anchors.fill: parent
+        anchors.margins: Config.controlPanelPadding
+
+        WifiMenu {
             anchors.fill: parent
         }
     }

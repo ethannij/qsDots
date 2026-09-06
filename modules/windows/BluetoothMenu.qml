@@ -8,13 +8,9 @@ import qs.services
 import qs.theme
 import qs.config
 
-Window {
+Item {
     id: root
-    title: "Bluetooth Manager"
-    width: 420
-    height: 520
-    visible: false
-    color: Colors.md3.surface
+    visible: PillController.bluetoothOpen
 
     // Stop discovering when window is not visible, I dont know if this saves resources but it bothered me
     onVisibleChanged: {
@@ -36,6 +32,7 @@ Window {
 
     // Mostly just UI, theres an IPC handler if you keep scrolling. I also don't know what would happen if the device list was longer than the window, I think it just scrolls.
     ColumnLayout {
+        id: ui
         anchors.fill: parent
         anchors.margins: Config.spaceMd
         spacing: Config.spaceMd
@@ -101,7 +98,18 @@ Window {
                     onTapped: {
                         // Needs if statement otherwise can desync with service
                         if (Bluetooth.defaultAdapter)
-                            Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled;
+                            Bluetooth.toggleEnabled();
+                    }
+                }
+
+                TapHandler {
+                    id: stateTapAlternate
+                    acceptedButtons: Qt.RightButton
+
+                    // Close bluetooth and return to panel
+                    onTapped: {
+                        PillController.closeBluetooth();
+                        PillController.showPanel();
                     }
                 }
             }
@@ -196,6 +204,7 @@ Window {
 
                     Text {
                         id: nameText
+                        // Not sure if many BT devices expose battery, might also show battery Icon instead of percentage
                         text: delegate.modelData.batteryAvailable ? delegate.modelData.battery + "% " + delegate.modelData.deviceName : delegate.modelData.deviceName
                         font: StylizedFont.body
                         color: Colors.md3.on_surface

@@ -9,7 +9,7 @@ Singleton {
     id: root
 
 
-    readonly property var devices: UPower.devices
+    readonly property var devices: UPower.devices.values
     
     // Icon for battery, assuming no device match provided
     function batteryIcon(device) {

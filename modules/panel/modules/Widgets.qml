@@ -16,13 +16,13 @@ Item {
     // To add widgets, first define the widget as a QtObject
     QtObject {
         id: wifi
-        property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wifi/wifi_4.svg"))
+        property url icon: Networks.statusIcon
         property bool active: Networks.wifiEnabled
         function trigger() {
             Networks.toggleWifi();
         }
         function triggerAlternate() {
-            Quickshell.execDetached(["qs", "ipc", "call", "wifi", "toggle"]);
+            PillController.showWifi();
         }
     }
 
@@ -31,10 +31,10 @@ Item {
         property url icon: Bluetooth.statusIcon
         property bool active: Bluetooth.enabled
         function trigger() {
-            Bluetooth.enabled = !Bluetooth.enabled;
+            Bluetooth.toggleEnabled();
         } 
         function triggerAlternate() {
-            Quickshell.execDetached(["qs", "ipc", "call", "bluetooth", "toggle"]);
+            PillController.showBluetooth();
         }
     }
 

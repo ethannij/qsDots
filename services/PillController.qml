@@ -18,7 +18,9 @@ Singleton {
     property string page: "home"
     property bool launcherOpen: false
     property bool sessionMenuOpen: false
-    readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : "none"
+    property bool bluetoothOpen: false
+    property bool wifiOpen: false
+    readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : "none"
 
     // Input handling for super key
     property bool superTap: false
@@ -150,6 +152,32 @@ Singleton {
         faceTimer.restart();
     }
 
+    function showBluetooth() {
+        closePanel();
+        closeLauncher()
+        closeWifi();
+        bluetoothOpen = true;
+        faceTimer.stop();
+    }
+
+    function closeBluetooth() {
+        bluetoothOpen = false;
+        faceTimer.restart();
+    }
+
+    function showWifi() {
+        closePanel();
+        closeLauncher();
+        closeBluetooth();
+        wifiOpen = true;
+        faceTimer.stop();
+    }
+
+    function closeWifi() {
+        wifiOpen = false;
+        faceTimer.restart();
+    }
+
     function toggleLauncher() {
         if (launcherOpen) {
             closeLauncher();
@@ -161,5 +189,7 @@ Singleton {
     function closeOverlay() {
         closePanel();
         closeLauncher();
+        closeBluetooth();
+        closeWifi();
     }
 }

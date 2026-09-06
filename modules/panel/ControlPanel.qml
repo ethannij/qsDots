@@ -8,7 +8,6 @@ import qs.theme
 import qs.modules.bar
 import qs.modules.panel.modules
 import qs.modules.elements
-import qs.modules.windows
 
 Item {
     id: controlPanel
@@ -155,10 +154,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.85
 
-            // System Controls
-            // - Wifi (clickable to expand wifi menu)
-            // - Bluetooth (clickable to expand bluetooth menu)
-
             VolumeSlider {
                 id: volumeSlider
                 anchors.left: parent.left
@@ -246,8 +241,6 @@ Item {
             }
         }
     }
-
-    WifiMenu {}
 
     IpcHandler {
         id: ipcPanel

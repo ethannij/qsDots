@@ -54,6 +54,10 @@ Variants {
                         PillController.closePanel();
                     if (PillController.overlay === "launcher")
                         PillController.closeLauncher();
+                    if (PillController.overlay === "bluetooth")
+                        PillController.closeBluetooth();
+                    if (PillController.overlay === "wifi")
+                        PillController.closeWifi();
                 }
             }
 
@@ -65,6 +69,10 @@ Variants {
                         PillController.closePanel();
                     if (PillController.overlay === "launcher")
                         PillController.closeLauncher();
+                    if (PillController.overlay === "bluetooth")
+                        PillController.closeBluetooth();
+                    if (PillController.overlay === "wifi")
+                        PillController.closeWifi();
                 }
             }
         }

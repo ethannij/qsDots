@@ -21,7 +21,7 @@ Singleton {
     property int gammaStep: 5
     property bool firstEvaluation: true
     property bool temperatureActive: false
-    property string temperatureState: "off"
+    property string temperatureState: "auto"
 
     property int hour: Time.date.getHours()
     property int minute: Time.date.getMinutes()

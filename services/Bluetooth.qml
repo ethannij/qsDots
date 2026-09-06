@@ -57,4 +57,13 @@ Singleton {
         device.trusted = true;
         device.connected = true;
     }
+
+    function toggleEnabled() {
+        if (enabled) {
+            defaultAdapter.enabled = false;
+            defaultAdapter.discovering = false;
+        }
+        if (!enabled)
+            defaultAdapter.enabled = true;
+    }
 }
