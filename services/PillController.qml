@@ -20,6 +20,7 @@ Singleton {
     property bool sessionMenuOpen: false
     property bool bluetoothOpen: false
     property bool wifiOpen: false
+    property bool devicePower: true
     readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : "none"
 
     // Input handling for super key

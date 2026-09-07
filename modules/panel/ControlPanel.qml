@@ -179,7 +179,7 @@ Item {
         }
     }
 
-    Item {
+    RowLayout {
         id: footer
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -188,29 +188,25 @@ Item {
         anchors.leftMargin: Config.controlPanelFooterInset
 
         Row {
+            Layout.alignment: Qt.AlignVCenter
             spacing: Config.controlPanelStatsSpacing
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            CPUInfo {
-                id: cpuInfo
-                color: Colors.md3.primary
-            }
 
-            MemInfo {
-                id: memInfo
-                color: Colors.md3.secondary
+            SysUsage {}
+            Rectangle {
+                implicitWidth: 1
+                implicitHeight: parent.height
+                color: Colors.md3.on_surface_variant
             }
-
-            GPUInfo {
-                id: gpuInfo
-                color: Colors.md3.tertiary
+            DeviceBattery {
+                Layout.alignment: Qt.AlignVCenter
             }
         }
 
         RowLayout {
             id: trayRow
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            //anchors.right: parent.right
+            //anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignRight
             spacing: Config.spaceSm
 
             TrayStrip {
@@ -225,18 +221,22 @@ Item {
                 }
             }
 
-            Text {
+            IconButton {
                 id: trayBtn
                 Layout.alignment: Qt.AlignVCenter
-                text: "󰍜"
-                font: StylizedFont.icon
-                color: trayBtnMouse.containsMouse || PillController.trayOpen ? Colors.md3.primary : Colors.md3.on_surface
-                MouseArea {
-                    id: trayBtnMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
+                source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/menu.svg"))
+                iconColor: trayBtnHover.hovered || PillController.trayOpen ? Colors.md3.primary : Colors.md3.on_surface
+                backgroundColor: trayBtnHover.hovered || PillController.trayOpen ? Colors.md3.surface_variant : "transparent"
+                size: Config.iconSize * 0.75
+
+                HoverHandler {
+                    id: trayBtnHover
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: PillController.trayOpen = !PillController.trayOpen
+                }
+                TapHandler {
+                    id: trayBtnTap
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: PillController.trayOpen = !PillController.trayOpen
                 }
             }
         }

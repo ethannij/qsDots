@@ -15,6 +15,7 @@ Singleton {
 
     property bool enabled: defaultAdapter?.enabled ?? false // Whether Bluetooth is enabled
 
+
     // Defines icon to use around system based on state of Bluetooth
     property url statusIcon: {
         if (defaultAdapter?.discovering)
@@ -30,7 +31,7 @@ Singleton {
             }
     }
 
-    // Pair a device, unpair if paired, pair and trust if not paired. Trust is required for some devices to connect.
+    // Pair a device, unpair if paired
     function pairDevice(device) {
         if (!device)
             return;
@@ -38,8 +39,8 @@ Singleton {
             device.forget();
             return;
         }
-        device.pair();
-        device.trusted = true;
+        else
+            device.pair();
     }
 
     // Connect a device, disconnect if connected, pair and trust if not paired.
@@ -47,15 +48,15 @@ Singleton {
         if (!device)
             return;
         if (device.connected) {
-            device.connected = false;
+            device.disconnect();
             return;
         }
         if (!device.paired) {
-            device.pair();
+            pairDevice(device);
             return;
         }
         device.trusted = true;
-        device.connected = true;
+        device.connect();
     }
 
     function toggleEnabled() {

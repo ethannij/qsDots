@@ -235,10 +235,7 @@ Item {
                                 color: pairingButtonHover.hovered ? Colors.md3.on_secondary_container : Colors.md3.on_tertiary_container
                             }
                             onTapped: {
-                                if (delegate.modelData.paired)
-                                    Bluetooth.pairDevice(delegate.modelData);
-                                else
-                                    Bluetooth.pairDevice(delegate.modelData);
+                                Bluetooth.pairDevice(delegate.modelData);
                             }
 
                             HoverHandler {
