@@ -1,21 +1,19 @@
 import QtQuick
 //@ pragma UseQApplication
 import Quickshell
+import Quickshell.Services.UPower
 import qs.modules
 import qs.modules.windows
 import qs.services
-import Quickshell.Services.UPower
 
 ShellRoot {
     id: root
 
-    Component.onCompleted: {
-    }
-
     ControlBar {
     }
 
-    Window { // Debug window
+    // Debug window
+    Window {
         width: 100
         height: 100
         visible: false

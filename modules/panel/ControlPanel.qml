@@ -45,13 +45,24 @@ Item {
             color: Colors.md3.on_surface
         }
 
+       
+
         Clock {
+            id: clock
             chrome: false
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
 
+        WeatherInfo {
+            id: weatherInfo
+            anchors.right: sessionMenu.left
+            anchors.left: clock.right
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
         SessionMenu {
+            id: sessionMenu
             anchors.right: parent.right
             anchors.rightMargin: 0
         }
