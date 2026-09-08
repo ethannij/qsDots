@@ -197,6 +197,9 @@ Item {
                 implicitHeight: parent.height
                 color: Colors.md3.on_surface_variant
             }
+            LaptopBattery {
+                Layout.alignment: Qt.AlignVCenter
+            }
             DeviceBattery {
                 Layout.alignment: Qt.AlignVCenter
             }

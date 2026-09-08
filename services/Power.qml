@@ -7,7 +7,9 @@ pragma Singleton
 Singleton {
     id: root
 
-    readonly property var devices: UPower.devices.values
+    readonly property var devices_unfiltered: UPower.devices.values // Laptops can have trouble with UPower api as it exposes laptop battery & power supply
+    readonly property var devices: devices_unfiltered.filter(d => d.isLaptopBattery !== true && d.powerSupply !== true) // Filter out laptop specific power devices
+    readonly property var laptopBattery: devices_unfiltered.find(d => d.isLaptopBattery === true) // Specify laptop battery specifically for module, will ALWAYS be first in list
     // Icon to add if non-generic device is charging
     property url chargeIcon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/battery/charging/charging.svg"))
 

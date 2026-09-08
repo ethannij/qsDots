@@ -4,7 +4,6 @@ import QtQuick
 import qs.modules
 import qs.services
 import qs.modules.windows
-import Quickshell.Services.UPower
 
 ShellRoot {
     id: root
@@ -12,5 +11,7 @@ ShellRoot {
 
     Component.onCompleted: {
         
-    }
+for (const d of Power.devices) {
+    console.log(d.nativePath, d.type, d.model, d.percentage, d.isLaptopBattery, d.powerSupply)
+}    }
 }
