@@ -70,9 +70,7 @@ Singleton {
             return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/weather/cloudy.svg")); // Default to cloudy
         }
     }
-
-    signal timerRestarted()
-
+    
     Process {
         id: weatherFetcher
 
