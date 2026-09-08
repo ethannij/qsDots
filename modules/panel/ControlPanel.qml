@@ -199,6 +199,7 @@ Item {
             }
             LaptopBattery {
                 Layout.alignment: Qt.AlignVCenter
+                visible: Power.laptopBattery !== undefined
             }
             DeviceBattery {
                 Layout.alignment: Qt.AlignVCenter

@@ -1,17 +1,38 @@
+import QtQuick
 //@ pragma UseQApplication
 import Quickshell
-import QtQuick
 import qs.modules
-import qs.services
 import qs.modules.windows
+import qs.services
+import Quickshell.Services.UPower
 
 ShellRoot {
     id: root
-    ControlBar {}
 
     Component.onCompleted: {
-        
-for (const d of Power.devices) {
-    console.log(d.nativePath, d.type, d.model, d.percentage, d.isLaptopBattery, d.powerSupply)
-}    }
+    }
+
+    ControlBar {
+    }
+
+    Window { // Debug window
+        width: 100
+        height: 100
+        visible: false
+
+        Rectangle {
+            anchors.fill: parent
+            color: "black"
+
+            Text {
+                anchors.centerIn: parent
+                color: "white"
+                //text: UPower.devices.values.find(d => d.isLaptopBattery === true) ? "exists" : "null"
+                text: Power.laptopBattery ? "exists" : "null"
+            }
+
+        }
+
+    }
+
 }
