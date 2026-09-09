@@ -16,6 +16,14 @@ Singleton {
 
     property int defaultColorTemperature: 6500
     property int nightColorTemperature: 5000
+    property int activeTemperature: {
+        if (temperatureState === "off")
+            return root.defaultColorTemperature;
+        if (temperatureState === "on")
+            return root.nightColorTemperature;
+        return isNight ? root.nightColorTemperature : root.defaultColorTemperature;
+    }
+
     property int gamma: 100
     property int gammaRestore: 100
     property int gammaStep: 5
@@ -83,15 +91,13 @@ Singleton {
     function enableTemperature() {
         root.temperatureActive = true;
         root.temperatureState = "on";
-        root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.nightColorTemperature}`]); // TODO: make this dynamic
+        applyTemperature(root.nightColorTemperature);
     }
 
     function disableTemperature() {
         root.temperatureActive = false;
         root.temperatureState = "off";
-        root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.defaultColorTemperature}`]); // TODO: make this dynamic
+        applyTemperature(root.defaultColorTemperature);
     }
 
     function automaticTemperature() {
@@ -100,11 +106,9 @@ Singleton {
     }
 
     function evaluateTemperature() {
-        if (root.isNight && root.temperatureState === "auto") {
-            Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.nightColorTemperature}`]);
-        } else if (!root.isNight || root.temperatureState === "auto") {
-            Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.defaultColorTemperature}`]);
-        }
+        if (temperatureState !== "auto")
+            return;
+        applyTemperature(isNight ? root.nightColorTemperature : root.defaultColorTemperature);
     }
 
     function temperatureNext() {
@@ -127,6 +131,12 @@ Singleton {
 
     onHourChanged: {
         root.evaluateTemperature();
+    }
+
+    function applyTemperature(kelvin) {
+        startHyprsunset();
+        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${kelvin}`]);
+        WLED.setTemperature(kelvin);
     }
 
     function setGamma(gamma) {
@@ -162,6 +172,15 @@ Singleton {
             root.gammaDown();
         }
     }
+
+    Connections {
+        target: WLED
+        function onWledExistsChanged() {
+            if (WLED.wledExists)
+                WLED.setTemperature(root.activeTemperature)
+        }
+    }
+
     Component.onCompleted: {
         evaluateTemperature();
     }

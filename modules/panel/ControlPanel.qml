@@ -24,6 +24,10 @@ Item {
             PillController.page = "home";
     }
 
+    onVisibleChanged: {
+        WLED.refresh()
+    }
+
     Item {
         id: header
 

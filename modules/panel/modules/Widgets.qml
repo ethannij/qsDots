@@ -40,10 +40,14 @@ Item {
 
     QtObject {
         id: wled
+        property bool visible: WLED.wledExists
         property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/wled/wled.svg"))
         property bool active: WLED.on
         function trigger() {
             WLED.toggle();
+        }
+        function triggerAlternate() {
+            WLED.refresh();
         }
     }
 
@@ -81,6 +85,7 @@ Item {
 
             QuickToggle {
                 required property var modelData
+                visible: modelData.visible ?? true
                 source: modelData.icon
                 active: modelData.active
                 onTapped: modelData.trigger()
