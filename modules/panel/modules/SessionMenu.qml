@@ -3,6 +3,7 @@ import Quickshell
 import qs.config
 import qs.theme
 import qs.services
+import qs.modules.elements
 pragma ComponentBehavior: Bound
 
 Item {
@@ -11,31 +12,29 @@ Item {
     implicitWidth: button.width
     implicitHeight: button.height
 
-    Rectangle {
+    IconButton {
         id: button
+        backgroundColor: buttonHover.hovered ? Colors.md3.surface_variant : "transparent"
+        iconColor: buttonHover.hovered ? Colors.md3.primary : Colors.md3.error
+        source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/power_button.svg"))
 
-        anchors.fill: parent
-        color: "transparent"
-        implicitWidth: text.width
-        implicitHeight: text.height
-
-        Text {
-            id: text
-
-            text: "󰐥"
-            color: mouse.containsMouse ? Colors.md3.on_surface_variant : Colors.md3.error
-
-            font: StylizedFont.body
-
+        HoverHandler {
+            id: buttonHover
+            cursorShape: Qt.PointingHandCursor
         }
 
+        TapHandler {
+            id: buttonTap
+            onTapped: PillController.sessionMenuOpen = !PillController.sessionMenuOpen
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+        }
     }
 
     readonly property var actions: [
         { label: "shutdown", cmd: ["systemctl", "poweroff"]},
         { label: "reboot", cmd: ["systemctl", "reboot"]},
         { label: "logout", cmd: ["loginctl", "terminate-session", Quickshell.env("XDG_SESSION_ID")]},
-        { label: "suspend", cmd: ["systemctl", "suspend"]},
+        { label: "sleep", cmd: ["systemctl", "suspend"]},
         { label: "hibernate", cmd: ["systemctl", "hibernate"]},
         { label: "lock", cmd: ["hyprlock"]},
     ]
@@ -77,19 +76,26 @@ Item {
                         id: label
                         anchors.centerIn: parent
                         text: entry.modelData.label
-                        color: entryMouse.containsMouse ? Colors.md3.primary : Colors.md3.on_surface
+                        color: entryHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
                         font: StylizedFont.body
-                    }
-                    MouseArea {
-                        id: entryMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            Quickshell.execDetached(entry.modelData.cmd)
-                            PillController.sessionMenuOpen = false
+
+                        HoverHandler {
+                            id: entryHover
+                            enabled: background.opacity > 0
+                            cursorShape: Qt.PointingHandCursor
                         }
-                        visible: background.opacity > 0
+
+                        TapHandler {
+                            id: entryTap
+                            enabled: background.opacity > 0
+                            onTapped: {
+                                Quickshell.execDetached(entry.modelData.cmd)
+                                PillController.closePanel()
+
+                            }
+                           gesturePolicy: TapHandler.ReleaseWithinBounds
+
+                        }
                     }
                 }
             }
@@ -97,18 +103,4 @@ Item {
         }
 
     }
-
-    MouseArea {
-        id: mouse
-
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            PillController.sessionMenuOpen = !PillController.sessionMenuOpen
-        }
-    }
-
-   
-
 }
