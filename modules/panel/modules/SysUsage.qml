@@ -29,6 +29,8 @@ Item {
     PillShape {
         id: pill
 
+        interactive: false
+
         anchors.centerIn: parent
         width: row.implicitWidth + Config.controlPanelStatsSpacing
         height: row.implicitHeight + Config.controlPanelStatsSpacing 
