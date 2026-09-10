@@ -39,11 +39,11 @@ Singleton {
             device.forget();
             return;
         }
-        else
-            device.pair();
+        device.pair();
+        device.trusted = true;
     }
 
-    // Connect a device, disconnect if connected, pair and trust if not paired.
+    // Connect a device
     function connectDevice(device) {
         if (!device)
             return;
@@ -51,12 +51,8 @@ Singleton {
             device.disconnect();
             return;
         }
-        if (!device.paired) {
-            pairDevice(device);
-            return;
-        }
-        device.trusted = true;
         device.connect();
+        pairDevice(device);
     }
 
     function toggleEnabled() {

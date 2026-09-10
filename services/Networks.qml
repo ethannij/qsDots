@@ -9,6 +9,7 @@ Singleton {
 
     readonly property bool wifiEnabled: Networking.wifiEnabled
     property string pskSsid: "" // Used for psk prompt
+    property string pskDraft: ""
 
     // This is pretty unique, but I didn't like seeing wifi_bad icon. I use my wifi as an access point for my lights, and ethernet for internet, so I provided a unique icon for that
     readonly property bool hotspotActive: {
@@ -106,6 +107,8 @@ Singleton {
     function connectTo(net, psk) {
         if (!net)
             return;
+        if (root.wirelessDevice)
+            root.wirelessDevice.scannerEnabled = false;
         if (psk)
             net.connectWithPsk(psk);
         else

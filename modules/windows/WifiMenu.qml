@@ -18,13 +18,17 @@ Item {
         else
             Networks.pskSsid = "";
     }
+    readonly property bool connecting: {
+        const nets = Networks.wirelessDevice ? [...Networks.wirelessDevice.networks.values]: [];
+        return nets.some(n => n.state === ConnectionState.Connecting)
+    }
 
     // Double check scanner is turned on assuming a wifi device exists
     Binding {
         target: Networks.wirelessDevice
         property: "scannerEnabled"
         value: true
-        when: root.visible && Networks.wirelessDevice !== null
+        when: root.visible && Networks.wirelessDevice && Networks.pskSsid === "" && !root.connecting
     }
 
     // UI bits *Caution* this whole block is a nightmare, I've attempted to clean it up but its a mess
@@ -143,7 +147,7 @@ Item {
                     enabled: delegate.modelData.net !== null
                     ignoreUnknownSignals: true
                     function onConnectionFailed(reason) {
-                        if (reason === ConnectionFailReason.NoSecrets)
+                        if (reason === ConnectionFailReason.NoSecrets || reason === ConnectionFailReason.WifiAuthTimeout || reason === ConnectionFailReason.WifiClientFailed)
                             Networks.pskSsid = delegate.modelData.name;
                     }
                 }
@@ -212,6 +216,9 @@ Item {
                                 // Input for psk
                                 id: pskInput
 
+                                text: Networks.pskDraft
+                                onTextChanged: Networks.pskDraft = text;
+
                                 // Formatting
                                 width: actions.showPsk ? 120 : 0
                                 height: nameText.implicitHeight
@@ -230,7 +237,7 @@ Item {
 
                                 onAccepted: {
                                     Networks.connectTo(delegate.modelData.net, text);
-                                    text = "";
+                                    Networks.pskDraft = "";
                                     Networks.pskSsid = "";
                                 }
                                 Keys.onEscapePressed: {

@@ -171,6 +171,15 @@ Singleton {
         function decreaseGamma(): void {
             root.gammaDown();
         }
+
+        function toggleTemperature(): void {
+            if (root.temperatureState === "auto")
+                root.disableTemperature();
+            else if (root.temperatureState === "on")
+                root.disableTemperature();
+            else if (root.temperatureState === "off")
+                root.enableTemperature();
+        }
     }
 
     Connections {

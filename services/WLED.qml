@@ -20,7 +20,7 @@ Singleton {
         setState.running = true;
     }
 
-    // Convert kelvin (from HyprSunset -> Gain values for hyperHDR)
+    // Convert kelvin (from HyprSunset -> Gain values for hyperHDR) // This is Vibe Coded
     function kelvinToGains(kelvin) {
         const k = kelvin / 100;
         let r, g, b;

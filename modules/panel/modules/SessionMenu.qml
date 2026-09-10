@@ -88,13 +88,12 @@ Item {
                         TapHandler {
                             id: entryTap
                             enabled: background.opacity > 0
+                            //gesturePolicy: TapHandler.ReleaseWithinBounds
                             onTapped: {
                                 Quickshell.execDetached(entry.modelData.cmd)
-                                PillController.closePanel()
+                                PillController.closeOverlay()
 
                             }
-                           gesturePolicy: TapHandler.ReleaseWithinBounds
-
                         }
                     }
                 }
