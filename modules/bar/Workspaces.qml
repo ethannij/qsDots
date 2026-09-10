@@ -20,7 +20,7 @@ PillShape {
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
         onWheel: event => {
             if (event.angleDelta.y > 0)
-                 Hyprland.dispatch("hl.dsp.focus({ workspace = 'e+1'})");
+                Hyprland.dispatch("hl.dsp.focus({ workspace = 'e+1'})");
             if (event.angleDelta.y < 0)
                 Hyprland.dispatch("hl.dsp.focus({ workspace = 'e-1'})");
             event.accepted = true;
@@ -37,8 +37,9 @@ PillShape {
                 id: wsButton
                 required property int index
                 // Get functionality from Hyprland module
-                property var ws: Hyprland.workspaces.values.find(w => w.id === (index + 1))
-                property bool isActive: Hyprland.focusedWorkspace?.id === (index + 1)
+                readonly property string wsName: String(index + 1)
+                property var ws: Hyprland.workspaces?.values.find(w => w && w.name === wsName) ?? null
+                property bool isActive: Hyprland.focusedWorkspace?.name === wsName
 
                 // Define font metrics for labels to prevent animation jittering
                 FontMetrics {

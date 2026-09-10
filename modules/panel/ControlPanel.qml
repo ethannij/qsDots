@@ -25,7 +25,7 @@ Item {
     }
 
     onVisibleChanged: {
-        WLED.refresh()
+        WLED.refresh();
     }
 
     Item {
@@ -41,6 +41,7 @@ Item {
         anchors.rightMargin: Config.controlPanelHeaderInset
 
         Text {
+            id: userText
             anchors.left: parent.left
             anchors.leftMargin: Config.spaceMd
             anchors.verticalCenter: parent.verticalCenter
@@ -49,7 +50,25 @@ Item {
             color: Colors.md3.on_surface
         }
 
-       
+        IconButton {
+            id: wallpapers
+            source: Wallpapers.icon
+            backgroundColor: wallpapersHover.hovered ? Colors.md3.surface_variant : "transparent"
+            iconColor: wallpapersHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+            anchors.left: userText.right
+            anchors.leftMargin: Config.spaceMd
+            anchors.verticalCenter: parent.verticalCenter
+
+            HoverHandler {
+                id: wallpapersHover
+                cursorShape: Qt.PointingHandCursor
+            }
+            TapHandler {
+                id: wallpapersTap
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+                onTapped: PillController.showWallpaperSwitcher()
+            }
+        }
 
         Clock {
             id: clock

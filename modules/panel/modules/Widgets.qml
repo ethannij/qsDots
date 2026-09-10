@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import qs.config
 import qs.modules.elements
 import qs.services
+import qs.theme
 
 Item {
     // Widget Grid Container, define widgets and behaviors here
@@ -69,9 +70,17 @@ Item {
         }
     }
 
+PillShape {
+        id: pill
+        interactive: false
+        anchors.centerIn: parent
+        width: parent.implicitWidth + Config.controlPanelStatsSpacing
+        height: parent.implicitHeight + Config.controlPanelStatsSpacing 
+        color: Colors.md3.surface_container_low
+
+
     Grid {
         id: grid
-        anchors.centerIn: parent
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.alignment: Qt.AlignCenter
@@ -92,5 +101,6 @@ Item {
                 onTappedAlternate: modelData.triggerAlternate()
             }
         }
-    }
+      }
+  }
 }

@@ -5,7 +5,6 @@ import Quickshell.Wayland
 import qs.config
 import qs.services
 import qs.theme
-import qs.modules.launcher
 
 Variants {
     model: Quickshell.screens
@@ -49,31 +48,13 @@ Variants {
             Item {
                 anchors.fill: parent
                 focus: true
-                Keys.onEscapePressed: {
-                    if (PillController.overlay === "panel")
-                        PillController.closePanel();
-                    if (PillController.overlay === "launcher")
-                        PillController.closeLauncher();
-                    if (PillController.overlay === "bluetooth")
-                        PillController.closeBluetooth();
-                    if (PillController.overlay === "wifi")
-                        PillController.closeWifi();
-                }
+                Keys.onEscapePressed: PillController.closeOverlay();
             }
 
             MouseArea {
                 anchors.fill: parent
                 enabled: PillController.overlay !== "none"
-                onClicked: {
-                    if (PillController.overlay === "panel")
-                        PillController.closePanel();
-                    if (PillController.overlay === "launcher")
-                        PillController.closeLauncher();
-                    if (PillController.overlay === "bluetooth")
-                        PillController.closeBluetooth();
-                    if (PillController.overlay === "wifi")
-                        PillController.closeWifi();
-                }
+                onClicked: PillController.closeOverlay();
             }
         }
 
@@ -85,6 +66,7 @@ Variants {
             visible: Config.showClock
             z: 1
         }
+        
         IpcHandler {
             id: ipcbar
             target: "ipcBar"

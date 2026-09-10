@@ -20,7 +20,8 @@ Singleton {
     property bool sessionMenuOpen: false
     property bool bluetoothOpen: false
     property bool wifiOpen: false
-    readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : "none"
+    property bool wallpaperSwitcherOpen: false
+    readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : wallpaperSwitcherOpen ? "wallpaperSwitcher" : "none"
 
     // Input handling for super key
     property bool superTap: false
@@ -139,6 +140,7 @@ Singleton {
         panelOpen = false;
         trayOpen = false;
         sessionMenuOpen = false;
+        wallpaperSwitcherOpen = false;
         faceTimer.restart();
     }
 
@@ -156,6 +158,7 @@ Singleton {
         closePanel();
         closeLauncher()
         closeWifi();
+        closeWallpaperSwitcher();
         bluetoothOpen = true;
         faceTimer.stop();
     }
@@ -169,6 +172,7 @@ Singleton {
         closePanel();
         closeLauncher();
         closeBluetooth();
+        closeWallpaperSwitcher();
         wifiOpen = true;
         faceTimer.stop();
     }
@@ -176,6 +180,28 @@ Singleton {
     function closeWifi() {
         wifiOpen = false;
         faceTimer.restart();
+    }
+
+    function showWallpaperSwitcher() {
+        closePanel();
+        closeLauncher();
+        closeBluetooth();
+        closeWifi();
+        wallpaperSwitcherOpen = true;
+        faceTimer.stop();
+    }
+
+    function closeWallpaperSwitcher() {
+        wallpaperSwitcherOpen = false;
+        faceTimer.restart();
+    }
+
+    function toggleWallpaperSwitcher() {
+        if (wallpaperSwitcherOpen) {
+            closeWallpaperSwitcher();
+        } else {
+            showWallpaperSwitcher();
+        }
     }
 
     function toggleLauncher() {
@@ -191,5 +217,7 @@ Singleton {
         closeLauncher();
         closeBluetooth();
         closeWifi();
+        closeWallpaperSwitcher();
+        faceTimer.restart();
     }
 }

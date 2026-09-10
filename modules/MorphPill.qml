@@ -93,7 +93,7 @@ Item {
 
     onShellBusyChanged: {
         if (shellBusy)
-            latchedHighlight = PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || hover.hovered;
+            latchedHighlight = hover.hovered || PillController.overlay !== "none";
     }
 
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
@@ -172,7 +172,7 @@ Item {
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Config.radiusPill
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
+        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || PillController.wallpaperSwitcherOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
 
         Behavior on border.color {
             enabled: !morphPill.shellBusy
@@ -321,6 +321,18 @@ Item {
         anchors.margins: Config.controlPanelPadding
 
         WifiMenu {
+            anchors.fill: parent
+        }
+    }
+
+    OverlayLayer {
+        name: "wallpaperSwitcher"
+        morph: morphPill.morph
+        contentOpacity: morphPill.panelOpacity
+        anchors.fill: parent
+        anchors.margins: Config.controlPanelPadding
+
+        WallpaperSwitcher {
             anchors.fill: parent
         }
     }

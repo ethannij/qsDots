@@ -13,9 +13,17 @@ Item {
     implicitHeight: row.implicitHeight
     implicitWidth: row.implicitWidth
 
+    PillShape {
+        id: pill
+        interactive: false
+        anchors.centerIn: parent
+        width: parent.implicitWidth + Config.controlPanelStatsSpacing
+        height: parent.implicitHeight + Config.controlPanelStatsSpacing 
+        color: Colors.md3.surface_container_low
+
+
     Row {
         id: row
-        anchors.centerIn: parent
         spacing: Config.controlPanelStatsSpacing
 
         Repeater {
@@ -46,5 +54,6 @@ Item {
                 }
             }
         }
+      }
     }
 }

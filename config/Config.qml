@@ -71,6 +71,9 @@ Singleton {
     // Feature Toggles
     readonly property bool showClock: true
 
-    // Icon Sized
+    // Icon Sizes
     readonly property int iconSize: 30
+
+    // Wallpaper
+    readonly property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
 }
