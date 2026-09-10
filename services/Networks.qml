@@ -55,7 +55,7 @@ Singleton {
     // Finds active wifi device
     readonly property var wirelessDevice: {
         const devices = [...Networking.devices.values];
-        return devices.find(d => typeof d.scannerEnabled === "boolean") ?? devices.find(d => d.type === DeviceType.Wifi) ?? null;
+        return devices.find(d => d.type === DeviceType.Wifi) ?? null;
     }
 
     // Exposes Connected Wifi Network

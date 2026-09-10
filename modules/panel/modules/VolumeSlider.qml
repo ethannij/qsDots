@@ -59,7 +59,9 @@ Item {
     }
 
     VolumeMenu {
+        id: menu
         anchors.top: slider.bottom
         anchors.horizontalCenter: slider.horizontalCenter
+        anchors.margins: Config.spaceMd
     }
 }

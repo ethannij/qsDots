@@ -13,7 +13,8 @@ Item {
 
     Rectangle {
         id: rect
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
         implicitWidth: text.width + Config.spaceSm
         implicitHeight: text.implicitHeight + Config.spaceSm
         color: Colors.md3.surface_variant

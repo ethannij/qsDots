@@ -18,17 +18,13 @@ Item {
         else
             Networks.pskSsid = "";
     }
-    readonly property bool connecting: {
-        const nets = Networks.wirelessDevice ? [...Networks.wirelessDevice.networks.values]: [];
-        return nets.some(n => n.state === ConnectionState.Connecting)
-    }
 
     // Double check scanner is turned on assuming a wifi device exists
     Binding {
         target: Networks.wirelessDevice
         property: "scannerEnabled"
         value: true
-        when: root.visible && Networks.wirelessDevice && Networks.pskSsid === "" && !root.connecting
+        when: root.visible && Networks.wirelessDevice && Networks.pskSsid === ""
     }
 
     // UI bits *Caution* this whole block is a nightmare, I've attempted to clean it up but its a mess

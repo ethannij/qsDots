@@ -14,7 +14,7 @@ Item {
     visible: PillController.bluetoothOpen
     // Stop discovering when window is not visible, I dont know if this saves resources but it bothered me
     onVisibleChanged: {
-        if (!visible)
+        if (!visible && Bluetooth.defaultAdapter)
             Bluetooth.defaultAdapter.discovering = false;
 
     }
@@ -76,8 +76,8 @@ Item {
                     id: icon
 
                     source: Bluetooth.statusIcon
-                    backgroundColor: stateHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter.enabled ? Colors.md3.primary_container : Colors.md3.surface_variant)
-                    iconColor: stateHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter.enabled ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
+                    backgroundColor: stateHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.primary_container : Colors.md3.surface_variant)
+                    iconColor: stateHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
 
                     Behavior on backgroundColor {
                         ColorAnimation {
@@ -139,8 +139,8 @@ Item {
                     id: searchIcon
 
                     source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/launcher/search.svg"))
-                    backgroundColor: searchHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter.discovering ? Colors.md3.primary_container : Colors.md3.surface_variant)
-                    iconColor: searchHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter.discovering ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
+                    backgroundColor: searchHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.primary_container : Colors.md3.surface_variant)
+                    iconColor: searchHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
 
                     Behavior on backgroundColor {
                         ColorAnimation {

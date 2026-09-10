@@ -35,8 +35,8 @@ Singleton {
 
     // Icon for battery, assuming no device match provided
     function batteryIcon(device) {
-        const charging = device.state === UPowerDeviceState.Charging;
-        const level = Math.round(device.percentage * 100);
+        const charging = device?.state === UPowerDeviceState.Charging;
+        const level = Math.round(device?.percentage * 100);
         if (charging) {
             if (level < 20)
                 return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/battery/charging/battery_charging_empty.svg"));
@@ -89,8 +89,8 @@ Singleton {
 
     // Color change based on battery level
     function batteryColor(device) {
-        const charging = device.state === UPowerDeviceState.Charging;
-        const level = Math.round(device.percentage * 100);
+        const charging = device?.state === UPowerDeviceState.Charging;
+        const level = Math.round(device?.percentage * 100);
         if (charging)
             return Colors.md3.secondary;
 

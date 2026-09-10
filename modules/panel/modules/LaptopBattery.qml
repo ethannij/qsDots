@@ -13,8 +13,14 @@ Item {
     implicitWidth: icon.implicitWidth + text.implicitWidth
     implicitHeight: Math.max(icon.implicitHeight, text.implicitHeight)
 
-    Row {
+    PillShape {
+        id: pill
         anchors.centerIn: parent
+        width: parent.implicitWidth + Config.controlPanelStatsSpacing
+        height: parent.implicitHeight + Config.controlPanelStatsSpacing 
+        color: Colors.md3.surface_container_low
+    
+    Row {
 
         ColorizedIcon {
             id: icon
@@ -26,12 +32,13 @@ Item {
         Text {
             id: text
 
-            text: Math.round(laptopBattery.percentage * 100) + "%"
+            text: Math.round(laptopBattery?.percentage * 100) + "%"
             font: StylizedFont.body
             color: Power.batteryColor(laptopBattery)
             anchors.verticalCenter: parent.verticalCenter
         }
 
+    }
     }
 
 }
