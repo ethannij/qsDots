@@ -4,7 +4,9 @@ import Quickshell
 import Quickshell.Services.UPower
 import qs.modules
 import qs.modules.windows
+import qs.modules.elements
 import qs.services
+import qs.config
 
 ShellRoot {
     id: root
@@ -14,19 +16,28 @@ ShellRoot {
 
     // Debug window
     Window {
-        width: 100
-        height: 100
+        width: 300
+        height: 300
         visible: false
+        title: "testWindow"
 
         Rectangle {
             anchors.fill: parent
             color: "black"
 
-            Text {
+            PillSlider {
+                id: slider
                 anchors.centerIn: parent
+                sliderSize: StylizedFont.body.pixelSize / 2
+            }
+
+            Text {
+                id: text
+                anchors.left: slider.right
                 color: "white"
-                //text: UPower.devices.values.find(d => d.isLaptopBattery === true) ? "exists" : "null"
-                text: Power.laptopBattery ? "exists" : "null"
+                font: StylizedFont.tooltip
+                text: slider.value.toFixed(2) + "%";
+                anchors.verticalCenter: slider.verticalCenter
             }
 
         }

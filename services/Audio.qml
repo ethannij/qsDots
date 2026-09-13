@@ -45,20 +45,20 @@ Singleton {
         root.sink.audio.volume = Math.min(Math.max(value, Config.volumeMin), Config.volumeMax);
     }
 
-    readonly property string icon: {
+    readonly property url icon: {
         if (!ready)
-            return String.fromCodePoint(0xF0581);
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/off.svg"));
         if (muted)
-            return String.fromCodePoint(0xF075F);
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/off.svg"));
 
         if (vol == 0)
-            return String.fromCodePoint(0xF0581);
-        if (vol < 34)
-            return String.fromCodePoint(0xF057F);
-        if (vol < 67)
-            return String.fromCodePoint(0xF0580);
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/mute.svg"));
+        if (vol < 50)
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/low.svg"));
+        if (vol >= 50)
+            return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/high.svg"));
 
-        return String.fromCodePoint(0xF057E);
+        return Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/off.svg"));
     }
 
     PwObjectTracker {

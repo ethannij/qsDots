@@ -22,6 +22,11 @@ Item {
     property alias orientation: slider.orientation
     property alias snapMode: slider.snapMode
 
+    property color backgroundColor: Colors.md3.surface_variant
+    property color borderColor: Colors.md3.shadow
+    property color fillColor: Colors.md3.primary
+    property color iconColor: Colors.md3.on_primary
+
     property bool handleVisible: true
     property url imageURL: ""
 
@@ -48,8 +53,8 @@ Item {
             y: slider.horizontal ? (slider.availableHeight - height) / 2 : 0
             implicitWidth: root.sliderWidth
             implicitHeight: root.sliderHeight
-            color: Colors.md3.surface_variant
-            border.color: Colors.md3.shadow
+            color: root.backgroundColor
+            border.color: root.borderColor
             radius: Math.min(width, height) / 2
 
             Rectangle {
@@ -59,7 +64,7 @@ Item {
                 width: slider.horizontal ? (handle.x - track.x + handle.width) : handle.width
                 height: slider.horizontal ? handle.height : (parent.height - (handle.y - track.y))
                 radius: Math.min(width, height) / 2
-                color: Colors.md3.primary
+                color: root.fillColor
             }
         }
 
@@ -75,7 +80,7 @@ Item {
             ColorizedIcon {
                 id: handleIcon
                 source: root.imageURL
-                color: Colors.md3.on_primary
+                color: root.iconColor
                 size: root.sliderSize
             }
 

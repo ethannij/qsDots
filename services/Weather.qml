@@ -75,6 +75,7 @@ Singleton {
         id: weatherFetcher
 
         command: ["curl", "-s", "https://wttr.in/?format=j1"] // Reports in JSON format, split into weather code (parsed for icon) and temperature
+        running: true
 
         stdout: StdioCollector {
             onStreamFinished: {
@@ -98,6 +99,5 @@ Singleton {
             weatherFetcher.running = false;
             weatherFetcher.running = true;
         }
-    }
-
+      }
 }
