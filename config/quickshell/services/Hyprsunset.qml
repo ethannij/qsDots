@@ -53,9 +53,9 @@ Singleton {
     }
     */
     property int fromHour: 21
-    property int toHour: 9
+    property int toHour: 8
 
-    property bool isNight: (hour >= fromHour || hour <= toHour)
+    property bool isNight: (hour >= fromHour || hour < toHour)
 
     // switch to case statements
     property url brightnessIconURL: {
@@ -158,9 +158,8 @@ Singleton {
         id: ipc
         target: "hyprsunsetIpc"
         function screenDim(): void {
-            root.gammaRestore = root.gamma
+            root.gammaRestore = root.gamma;
             root.setGamma(40);
-
         }
         function screenBright(): void {
             root.setGamma(root.gammaRestore);
@@ -186,7 +185,7 @@ Singleton {
         target: WLED
         function onWledExistsChanged() {
             if (WLED.wledExists)
-                WLED.setTemperature(root.activeTemperature)
+                WLED.setTemperature(root.activeTemperature);
         }
     }
 

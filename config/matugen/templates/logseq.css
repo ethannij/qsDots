@@ -1,0 +1,34 @@
+:root {
+  --background: {{colors.background.default.hex}};
+  --surface: {{colors.surface.default.hex}};
+  --surface-variant: {{colors.surface_variant.default.hex}};
+
+  --foreground: {{colors.on_background.default.hex}};
+
+  --primary: {{colors.primary.default.hex}};
+  --secondary: {{colors.secondary.default.hex}};
+  --tertiary: {{colors.tertiary.default.hex}};
+  --error: {{colors.error.default.hex}};
+
+  --outline: {{colors.outline.default.hex}};
+
+  --white: var(--on-background);
+
+  --purple: var(--primary);
+  --pink: var(--secondary);
+  --cyan: var(--tertiary);
+
+  --green: var(--tertiary);
+  --orange: var(--secondary);
+  --yellow: var(--primary-container);
+  --red: var(--error);
+
+  --comment: var(--outline);
+
+  --light-background: var(--surface-variant);
+  --lighter-background: var(--surface);
+  --dark-background: var(--background);
+  --darker-background: var(--background);
+
+  --white-hover: color-mix(in srgb, var(--white) 50%, transparent);
+}

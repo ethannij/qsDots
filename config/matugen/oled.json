@@ -1,0 +1,7 @@
+{
+  "colors": {
+    "surface": { "default": { "color": "#000000" } },
+    "background": { "default": { "color": "#000000" } },
+    "surface_dim": { "default": { "color": "#000000" } }
+  }
+}

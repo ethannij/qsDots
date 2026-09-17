@@ -1,0 +1,171 @@
+[config.wallpaper]
+command = "awww img --transition-type random --transition-step 90 --transition-fps 240 {{ image }}"
+set = true
+
+[config.custom_keywords]
+font_main = "JetBrainsMono Nerd Font Mono"
+font_main_propo = "JetBrainsMono Nerd Font Propo"
+font_size_normal = "12"
+font_size_large = "16"
+font_size_small = "10"
+
+[templates.btop]
+input_path = 'templates/btop.theme'
+output_path = '~/.config/btop/themes/colors.theme'
+post_hook = 'pkill -USR2 btop || true'
+
+[templates.cava]
+input_path = 'templates/cava-colors.ini'
+output_path = '~/.config/cava/themes/colors'
+post_hook = 'pkill -USR1 cava'
+
+[templates.hyprland]
+input_path = 'templates/hyprland-colors.lua'
+output_path = '~/.config/hypr/colors.lua'
+
+[templates.hyprlock]
+input_path = 'templates/hyprlock-colors.conf'
+output_path = '~/.config/hypr/colors.conf'
+
+[templates.wlogout]
+input_path = 'templates/wlogout-colors.css'
+output_path = '~/.config/wlogout/colors.css'
+
+[templates.kitty]
+input_path = 'templates/kitty-colors.conf'
+output_path = '~/.config/kitty/themes/Matugen.conf'
+post_hook = "kitty +kitten themes --reload-in=all Matugen"
+
+[templates.waybar]
+input_path = 'templates/colors.css'
+output_path = '~/.config/waybar/colors.css'
+
+[templates.swaync]
+input_path = 'templates/colors.css'
+output_path = '~/.config/swaync/colors.css'
+#post_hook = 'swaync-client -rs'
+
+[templates.firefox_websites]
+input_path = 'templates/firefox_websites.css'
+output_path = 'generated/firefox_websites.css'
+
+[templates.vscode-raw]
+input_path = 'templates/vscode-colors'
+output_path = '~/.cache/matugen/vscode-colors'
+
+[templates.vscode-json]
+input_path = 'templates/vscode-colors.json'
+output_path = '~/.cache/matugen/vscode-colors.json'
+
+[templates.steam]
+input_path = 'templates/steam-colors.css'
+output_path = '~/.config/AdwSteamGtk/custom.css'
+post_hook =  'adwaita-steam-gtk -i'
+
+[templates.qt5ct]
+input_path = 'templates/qtct-colors.conf'
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = 'templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.papirus-folders]
+input_path = 'templates/papirus-color'
+colors_to_compare = [
+    { name = "black",      color = "#4f4f4f" },
+    { name = "blue",       color = "#5294e2" },
+    { name = "bluegrey",   color = "#607d8b" },
+    { name = "brown",      color = "#ae8e6c" },
+    { name = "carmine",    color = "#a30002" },
+    { name = "cyan",       color = "#00bcd4" },
+    { name = "darkcyan",   color = "#45abb7" },
+    { name = "deeporange", color = "#eb6637" },
+    { name = "green",      color = "#87b158" },
+    { name = "grey",       color = "#8e8e8e" },
+    { name = "indigo",     color = "#5c6bc0" },
+    { name = "magenta",    color = "#ca71df" },
+    { name = "nordic",     color = "#81a1c1" },
+    { name = "orange",     color = "#ee923a" },
+    { name = "palebrown",  color = "#d1bfae" },
+    { name = "paleorange", color = "#eeca8f" },
+    { name = "pink",       color = "#f06292" },
+    { name = "red",        color = "#e25252" },
+    { name = "teal",       color = "#16a085" },
+    { name = "violet",     color = "#7e57c2" },
+    { name = "white",      color = "#e4e4e4" },
+    { name = "yaru",       color = "#676767" },
+    { name = "yellow",     color = "#f9bd30" },
+]
+compare_to = "{{ colors.primary.default.hex }}"
+post_hook = 'nohup sudo -n papirus-folders -C {{ closest_color }} -u > /dev/null 2>&1 &'
+index = 1
+
+[templates.prismlauncher]
+input_path = 'templates/prismlauncher.json'
+output_path = '~/.local/share/PrismLauncher/themes/Matugen/theme.json'
+
+[templates.obs]
+input_path = 'templates/obs.obt'
+output_path = '~/.config/obs-studio/themes/matugen.obt'
+
+[templates.heroic]
+input_path = 'templates/heroic.css'
+output_path = '~/.config/heroic/themes/matugen.css'
+
+[templates.rofi]
+input_path = 'templates/rofi.rasi'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.gtk3]
+input_path = 'templates/gtk.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
+
+[templates.gtk4]
+input_path = 'templates/gtk.css'
+output_path = '~/.config/gtk-4.0/colors.css'
+post_hook = '~/.config/matugen/post-hook-scripts/gtk-themes-reload.sh'
+
+[templates.nvim]
+input_path = 'templates/nvim-colors.vim'
+output_path = '~/.config/nvim/colors/colors.vim'
+post_hook = 'pkill -SIGUSR1 nvim'
+
+[templates.mangohud]
+input_path = 'templates/mangohud.conf'
+output_path = '~/.config/MangoHud/MangoHud.conf'
+colors_to_compare = [
+    { name = "black",      color = "#4f4f4f" },
+    { name = "blue",       color = "#5294e2" },
+    { name = "bluegrey",   color = "#607d8b" },
+    { name = "brown",      color = "#ae8e6c" },
+    { name = "carmine",    color = "#a30002" },
+    { name = "cyan",       color = "#00bcd4" },
+    { name = "darkcyan",   color = "#45abb7" },
+    { name = "deeporange", color = "#eb6637" },
+    { name = "green",      color = "#87b158" },
+    { name = "grey",       color = "#8e8e8e" },
+    { name = "indigo",     color = "#5c6bc0" },
+    { name = "magenta",    color = "#ca71df" },
+    { name = "nordic",     color = "#81a1c1" },
+    { name = "orange",     color = "#ee923a" },
+    { name = "palebrown",  color = "#d1bfae" },
+    { name = "paleorange", color = "#eeca8f" },
+    { name = "pink",       color = "#f06292" },
+    { name = "red",        color = "#e25252" },
+    { name = "teal",       color = "#16a085" },
+    { name = "violet",     color = "#7e57c2" },
+    { name = "white",      color = "#e4e4e4" },
+    { name = "yaru",       color = "#676767" },
+    { name = "yellow",     color = "#f9bd30" },
+]
+
+[templates.logseq]
+input_path = 'templates/logseq.css'
+output_path = '~/.logseq/plugins/logseq-matugen-theme/colors.css'
+post_hook = 'cat ~/.logseq/plugins/logseq-matugen-theme/colors.css > ~/.logseq/plugins/logseq-matugen-theme/custom.css && cat ~/.logseq/plugins/logseq-matugen-theme/layout.css >> ~/.logseq/plugins/logseq-matugen-theme/custom.css'
+
+[templates.quickshell]
+input_path = 'templates/quickshell.json'
+output_path = '~/.local/state/quickshell/generated/colors.json'
