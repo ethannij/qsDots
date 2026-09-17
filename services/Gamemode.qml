@@ -1,25 +1,21 @@
 pragma Singleton
 
+import QtQuick
 import Quickshell
 import Quickshell.Io
-import QtQuick
+import qs.services
 
 Singleton {
     id: root
 
-    property bool active: false
-
-    readonly property string enableLua: "GAMEMODE = true; fullscreen_anims(); hl.config({ decoration = { rounding = 0, blur = { enabled = false } }, general = { border_size = 0, gaps_in = 0, gaps_out = 0 } })"
+    readonly property bool active: States.gamemode
 
     function toggle() {
-        active = !active;
+        States.gamemode = !States.gamemode;
     }
 
     onActiveChanged: {
-        if (active)
-            Quickshell.execDetached(["hyprctl", "eval", "set_gamemode(true)"]);
-        else
-            Quickshell.execDetached(["hyprctl", "eval", "set_gamemode(false)"]);
+        Quickshell.execDetached(["hyprctl", "eval", "set_gamemode(" + (active ? "true" : "false") + ")"]);
     }
 
     IpcHandler {

@@ -33,7 +33,7 @@ Item {
         property bool active: Bluetooth.enabled
         function trigger() {
             Bluetooth.toggleEnabled();
-        } 
+        }
         function triggerAlternate() {
             PillController.showBluetooth();
         }
@@ -70,37 +70,45 @@ Item {
         }
     }
 
-PillShape {
+    QtObject {
+        id: oled
+        property url icon: OLED.icon
+        property bool active: OLED.active
+        function trigger() {
+            OLED.toggle();
+        }
+    }
+
+    PillShape {
         id: pill
         interactive: false
         anchors.centerIn: parent
         width: parent.implicitWidth + Config.controlPanelStatsSpacing
-        height: parent.implicitHeight + Config.controlPanelStatsSpacing 
+        height: parent.implicitHeight + Config.controlPanelStatsSpacing
         color: Colors.md3.surface_container_low
 
+        Grid {
+            id: grid
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignCenter
+            spacing: Config.spaceMd
+            columns: 4
+            rows: 2
 
-    Grid {
-        id: grid
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.alignment: Qt.AlignCenter
-        spacing: Config.spaceMd
-        columns: 4
-        rows: 2
+            // Add QtObjects to repeater to add to widget grid
+            Repeater {
+                model: [wifi, bluetooth, wled, idle, gamemode, oled]
 
-        // Add QtObjects to repeater to add to widget grid
-        Repeater {
-            model: [wifi, bluetooth, wled, idle, gamemode]
-
-            QuickToggle {
-                required property var modelData
-                visible: modelData.visible ?? true
-                source: modelData.icon
-                active: modelData.active
-                onTapped: modelData.trigger()
-                onTappedAlternate: modelData.triggerAlternate()
+                QuickToggle {
+                    required property var modelData
+                    visible: modelData.visible ?? true
+                    source: modelData.icon
+                    active: modelData.active
+                    onTapped: modelData.trigger()
+                    onTappedAlternate: modelData.triggerAlternate()
+                }
             }
         }
-      }
-  }
+    }
 }

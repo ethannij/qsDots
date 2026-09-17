@@ -171,8 +171,16 @@ Item {
         anchors.fill: parent
         color: Colors.md3.surface
         border.width: Config.borderWidth
-        radius: Config.radiusPill
+        radius: Gamemode.active ? 0 : PillController.overlay !== "none" ? Config.radiusPill : height / 2
         border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || PillController.wallpaperSwitcherOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
+
+        Behavior on radius {
+            enabled: !Gamemode.active
+            NumberAnimation {
+                duration: Config.animMs
+                easing.type: Easing.InOutCubic
+            }
+        }
 
         Behavior on border.color {
             enabled: !morphPill.shellBusy

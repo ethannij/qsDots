@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 import qs.config
 import qs.theme
+import qs.services
 
 Singleton {
     id: root
@@ -40,11 +41,12 @@ Singleton {
             return;
         if (!fromCycle)
             stopCycle();
-        matugen.command = ["matugen", "--source-color-index", "0", "--continue-on-error", "image", originalPath(name)];
+        matugen.command = matugenCommand(originalPath(name));
         matugen.running = false;
         matugen.running = true;
     }
 
+    // Randomly choose wallpaper
     function random(fromCycle) {
         const pool = files.filter(n => n !== currentName);
         const pick = (pool.length ? pool : files);
@@ -53,20 +55,23 @@ Singleton {
         apply(pick[Math.floor(Math.random() * pick.length)], !!fromCycle);
     }
 
-    FileView {
-        id: cycleFile
-        path: Quickshell.env("HOME") + "/.local/state/quickshell/wallpaper-cycle.json"
-        watchChanges: true
-        onFileChanged: reload()
-        onAdapterUpdated: writeAdapter()
+    // Determine matugen command based on OLED state
+    function matugenCommand(imagePath) {
+        const cmd = ["matugen", "--source-color-index", "0", "--continue-on-error"];
+        if (OLED.active)
+            cmd.push("--import-json", Quickshell.env("HOME") + "/.config/matugen/oled.json");
+        // cmd.push("--lightness-dark", "-0.1"); // Alternative approach
 
-        JsonAdapter {
-            id: cycleAdapter
-            property int seconds: 0
-        }
+        cmd.push("image", imagePath);
+        return cmd;
     }
 
-    property alias cycleSeconds: cycleAdapter.seconds
+    // Reapply colorscheme and wallpaper (for OLED toggle)
+    function reapply() {
+        apply(currentName, true);
+    }
+
+    readonly property int cycleSeconds: States.wallpaperCycleSeconds
 
     // This process does a few really important things:
     // 1. Creates a cache directory for wallpaper thumbnails
@@ -91,11 +96,11 @@ Singleton {
     readonly property bool cycling: cycleSeconds > 0
 
     function startCycle(seconds) {
-        cycleSeconds = seconds;
+        States.wallpaperCycleSeconds = seconds;
     }
 
     function stopCycle() {
-        cycleSeconds = 0;
+        States.wallpaperCycleSeconds = 0;
     }
 
     Timer {
@@ -113,7 +118,7 @@ Singleton {
             Wallpapers.random();
         }
 
-        function apply(name: string): void {
+        function applyWallpaper(name: string): void {
             Wallpapers.apply(name);
         }
 
@@ -123,5 +128,9 @@ Singleton {
             else
                 Wallpapers.stopCycle();
         }
+    }
+    Component.onCompleted: {
+        fetcher.running = false;
+        fetcher.running = true;
     }
 }
