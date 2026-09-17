@@ -172,7 +172,7 @@ Item {
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Gamemode.active ? 0 : PillController.overlay !== "none" ? Config.radiusPill : height / 2
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.panelOpen || PillController.launcherOpen || PillController.bluetoothOpen || PillController.wifiOpen || PillController.wallpaperSwitcherOpen || hover.hovered)) ? Colors.md3.primary : Colors.md3.shadow
+        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.overlay !== "none" || hover.hovered)) ? Colors.md3.primary : Colors.md3.surface_variant
 
         Behavior on radius {
             enabled: !Gamemode.active

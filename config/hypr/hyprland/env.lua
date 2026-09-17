@@ -1,0 +1,7 @@
+hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
+hl.env("XCURSOR_SIZE", "24")
+hl.env("XCURSOR_THEME", "Moga-White")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_THEME", "Moga-White")
+hl.dsp.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme 'Moga-White'")

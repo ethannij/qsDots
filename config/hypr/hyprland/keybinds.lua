@@ -1,5 +1,5 @@
 ---------------------
----- MY PROGRAMS ----
+----- Programs ------
 ---------------------
 
 local terminal = "kitty"
@@ -17,40 +17,54 @@ local gamebar = "$HOME/.config/rofi/modules/gamebar/gamebar.sh || pkill rofi"
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
+-- App Bindings
+--------------------------------
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(lock))
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+
+--------------------------------
+
+-- QUICKSHELL binds
+--------------------------------
+
 hl.bind("SUPER_L", hl.dsp.global(menu), { ignore_mods = true, non_consuming = true, transparent = true }) -- Open Quickshell App Launcher
+
 hl.bind(
 	mainMod .. " + catchall",
 	hl.dsp.global("quickshell:launcherInterrupt"),
 	{ ignore_mods = true, non_consuming = true }
 ) -- Pass inputs through to other binds
 
-hl.bind(mainMod .. " + J", hl.dsp.exec_cmd("qs ipc call ipcBar toggleBar"))
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + J", hl.dsp.exec_cmd("qs ipc call ipcBar toggleBar")) -- Toggle bar visibility
+hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/reload.sh")) -- Reload Quickshell
+hl.bind(mainMod .. " + F1", hl.dsp.exec_cmd(themeswitcher)) -- wallpaper selector menu
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd(sessionManager)) -- logout menu
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(gamebar)) -- show gamebar
+
+--------------------------------
+
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(
-	mainMod .. " + M",
-	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
-)
+
 hl.bind(mainMod .. " + SHIFT + SPACE", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" })) -- fullscreen
 hl.bind(mainMod .. " + D", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" })) -- maximize
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pin({}))
-hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/waybar/waybarrestart.sh"))
-hl.bind(mainMod .. " + F1", hl.dsp.exec_cmd(themeswitcher))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
---hl.bind(mainMod .. " + SUPER_L", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd(sessionManager))
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(lock))
-hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(gamebar))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+
+-- Move windows with mainMod + Shift + arrow keys
+hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.move({ direction = "left" }))
+hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "right" }))
+hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.move({ direction = "up" }))
+hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.move({ direction = "down" }))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
@@ -101,23 +115,3 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
-
--- scrolling
---hl.bind(mainMod .. " + period", hl.dsp.layout("move +col"))
---hl.bind(mainMod .. " + comma", hl.dsp.layout("move -col"))
-
---hl.bind(mainMod .. " + left", hl.dsp.layout("focus l"))
---hl.bind(mainMod .. " + down", hl.dsp.layout("focus d"))
---hl.bind(mainMod .. " + up", hl.dsp.layout("focus u"))
---hl.bind(mainMod .. " + right", hl.dsp.layout("focus r"))
-
---hl.bind(mainMod .. " + equal", hl.dsp.layout("colresize +conf"))
---hl.bind(mainMod .. " + minus", hl.dsp.layout("colresize -conf"))
-
---hl.bind(mainMod .. " + SHIFT + f", hl.dsp.layout("fit expand"))
-
---hl.bind(mainMod .. " + bracketleft", hl.dsp.layout("consume_or_expel prev"))
---hl.bind(mainMod .. " + bracketright", hl.dsp.layout("consume_or_expel next"))
-
---hl.bind(mainMod .. " + SHIFT + comma", hl.dsp.layout("swapcol l"))
---hl.bind(mainMod .. " + SHIFT + period", hl.dsp.layout("swapcol r"))
