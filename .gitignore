@@ -1,0 +1,8 @@
+# Local hyprland configs
+config/hypr/custom/
+
+# QML language server
+.qmlls.ini
+
+# Editor files
+.vscode/
