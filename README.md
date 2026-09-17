@@ -1,7 +1,25 @@
 # qsDots
+Made for Arch, should be agnostic though.
+
+### Dependencies
+Required:
+`hyprland quickshell hypridle hyprlock hyprsunset awww matugen
+xdg-desktop-portal-hyprland xdg-desktop-portal-gtk stow
+pipewire pipewire-pulse wireplumber networkmanager bluez bluez-utils upower
+imagemagick inotify-tools curl ttf-jetbrains-mono-nerd adw-gtk-theme
+papirus-icon-theme papirus-folders gtk3 dconf gsettings-desktop-schemas qt6-wayland qt6-imageformats`
+
+Default apps: `floorp-bin kitty nautilus wlogout brightnessctl playerctl`
+Cursors: `moga-white-cursors`
+
+### Optional
+HDR supported (gamma/nightmode)  
+Supports WLED + HyperHDR ambient lights  
+Designed on a 32:9 ultrawide OLED
 
 ### Install
-`./install.sh` Make sure to backup your original configs and ~/.local/state/quickshell (if it exists). Stow will not overwrite your files
+`./install.sh` - Just stows files, will not check dependencies  
+Make sure to backup your original configs and ~/.local/state/quickshell (if it exists). Stow will not overwrite your files
 
 
 ### Features
