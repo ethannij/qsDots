@@ -25,19 +25,12 @@ ShellRoot {
             anchors.fill: parent
             color: "black"
 
-            PillSlider {
-                id: slider
-                anchors.centerIn: parent
-                sliderSize: StylizedFont.body.pixelSize / 2
-            }
-
             Text {
                 id: text
-                anchors.left: slider.right
+                anchors.centerIn: parent
+                font: StylizedFont.body
                 color: "white"
-                font: StylizedFont.tooltip
-                text: slider.value.toFixed(2) + "%";
-                anchors.verticalCenter: slider.verticalCenter
+                text: States.gamemode
             }
 
         }

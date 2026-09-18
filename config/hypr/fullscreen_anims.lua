@@ -28,7 +28,7 @@ function set_gamemode(on)
         })
     else
         hl.config({
-            decoration = { rounding = 14, blur = { enabled = true } },
+            decoration = { rounding = 10, blur = { enabled = true } },
             general = { border_size = 2, gaps_in = 5, gaps_out = 20 },
         })
     end
@@ -42,11 +42,8 @@ function apply_gamemode_from_state()
 end
 
 fullscreen_anims()
+apply_gamemode_from_state()
 
 hl.on("window.fullscreen", fullscreen_anims)
 hl.on("workspace.active", fullscreen_anims)
 hl.on("workspace.special_active", fullscreen_anims)
-
-hl.timer(function()
-    apply_gamemode_from_state()
-end, { timeout = 400, type = "repeat" })
