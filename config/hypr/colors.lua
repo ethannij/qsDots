@@ -1,7 +1,7 @@
 local colors = {
 
 
-      background = "rgb(000000)",
+      background = "rgb(101417)",
 
       error = "rgb(ffb4ab)",
 
@@ -73,7 +73,7 @@ local colors = {
 
       source_color = "rgb(1d96d1)",
 
-      surface = "rgb(000000)",
+      surface = "rgb(101417)",
 
       surface_bright = "rgb(353a3e)",
 
@@ -87,7 +87,7 @@ local colors = {
 
       surface_container_lowest = "rgb(0a0f12)",
 
-      surface_dim = "rgb(000000)",
+      surface_dim = "rgb(101417)",
 
       surface_tint = "rgb(94cdf6)",
 

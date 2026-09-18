@@ -1,6 +1,6 @@
 :root {
 
-    --background: #000000;
+    --background: #101417;
 
     --error: #ffb4ab;
 
@@ -72,7 +72,7 @@
 
     --source_color: #1d96d1;
 
-    --surface: #000000;
+    --surface: #101417;
 
     --surface_bright: #353a3e;
 
@@ -86,7 +86,7 @@
 
     --surface_container_lowest: #0a0f12;
 
-    --surface_dim: #000000;
+    --surface_dim: #101417;
 
     --surface_tint: #94cdf6;
 
@@ -102,7 +102,7 @@
 
 
 
-    --background_rgb: 0 0 0;
+    --background_rgb: 16 20 23;
 
     --error_rgb: 255 180 171;
 
@@ -174,7 +174,7 @@
 
     --source_color_rgb: 29 150 209;
 
-    --surface_rgb: 0 0 0;
+    --surface_rgb: 16 20 23;
 
     --surface_bright_rgb: 53 58 62;
 
@@ -188,7 +188,7 @@
 
     --surface_container_lowest_rgb: 10 15 18;
 
-    --surface_dim_rgb: 0 0 0;
+    --surface_dim_rgb: 16 20 23;
 
     --surface_tint_rgb: 148 205 246;
 

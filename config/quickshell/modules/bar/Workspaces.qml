@@ -37,9 +37,11 @@ PillShape {
                 id: wsButton
                 required property int index
                 // Get functionality from Hyprland module
+                //readonly property string wsName: String(index + 1)
+                readonly property int wsIndex: index + 1
                 readonly property string wsName: String(index + 1)
-                property var ws: Hyprland.workspaces?.values.find(w => w && w.name === wsName) ?? null
-                property bool isActive: Hyprland.focusedWorkspace?.name === wsName
+                property var ws: Hyprland.workspaces?.values.find(w => w && w.id === wsIndex || w && w.name === wsName) ?? null
+                property bool isActive: Hyprland.focusedWorkspace?.id === wsIndex || Hyprland.focusedWorkspace?.name === wsName
 
                 // Define font metrics for labels to prevent animation jittering
                 FontMetrics {
