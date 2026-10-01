@@ -103,6 +103,11 @@ Singleton {
         States.wallpaperCycleSeconds = 0;
     }
 
+    function refetch() {
+        fetcher.running = false;
+        fetcher.running = true;
+    }
+
     Timer {
         interval: Math.max(1, root.cycleSeconds) * 1000
         repeat: true
