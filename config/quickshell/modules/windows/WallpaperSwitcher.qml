@@ -212,4 +212,12 @@ Item {
             PillController.toggleWallpaperSwitcher();
         }
     }
+
+    // When menu opens, refetch so you can add and remove without full reload
+    onVisibleChanged: {
+        if (visible)
+            Wallpapers.refetch();
+            wallpaperFetcher.running = false;
+            wallpaperFetcher.running = true;
+    }
 }
