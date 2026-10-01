@@ -1,6 +1,8 @@
 import QtQuick
 //@ pragma UseQApplication
 import Quickshell
+import Quickshell.Wayland
+import QtQuick.Controls
 import Quickshell.Services.UPower
 import qs.modules
 import qs.modules.windows
@@ -21,16 +23,27 @@ ShellRoot {
         visible: false
         title: "testWindow"
 
+        WlSessionLock {
+        id: lock
+
+        WlSessionLockSurface {
+            Button {
+                text: "Unlock"
+                onClicked: lock.locked = false
+            }
+        }
+    }
+
+    
+
         Rectangle {
             anchors.fill: parent
             color: "black"
 
-            Text {
-                id: text
+            Button {
+                text: "lock"
                 anchors.centerIn: parent
-                font: StylizedFont.body
-                color: "white"
-                text: States.gamemode
+                onClicked: lock.locked = true
             }
 
         }

@@ -39,9 +39,12 @@ PillShape {
                 // Get functionality from Hyprland module
                 //readonly property string wsName: String(index + 1)
                 readonly property int wsIndex: index + 1
-                readonly property string wsName: String(index + 1)
-                property var ws: Hyprland.workspaces?.values.find(w => w && w.id === wsIndex || w && w.name === wsName) ?? null
-                property bool isActive: Hyprland.focusedWorkspace?.id === wsIndex || Hyprland.focusedWorkspace?.name === wsName
+                readonly property string wsName: String(wsIndex)
+                //property var ws: Hyprland.workspaces?.values.find(w => w && w.id === wsIndex ) ?? null //|| w && w.name === wsName) ?? null
+                property var ws: Hyprland.workspaces?.values.find(w => w && w.name === wsName) ?? null
+                //property bool isActive: Hyprland.focusedWorkspace?.id === wsIndex //|| Hyprland.focusedWorkspace?.name === wsName
+                property bool isActive: ws?.focused ?? false
+                property bool occupied: (ws?.toplevels?.values?.length ?? 0) > 0
 
                 // Define font metrics for labels to prevent animation jittering
                 FontMetrics {
