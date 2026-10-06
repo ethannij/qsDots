@@ -31,12 +31,6 @@ hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 
 hl.bind("SUPER_L", hl.dsp.global(menu), { ignore_mods = true, non_consuming = true, transparent = true }) -- Open Quickshell App Launcher
 
-hl.bind(
-	mainMod .. " + catchall",
-	hl.dsp.global("quickshell:launcherInterrupt"),
-	{ ignore_mods = true, non_consuming = true }
-) -- Pass inputs through to other binds
-
 hl.bind(mainMod .. " + J", hl.dsp.exec_cmd("qs ipc call ipcBar toggleBar")) -- Toggle bar visibility
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/reload.sh")) -- Reload Quickshell
 hl.bind(mainMod .. " + F1", hl.dsp.exec_cmd(themeswitcher)) -- wallpaper selector menu
