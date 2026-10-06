@@ -9,6 +9,12 @@ hl.config({
 })
 
 hl.config({
+	layout = {
+		single_window_aspect_ratio = { 16, 9 },
+	},
+})
+
+hl.config({
 	master = {
 		new_status = "master",
 	},
