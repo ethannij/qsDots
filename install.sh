@@ -7,3 +7,4 @@ cd "$(dirname "$(readlink -f "$0")")"
 
 stow -v -t "$HOME/.config" config
 stow -v -t "$HOME/.local" local
+stow -v -t "$HOME" home

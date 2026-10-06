@@ -1,0 +1,7 @@
+{
+  "ecoMode": true,
+  "colorsPath": "~/.config/matugen/generated/firefox_websites.css",
+  "websitesDir": "~/.config/dusky_sites",
+  "browserThemeEnabled": true,
+  "webThemeEnabled": false
+}
