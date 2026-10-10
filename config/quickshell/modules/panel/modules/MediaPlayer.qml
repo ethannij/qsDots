@@ -105,9 +105,9 @@ Item {
                         color: Colors.md3.primary
 
                         Behavior on width {
-                            enabled: !seekMouse.pressed
+                            enabled: root.glide && !seekMouse.pressed
                             NumberAnimation {
-                                duration: 80
+                                duration: Media.progressTick
                                 easing.type: Easing.Linear
                             }
                         }
@@ -132,7 +132,7 @@ Item {
                     onClicked: mouse => Media.seekTo(mouse.x / width)
                     onPositionChanged: mouse => {
                         if (pressed)
-                            Media.seekTo(mouse.x / width)
+                            Media.seekTo(mouse.x / width);
                     }
                 }
             }
@@ -144,7 +144,7 @@ Item {
                 Text {
                     id: posLabel
                     anchors.left: parent.left
-                    text: root.fmtTime(Media.position)
+                    text: root.fmtTime(track.width > 0 ? fill.width / track.width * Media.length : 0)
                     font: StylizedFont.tooltip
                     color: Colors.md3.on_surface_variant
                 }
@@ -183,10 +183,10 @@ Item {
 
     function fmtTime(secs) {
         if (!secs || secs < 0)
-            return "0:00"
-        const m = Math.floor(secs / 60)
-        const s = Math.floor(secs % 60)
-        return m + ":" + String(s).padStart(2, "0")
+            return "0:00";
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60);
+        return m + ":" + String(s).padStart(2, "0");
     }
 
     component NavBtn: Text {
@@ -205,6 +205,15 @@ Item {
             enabled: btn.available
             cursorShape: btn.available ? Qt.PointingHandCursor : Qt.ArrowCursor
             onClicked: btn.clicked()
+        }
+    }
+
+    property bool glide: true
+
+    Connections {
+        target: Media
+        function onProgressChanged() {
+            root.glide = Math.abs(track.width * Media.progress - fill.width) < track.width * 0.08;
         }
     }
 }

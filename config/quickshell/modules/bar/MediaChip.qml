@@ -11,7 +11,7 @@ PillShape {
 
     onVisibleChanged: {
         if (!visible)
-            root.expanded = false
+            root.expanded = false;
     }
 
     Column {
@@ -35,7 +35,7 @@ PillShape {
                 maximumLineCount: 1
                 width: Math.min(implicitWidth, 400)
                 font: StylizedFont.body
-                color: titleHover.hovered ? Colors.md3.primary : Colors.md3.tertiary
+                color: titleHover.hovered ? Colors.md3.primary : Colors.md3.secondary
 
                 HoverHandler {
                     id: titleHover
@@ -108,6 +108,7 @@ PillShape {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 2
                 height: 4
+                width: parent.width * root.shown
                 radius: height / 2
                 color: Colors.md3.surface_container_highest
 
@@ -118,10 +119,20 @@ PillShape {
                     radius: parent.radius
                     color: Colors.md3.primary
 
+                    property real shown: Media.progress
+
                     Behavior on width {
-                        enabled: !seekMouse.pressed
+                        enabled: root.glide && !seekMouse.pressed
                         NumberAnimation {
-                            duration: 80
+                            duration: Media.progressTick
+                            easing.type: Easing.Linear
+                        }
+                    }
+
+                    Behavior on shown {
+                        enabled: PillController.panelOpen && root.glide && !seekMouse.pressed
+                        NumberAnimation {
+                            duration: Media.progressTick
                             easing.type: Easing.Linear
                         }
                     }
@@ -170,7 +181,7 @@ PillShape {
                     onClicked: mouse => Media.seekTo(mouse.x / width)
                     onPositionChanged: mouse => {
                         if (pressed)
-                            Media.seekTo(mouse.x / width)
+                            Media.seekTo(mouse.x / width);
                     }
                 }
             }
@@ -197,6 +208,15 @@ PillShape {
             parent: btn
             gesturePolicy: TapHandler.ReleaseWithinBounds
             onTapped: btn.clicked()
+        }
+    }
+
+    property bool glide: true
+
+    Connections {
+        target: Media
+        function onProgressChanged() {
+            root.glide = Math.abs(Media.progress - root.shown) < 0.08;
         }
     }
 }

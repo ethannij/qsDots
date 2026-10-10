@@ -37,6 +37,7 @@ Singleton {
     readonly property bool canGoNext: player?.canGoNext ?? false
     readonly property bool canGoPrevious: player?.canGoPrevious ?? false
     readonly property bool canSeek: (player?.canSeek && player?.positionSupported && length > 0) ?? false
+    readonly property int progressTick: 800
 
     function toggle() {
         if (root.canToggle)
@@ -59,11 +60,10 @@ Singleton {
         root.player.position = Math.max(0, Math.min(1, fraction)) * root.length
     }
 
-    FrameAnimation {
-        running: root.isPlaying
-        onTriggered: {
-            if (root.player)
-                root.player.positionChanged()
-        }
+    Timer {
+        running: root.player?.playbackState === MprisPlaybackState.Playing
+        interval: root.progressTick
+        repeat: true
+        onTriggered: root.player?.positionChanged()
     }
 }
