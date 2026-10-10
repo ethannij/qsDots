@@ -12,7 +12,15 @@ PillShape {
         id: clockText
         text: clockItem.showDate ? Qt.formatDateTime(Time.date, Config.dateFormat) : Qt.formatDateTime(Time.date, Config.clockFormat)
         font: StylizedFont.bold
-        color: Colors.md3.primary
+        color: clockItem.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Config.animMs
+                easing.type: Easing.InOutCubic
+            }
+        }
     }
     onTapped: clockItem.showDate = !clockItem.showDate
+    onTappedAlternate: PillController.togglePanel();
 }

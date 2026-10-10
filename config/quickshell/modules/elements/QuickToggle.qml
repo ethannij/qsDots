@@ -21,6 +21,5 @@ PillShape {
         source: root.source
         size: Config.iconSize
         color: root.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant
-
     }
 }

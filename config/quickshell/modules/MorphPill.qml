@@ -14,7 +14,6 @@ Item {
 
     readonly property real restHeight: clock.implicitHeight
     readonly property bool ready: restW > 0 && restH > 0
-    property bool latchedHighlight: false
 
     readonly property Item face: {
         switch (PillController.activeFace) {
@@ -24,8 +23,10 @@ Item {
             return volume;
         case "notification":
             return notification;
+        case "gamebar":
+            return gamebar;
         default:
-            return clock;
+            return null;
         }
     }
 
@@ -34,18 +35,16 @@ Item {
     Behavior on morph {
         enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
+            duration: PillController.overlay !== "none" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.overlay !== "none" ? Easing.OutCubic : Easing.InCubic
         }
     }
 
     property real restW: 0
     property real restH: 0
-    property real hostW: 0
-    property real hostH: 0
 
-    readonly property real liveRestW: restContent.implicitWidth * Config.pillFaceWidthScale
-    readonly property real liveRestH: restContent.implicitHeight
+    readonly property real liveRestW: restContent.implicitWidth + Config.shellPadH * 2
+    readonly property real liveRestH: restContent.implicitHeight + Config.shellPadV * 2
 
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
@@ -58,27 +57,23 @@ Item {
         restH = liveRestH;
     }
 
-    function snapHostToFace() {
-        hostW = face.implicitWidth;
-        hostH = face.implicitHeight;
-        clock.opacity = PillController.activeFace === "clock" ? 1 : 0;
+    function snapHostOpacity() {
         workspaces.opacity = PillController.activeFace === "workspaces" ? 1 : 0;
         volume.opacity = PillController.activeFace === "volume" ? 1 : 0;
         notification.opacity = PillController.activeFace === "notification" ? 1 : 0;
+        gamebar.opacity = PillController.activeFace === "gamebar" ? 1 : 0;
     }
 
     function runFaceAnim() {
         if (!ready || morph !== 0 || Config.animMs <= 0) {
-            snapHostToFace();
+            snapHostOpacity();
             return;
         }
         faceAnim.stop();
-        hostWAnim.to = face.implicitWidth;
-        hostHAnim.to = face.implicitHeight;
-        clockOpAnim.to = PillController.activeFace === "clock" ? 1 : 0;
         wsOpAnim.to = PillController.activeFace === "workspaces" ? 1 : 0;
         volumeOpAnim.to = PillController.activeFace === "volume" ? 1 : 0;
         notifOpAnim.to = PillController.activeFace === "notification" ? 1 : 0;
+        gamebarOpAnim.to = PillController.activeFace === "gamebar" ? 1 : 0;
         faceAnim.start();
     }
 
@@ -89,18 +84,11 @@ Item {
 
     clip: false
 
-    readonly property bool shellBusy: morph > 0 && morph < 1
-
-    onShellBusyChanged: {
-        if (shellBusy)
-            latchedHighlight = hover.hovered || PillController.overlay !== "none";
-    }
-
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
     readonly property real panelOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
 
     Component.onCompleted: {
-        snapHostToFace();
+        snapHostOpacity();
         restW = liveRestW;
         restH = liveRestH;
     }
@@ -116,46 +104,32 @@ Item {
         id: faceAnim
 
         NumberAnimation {
-            id: hostWAnim
-            target: morphPill
-            property: "hostW"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
-        }
-        NumberAnimation {
-            id: hostHAnim
-            target: morphPill
-            property: "hostH"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
-        }
-        NumberAnimation {
-            id: clockOpAnim
-            target: clock
-            property: "opacity"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
-        }
-        NumberAnimation {
             id: wsOpAnim
             target: workspaces
             property: "opacity"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
+            duration: PillController.activeFace === "workspaces" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.activeFace === "workspaces" ? Easing.OutCubic : Easing.InCubic
         }
         NumberAnimation {
             id: volumeOpAnim
             target: volume
             property: "opacity"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
+            duration: PillController.activeFace === "volume" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.activeFace === "volume" ? Easing.OutCubic : Easing.InCubic
         }
         NumberAnimation {
             id: notifOpAnim
             target: notification
             property: "opacity"
-            duration: Config.animMs
-            easing.type: Easing.InOutCubic
+            duration: PillController.activeFace === "notification" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.activeFace === "notification" ? Easing.OutCubic : Easing.InCubic
+        }
+        NumberAnimation {
+            id: gamebarOpAnim
+            target: gamebar
+            property: "opacity"
+            duration: PillController.activeFace === "gamebar" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.activeFace === "gamebar" ? Easing.OutCubic : Easing.InCubic
         }
     }
 
@@ -171,20 +145,12 @@ Item {
         anchors.fill: parent
         color: Colors.md3.surface
         border.width: Config.borderWidth
-        radius: Gamemode.active ? 0 : PillController.overlay !== "none" ? Config.radiusPill : height / 2
-        border.color: (morphPill.shellBusy ? morphPill.latchedHighlight : (PillController.overlay !== "none" || hover.hovered)) ? Colors.md3.primary : Colors.md3.surface_variant
+        radius: Gamemode.active ? 0 : Math.min(height / 2, morphPill.restHeight / 2 + Config.shellPadV)
+        border.color: Colors.md3.outline_variant
 
         Behavior on radius {
             enabled: !Gamemode.active
             NumberAnimation {
-                duration: Config.animMs
-                easing.type: Easing.InOutCubic
-            }
-        }
-
-        Behavior on border.color {
-            enabled: !morphPill.shellBusy
-            ColorAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
             }
@@ -213,67 +179,90 @@ Item {
         MediaChip {
             visible: Media.active
             chrome: false
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
         }
 
-        Item {
-            id: faceHost
-            width: morphPill.face.implicitWidth
-            height: morphPill.face.implicitHeight
-            implicitWidth: width
-            implicitHeight: height
-            clip: false
-
-            Behavior on width {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
-                NumberAnimation {
-                    duration: Config.animMs
-                    easing.type: Easing.InOutCubic
-                }
-            }
-            Behavior on height {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
-                NumberAnimation {
-                    duration: Config.animMs
-                    easing.type: Easing.InOutCubic
-                }
-            }
+        Row {
+            id: dynamicContent
+            spacing: 0
+            anchors.top: parent.top
 
             Clock {
                 id: clock
-                readonly property bool faceActive: PillController.activeFace === "clock"
-                enabled: faceActive && restContent.enabled
-                visible: faceActive
-                anchors.centerIn: parent
+                enabled: restContent.enabled
+                visible: true
+                opacity: 1
+                anchors.top: parent.top
                 chrome: false
             }
 
-            Workspaces {
-                id: workspaces
-                readonly property bool faceActive: PillController.activeFace === "workspaces"
-                enabled: faceActive && restContent.enabled
-                visible: faceActive
-                anchors.centerIn: parent
-                chrome: false
-                animateWidths: faceActive && morphPill.morph === 0
-            }
+            Item {
+                id: faceHost
+                width: face ? morphPill.face.implicitWidth + Config.spaceSm: 0
+                height: face ? morphPill.face.implicitHeight : 0
+                implicitWidth: width
+                implicitHeight: height
+                anchors.top: parent.top
+                clip: true
 
-            Volume {
-                id: volume
-                readonly property bool faceActive: PillController.activeFace === "volume"
-                enabled: faceActive && restContent.enabled
-                visible: faceActive
-                anchors.centerIn: parent
-                chrome: false
-            }
+                Behavior on width {
+                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                    NumberAnimation {
+                        duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
+                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing.InCubic : Easing.OutCubic
+                    }
+                }
+                Behavior on height {
+                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                    NumberAnimation {
+                        duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
+                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing.InCubic : Easing.OutCubic
+                    }
+                }
 
-            Notification {
-                id: notification
-                readonly property bool faceActive: PillController.activeFace === "notification"
-                enabled: faceActive && restContent.enabled
-                visible: faceActive
-                anchors.centerIn: parent
-                chrome: false
+                Workspaces {
+                    id: workspaces
+                    readonly property bool faceActive: PillController.activeFace === "workspaces"
+                    enabled: faceActive && restContent.enabled
+                    visible: faceActive || opacity > 0
+                    opacity: 0
+                    x: Config.spaceSm
+                    anchors.top: parent.top
+                    chrome: false
+                    animateWidths: faceActive && morphPill.morph === 0
+                }
+
+                Volume {
+                    id: volume
+                    readonly property bool faceActive: PillController.activeFace === "volume"
+                    enabled: faceActive && restContent.enabled
+                    visible: faceActive || opacity > 0
+                    opacity: 0
+                    x: Config.spaceSm
+                    anchors.top: parent.top
+                    chrome: false
+                }
+
+                Notification {
+                    id: notification
+                    readonly property bool faceActive: PillController.activeFace === "notification"
+                    enabled: faceActive && restContent.enabled
+                    visible: faceActive || opacity > 0
+                    opacity: 0
+                    x: Config.spaceSm
+                    anchors.top: parent.top
+                    chrome: false
+                }
+
+                GameBar {
+                    id: gamebar
+                    readonly property bool faceActive: PillController.activeFace === "gamebar"
+                    enabled: faceActive && restContent.enabled
+                    visible: faceActive || opacity > 0
+                    opacity: 0
+                    x: Config.spaceSm
+                    chrome: false
+                }
             }
         }
 
@@ -348,4 +337,5 @@ Item {
     VolumeBehavior {}
     WorkspacesBehavior {}
     NotificationBehavior {}
+    GameBarBehavior {}
 }

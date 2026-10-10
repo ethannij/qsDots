@@ -24,7 +24,7 @@ Item {
         anchors.centerIn: parent
         implicitWidth: icon.size + Config.spaceMd
         implicitHeight: icon.size + Config.spaceMd
-        radius: width * 0.3
+        radius: Config.radiusPill
         color: root.backgroundColor
 
         ColorizedIcon {

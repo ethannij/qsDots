@@ -4,6 +4,7 @@ import qs.services
 
 Singleton {
     // Timing
+    readonly property int animMsClose: animMs === 0 ? 0 : 180
     readonly property int animMs: Gamemode.active ? 0 : 300
     readonly property int ttlMs: 1500
     readonly property int holdMs: 200
@@ -61,8 +62,9 @@ Singleton {
     readonly property int hoverTipPadV: 5
 
     readonly property int pillPadH: spaceMd
+    readonly property int shellPadH: spaceMd
     readonly property int pillPadV: spaceSm
-    readonly property real pillFaceWidthScale: 1.5
+    readonly property int shellPadV: 4
 
     // Session menu
     readonly property int sessionMenuPadding: spaceMd

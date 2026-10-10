@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import QtQuick.Layouts
 import qs.config
 import qs.modules.elements
 import qs.services
@@ -89,9 +88,6 @@ Item {
 
         Grid {
             id: grid
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
             spacing: Config.spaceMd
             columns: 4
             rows: 2

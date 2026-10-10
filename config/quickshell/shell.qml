@@ -23,29 +23,10 @@ ShellRoot {
         visible: false
         title: "testWindow"
 
-        WlSessionLock {
-        id: lock
-
-        WlSessionLockSurface {
-            Button {
-                text: "Unlock"
-                onClicked: lock.locked = false
-            }
-        }
-    }
-
-    
-
-        Rectangle {
-            anchors.fill: parent
-            color: "black"
-
-            Button {
-                text: "lock"
-                anchors.centerIn: parent
-                onClicked: lock.locked = true
-            }
-
+        Button {
+            anchors.centerIn: parent
+            text: "Toggle Gamebar"
+            onClicked: PillController.gameBarOpen = !PillController.gameBarOpen
         }
 
     }

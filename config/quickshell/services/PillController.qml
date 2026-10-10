@@ -70,8 +70,13 @@ Singleton {
 
     // Functions for pill face control
 
+    property bool faceHeld: false // Pinning behavior
+
     function showFace(name) {
         if (panelOpen || launcherOpen)
+            return;
+
+        if (faceHeld && name !== "gamebar")
             return;
 
         if (name === "clock") {
@@ -98,6 +103,18 @@ Singleton {
         faceTimer.stop();
         activeFace = "clock";
         panelOpen = false;
+    }
+
+    function holdGamebar() {
+        faceHeld = true;
+        faceTimer.stop();
+        activeFace = "gamebar";
+    }
+
+    function releaseGamebar() {
+        faceHeld = false;
+        faceTimer.restart();
+        activeFace = "clock";
     }
 
     onPinnedChanged: {
@@ -134,6 +151,7 @@ Singleton {
         panelOpen = true;
         closeLauncher();
         faceTimer.stop();
+        faceHeld = false;
     }
 
     function closePanel() {
@@ -142,30 +160,35 @@ Singleton {
         sessionMenuOpen = false;
         wallpaperSwitcherOpen = false;
         faceTimer.restart();
+        faceHeld = false;
     }
 
     function showLauncher() {
         launcherOpen = true;
         faceTimer.stop();
+        faceHeld = false;
     }
 
     function closeLauncher() {
         launcherOpen = false;
         faceTimer.restart();
+        faceHeld = false;
     }
 
     function showBluetooth() {
         closePanel();
-        closeLauncher()
+        closeLauncher();
         closeWifi();
         closeWallpaperSwitcher();
         bluetoothOpen = true;
         faceTimer.stop();
+        faceHeld = false;
     }
 
     function closeBluetooth() {
         bluetoothOpen = false;
         faceTimer.restart();
+        faceHeld = false;
     }
 
     function showWifi() {
@@ -175,11 +198,13 @@ Singleton {
         closeWallpaperSwitcher();
         wifiOpen = true;
         faceTimer.stop();
+        faceHeld = false;
     }
 
     function closeWifi() {
         wifiOpen = false;
         faceTimer.restart();
+        faceHeld = false;
     }
 
     function showWallpaperSwitcher() {
@@ -189,11 +214,13 @@ Singleton {
         closeWifi();
         wallpaperSwitcherOpen = true;
         faceTimer.stop();
+        faceHeld = false;
     }
 
     function closeWallpaperSwitcher() {
         wallpaperSwitcherOpen = false;
         faceTimer.restart();
+        faceHeld = false;
     }
 
     function toggleWallpaperSwitcher() {
@@ -219,5 +246,6 @@ Singleton {
         closeWifi();
         closeWallpaperSwitcher();
         faceTimer.restart();
+        faceHeld = false;
     }
 }

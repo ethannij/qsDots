@@ -45,6 +45,18 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	-- size, float, and pin Picture-in-Picture vidoes
+	name = "Picutre-in-Picture",
+	match = {
+		title = "Picture-in-Picture",
+	},
+
+	float = true,
+	size = { 640, 360 },
+	pin = true,
+})
+
+hl.window_rule({
 	-- center & size pavucontrol
 	name = "Volume Control",
 	match = {

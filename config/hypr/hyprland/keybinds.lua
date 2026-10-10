@@ -9,7 +9,7 @@ local browser = "floorp"
 local sessionManager = "wlogout"
 local lock = "hyprlock"
 local themeswitcher = "qs ipc call wallpaperSwitcher toggleVisible"
-local gamebar = "$HOME/.config/rofi/modules/gamebar/gamebar.sh || pkill rofi"
+local gamebar = "qs ipc call gamebarIpc toggleGamebar"
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -30,6 +30,12 @@ hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 --------------------------------
 
 hl.bind("SUPER_L", hl.dsp.global(menu), { ignore_mods = true, non_consuming = true, transparent = true }) -- Open Quickshell App Launcher
+
+hl.bind(
+	mainMod .. " + catchall",
+	hl.dsp.global("quickshell:launcherInterrupt"),
+	{ ignore_mods = true, non_consuming = true }
+) -- Pass inputs through to other binds
 
 hl.bind(mainMod .. " + J", hl.dsp.exec_cmd("qs ipc call ipcBar toggleBar")) -- Toggle bar visibility
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/reload.sh")) -- Reload Quickshell
