@@ -25,8 +25,8 @@ ShellRoot {
 
         Button {
             anchors.centerIn: parent
-            text: "Toggle Gamebar"
-            onClicked: PillController.gameBarOpen = !PillController.gameBarOpen
+            text: "Toggle WLED"
+            onClicked: WLED.toggle()
         }
 
     }

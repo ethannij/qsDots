@@ -106,6 +106,11 @@ hl.window_rule({
 	center = true,
 })
 
+hl.workspace_rule({
+	workspace = "special:scratchpad",
+	animation = "slide bottom"
+})
+
 hl.layer_rule({
 	name = "Quickshell, background blur",
 	match = { namespace = "quickshell:bar" },
@@ -119,18 +124,6 @@ hl.layer_rule({
 	match = { namespace = "^logout_dialog$" },
 	blur = true,
 	ignore_alpha = 0.5,
-})
-
--- scratchpad vertical workspace transition
-hl.workspace_rule({
-	workspace = "special:scratchpad",
-	animation = "slide",
-})
-
-hl.workspace_rule({
-	workspace = "special:gamehub",
-	on_created_empty = "$HOME/.config/rofi/modules/gamebar/gamebar.sh",
-	animation = "none",
 })
 
 -- center & size file picker dialogue

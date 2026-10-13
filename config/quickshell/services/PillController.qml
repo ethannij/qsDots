@@ -76,7 +76,7 @@ Singleton {
         if (panelOpen || launcherOpen)
             return;
 
-        if (faceHeld && name !== "gamebar")
+        if (faceHeld && name !== "gamebar" && name !== "agent")
             return;
 
         if (name === "clock") {
@@ -117,6 +117,18 @@ Singleton {
         activeFace = "clock";
     }
 
+    function holdAgent() {
+        faceHeld = true;
+        faceTimer.stop();
+        activeFace = "agent";
+    }
+
+    function releaseAgent() {
+        faceHeld = false;
+        faceTimer.restart();
+        activeFace = "clock";
+    }
+
     onPinnedChanged: {
         if (panelOpen || pinned || launcherOpen)
             faceTimer.stop();
@@ -130,7 +142,7 @@ Singleton {
         interval: 2000
         repeat: false
         onTriggered: {
-            if (handler.panelOpen || handler.pinned)
+            if (handler.panelOpen || handler.pinned || handler.faceHeld)
                 return;
 
             handler.dismiss();

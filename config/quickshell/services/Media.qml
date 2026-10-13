@@ -9,20 +9,21 @@ Singleton {
     property var stickyPlayer: null
 
     readonly property var player: {
-        const list = Mpris.players.values
-        const playing = list.find(p => p.isPlaying)
+        const list = Mpris.players.values;
+        const playing = list.find(p => p.isPlaying);
         if (playing)
-            return playing
+            return playing;
         if (root.stickyPlayer && list.indexOf(root.stickyPlayer) !== -1)
-            return root.stickyPlayer
-        return list[0] ?? null
+            return root.stickyPlayer;
+        return list[0] ?? null;
     }
 
     onPlayerChanged: {
         if (root.player)
-            root.stickyPlayer = root.player
+            root.stickyPlayer = root.player;
     }
 
+    property bool isIdle: false
     readonly property bool active: player !== null
     readonly property bool isPlaying: player?.isPlaying ?? false
     readonly property string name: player?.identity ?? ""
@@ -41,23 +42,23 @@ Singleton {
 
     function toggle() {
         if (root.canToggle)
-            root.player.togglePlaying()
+            root.player.togglePlaying();
     }
 
     function next() {
         if (root.canGoNext)
-            root.player.next()
+            root.player.next();
     }
 
     function previous() {
         if (root.canGoPrevious)
-            root.player.previous()
+            root.player.previous();
     }
 
     function seekTo(fraction) {
         if (!root.canSeek)
-            return
-        root.player.position = Math.max(0, Math.min(1, fraction)) * root.length
+            return;
+        root.player.position = Math.max(0, Math.min(1, fraction)) * root.length;
     }
 
     Timer {
@@ -65,5 +66,17 @@ Singleton {
         interval: root.progressTick
         repeat: true
         onTriggered: root.player?.positionChanged()
+    }
+
+    onIsPlayingChanged: {
+        if (root.isPlaying)
+            root.isIdle = false;
+    }
+
+    Timer {
+        running: root.player?.playbackState !== MprisPlaybackState.Playing
+        interval: 300000 // 5 minutes
+        onTriggered: root.isIdle = true
+        repeat: true
     }
 }

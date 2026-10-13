@@ -12,7 +12,7 @@ Variants {
         id: bar
         WlrLayershell.namespace: "quickshell:bar"
         WlrLayershell.layer: WlrLayer.Top
-        WlrLayershell.keyboardFocus: PillController.overlay !== "none" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: PillController.overlay !== "none" ? WlrKeyboardFocus.Exclusive : PillController.activeFace === "agent" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         required property var modelData
         screen: modelData
         property alias barVisible: bar.visible
@@ -48,13 +48,13 @@ Variants {
             Item {
                 anchors.fill: parent
                 focus: true
-                Keys.onEscapePressed: PillController.closeOverlay();
+                Keys.onEscapePressed: PillController.closeOverlay()
             }
 
             MouseArea {
                 anchors.fill: parent
                 enabled: PillController.overlay !== "none"
-                onClicked: PillController.closeOverlay();
+                onClicked: PillController.closeOverlay()
             }
         }
 
@@ -66,7 +66,7 @@ Variants {
             visible: Config.showClock
             z: 1
         }
-        
+
         IpcHandler {
             id: ipcbar
             target: "ipcBar"

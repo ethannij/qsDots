@@ -1,6 +1,9 @@
 # Local hyprland configs
 config/hypr/custom/
 
+# my zshrc
+home/.zshrc
+
 # QML language server
 .qmlls.ini
 

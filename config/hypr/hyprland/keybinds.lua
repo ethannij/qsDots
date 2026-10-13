@@ -10,6 +10,7 @@ local sessionManager = "wlogout"
 local lock = "hyprlock"
 local themeswitcher = "qs ipc call wallpaperSwitcher toggleVisible"
 local gamebar = "qs ipc call gamebarIpc toggleGamebar"
+local agent = "qs ipc call agentIpc toggleAgent"
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -42,7 +43,7 @@ hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/rel
 hl.bind(mainMod .. " + F1", hl.dsp.exec_cmd(themeswitcher)) -- wallpaper selector menu
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd(sessionManager)) -- logout menu
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(gamebar)) -- show gamebar
-
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(agent)) -- show agent text input
 --------------------------------
 
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())

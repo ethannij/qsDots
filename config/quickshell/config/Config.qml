@@ -75,6 +75,7 @@ Singleton {
 
     // Icon Sizes
     readonly property int iconSize: 30
+    readonly property int barIconSize: 18
 
     // Wallpaper
     readonly property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"

@@ -1,10 +1,10 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import qs.config
 import qs.theme
 import qs.services
 import qs.modules.elements
-pragma ComponentBehavior: Bound
 
 Item {
     id: root
@@ -31,12 +31,30 @@ Item {
     }
 
     readonly property var actions: [
-        { label: "shutdown", cmd: ["systemctl", "poweroff"]},
-        { label: "reboot", cmd: ["systemctl", "reboot"]},
-        { label: "logout", cmd: ["loginctl", "terminate-session", Quickshell.env("XDG_SESSION_ID")]},
-        { label: "sleep", cmd: ["systemctl", "suspend"]},
-        { label: "hibernate", cmd: ["systemctl", "hibernate"]},
-        { label: "lock", cmd: ["hyprlock"]},
+        {
+            label: "shutdown",
+            cmd: ["systemctl", "poweroff"]
+        },
+        {
+            label: "reboot",
+            cmd: ["systemctl", "reboot"]
+        },
+        {
+            label: "logout",
+            cmd: ["hyprctl", "dispatch", "hl.dsp.exit()"]
+        },
+        {
+            label: "sleep",
+            cmd: ["systemctl", "suspend"]
+        },
+        {
+            label: "hibernate",
+            cmd: ["systemctl", "hibernate"]
+        },
+        {
+            label: "lock",
+            cmd: ["hyprlock"]
+        },
     ]
 
     Rectangle {
@@ -90,16 +108,22 @@ Item {
                             enabled: background.opacity > 0
                             //gesturePolicy: TapHandler.ReleaseWithinBounds
                             onTapped: {
-                                Quickshell.execDetached(entry.modelData.cmd)
-                                PillController.closeOverlay()
-
+                                // Prevents LEDs from staying on after shutdown (because how are you supposed to turn them off without rebooting)
+                                const cmd = entry.modelData.cmd;
+                                function go() {
+                                    Quickshell.execDetached(cmd);
+                                    PillController.closeOverlay();
+                                }
+                                if (entry.modelData.label === "shutdown" && WLED.wledExists && WLED.on) {
+                                    WLED.toggle();
+                                    go();
+                                } else
+                                    go();
                             }
                         }
                     }
                 }
             }
-
         }
-
     }
 }

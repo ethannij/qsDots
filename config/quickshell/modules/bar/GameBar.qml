@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import QtQuick.Layouts
 import qs.services
 import qs.modules.elements
@@ -78,7 +79,8 @@ PillShape {
 
         Row {
             id: row
-            spacing: Config.spaceMd
+            spacing: Config.spaceSm
+            visible: !gamebar.fpsOpen
 
             Repeater {
                 id: repeater
@@ -86,11 +88,26 @@ PillShape {
 
                 delegate: IconButton {
                     id: icon
+
                     required property var modelData
                     source: modelData.icon
                     size: Config.iconSize
                     iconColor: hover.hovered ? Colors.md3.primary : Colors.md3.on_surface
                     backgroundColor: hover.hovered ? Colors.md3.surface_variant : "transparent"
+
+                    Behavior on backgroundColor {
+                        ColorAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Behavior on iconColor {
+                        ColorAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing.OutCubic
+                        }
+                    }
 
                     HoverHandler {
                         id: hover
@@ -111,24 +128,81 @@ PillShape {
             }
         }
 
-        Column {
+        Row {
             id: fpsList
             visible: gamebar.fpsOpen
-            spacing: Config.spaceXs
-            width: row.implicitWidth
+            spacing: Config.spaceSm
 
             Repeater {
-                model: [0, 30, 60, 90, 120, 240]
+                model: [0, 60, 90, 120, 240]
 
-                Text {
+                delegate: Item {
+                    id: fpsItem
                     required property int modelData
-                    width: fpsList.width
-                    horizontalAlignment: Text.AlignHCenter
-                    text: modelData === 0 ? "Unlimited" : modelData + " FPS"
-                    font: StylizedFont.body
-                    color: Colors.md3.on_surface
+
+                    implicitWidth: background.implicitWidth + Config.spaceSm
+                    implicitHeight: background.implicitHeight + Config.spaceSm
+
+                    Rectangle {
+                        id: background
+                        anchors.centerIn: parent
+                        implicitWidth: fpsText.implicitWidth + Config.spaceMd
+                        implicitHeight: fpsText.implicitHeight + Config.spaceMd
+                        radius: Config.radiusPill
+                        color: listHover.hovered ? Colors.md3.surface_variant : "transparent"
+
+                        Text {
+                            id: fpsText
+                            anchors.centerIn: parent
+                            text: fpsItem.modelData === 0 ? "" : modelData
+                            font: StylizedFont.body
+                            color: listHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: Config.animMs
+                                    easing.type: Easing.OutCubic
+                                }
+                            }
+                            
+                            HoverHandler {
+                                id: listHover
+                                cursorShape: Qt.PointingHandCursor
+                            }
+                            TapHandler {
+                                id: listTap
+                                gesturePolicy: TapHandler.ReleaseWithinBounds
+                                onTapped: {
+                                    gamebar.applyLimit(fpsItem.modelData);
+                                    PillController.releaseGamebar();
+                                }
+                            }
+                        }
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: Config.animMs
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    FileView {
+        id: mangoConf
+        path: Quickshell.env("HOME") + "/.config/MangoHud/MangoHud.conf"
+        watchChanges: true
+        atomicWrites: true
+        onFileChanged: reload()
+    }
+
+    function applyLimit(fps) {
+        if (!mangoConf.loaded)
+            return;
+        const next = mangoConf.text().replace(/^fps_limit=.*/m, "fps_limit=" + fps);
+        if (next !== mangoConf.text())
+            mangoConf.setText(next);
     }
 }

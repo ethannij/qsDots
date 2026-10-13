@@ -14,6 +14,8 @@ Item {
 
     readonly property real restHeight: clock.implicitHeight
     readonly property bool ready: restW > 0 && restH > 0
+    readonly property bool gamebarOnly: PillController.activeFace === "gamebar"
+    readonly property bool agentOnly: PillController.activeFace === "agent"
 
     readonly property Item face: {
         switch (PillController.activeFace) {
@@ -25,6 +27,8 @@ Item {
             return notification;
         case "gamebar":
             return gamebar;
+        case "agent":
+            return agent;
         default:
             return null;
         }
@@ -43,8 +47,8 @@ Item {
     property real restW: 0
     property real restH: 0
 
-    readonly property real liveRestW: restContent.implicitWidth + Config.shellPadH * 2
-    readonly property real liveRestH: restContent.implicitHeight + Config.shellPadV * 2
+    readonly property real liveRestW: gamebarOnly ? (gamebar.implicitWidth + Config.shellPadH * 2) : (agentOnly ? (agent.implicitWidth + Config.shellPadH * 2) : agentOnly ? (agent.implicitWidth + Config.shellPadH * 2) : (restContent.implicitWidth + Config.shellPadH * 2))
+    readonly property real liveRestH: gamebarOnly ? (gamebar.implicitHeight + Config.shellPadV * 2) : (agentOnly ? (agent.implicitHeight + Config.shellPadV * 2) : agentOnly ? (agent.implicitHeight + Config.shellPadV * 2) : (restContent.implicitHeight + Config.shellPadV * 2))
 
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
@@ -62,6 +66,7 @@ Item {
         volume.opacity = PillController.activeFace === "volume" ? 1 : 0;
         notification.opacity = PillController.activeFace === "notification" ? 1 : 0;
         gamebar.opacity = PillController.activeFace === "gamebar" ? 1 : 0;
+        agent.opacity = PillController.activeFace === "agent" ? 1 : 0;
     }
 
     function runFaceAnim() {
@@ -74,6 +79,7 @@ Item {
         volumeOpAnim.to = PillController.activeFace === "volume" ? 1 : 0;
         notifOpAnim.to = PillController.activeFace === "notification" ? 1 : 0;
         gamebarOpAnim.to = PillController.activeFace === "gamebar" ? 1 : 0;
+        agentOpAnim.to = PillController.activeFace === "agent" ? 1 : 0;
         faceAnim.start();
     }
 
@@ -104,6 +110,14 @@ Item {
         id: faceAnim
 
         NumberAnimation {
+            id: mediaChipOpAnim
+            target: mediaChip
+            property: "opacity"
+            duration: !Media.isIdle ? Config.animMs : Config.animMsClose
+            easing.type: !Media.isIdle ? Easing.OutCubic : Easing.InCubic
+        }
+
+        NumberAnimation {
             id: wsOpAnim
             target: workspaces
             property: "opacity"
@@ -131,6 +145,13 @@ Item {
             duration: PillController.activeFace === "gamebar" ? Config.animMs : Config.animMsClose
             easing.type: PillController.activeFace === "gamebar" ? Easing.OutCubic : Easing.InCubic
         }
+        NumberAnimation {
+            id: agentOpAnim
+            target: agent
+            property: "opacity"
+            duration: PillController.activeFace === "agent" ? Config.animMs : Config.animMsClose
+            easing.type: PillController.activeFace === "agent" ? Easing.OutCubic : Easing.InCubic
+        }
     }
 
     HoverHandler {
@@ -149,7 +170,7 @@ Item {
         border.color: Colors.md3.outline_variant
 
         Behavior on radius {
-            enabled: !Gamemode.active
+            enabled: !Gamemode.active && !morphPill.agentOnly
             NumberAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
@@ -176,33 +197,94 @@ Item {
         spacing: Config.spaceSm
         layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
 
-        MediaChip {
-            visible: Media.active
-            chrome: false
-            anchors.top: parent.top
+        Item {
+            id: mediaSlot
+            width: mediaChip.shown ? mediaChip.implicitWidth : 0
+            height: mediaChip.implicitHeight
+            clip: true
+            visible: width > 0 || mediaChip.opacity > 0
+
+            Behavior on width {
+                NumberAnimation {
+                    duration: Config.animMsClose
+                    easing.type: Easing.InCubic
+                }
+            }
+
+            MediaChip {
+                id: mediaChip
+                readonly property bool shown: Media.active && !Media.isIdle && (!morphPill.gamebarOnly && !morphPill.agentOnly)
+                visible: shown || opacity > 0
+                opacity: shown ? 1 : 0
+                chrome: false
+                x: Config.pillPadH
+                y: Config.pillPadV - 2
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: shown ? Config.animMs : Config.animMsClose
+                        easing.type: shown ? Easing.OutCubic : Easing.InCubic
+                    }
+                }
+            }
         }
 
         Row {
             id: dynamicContent
             spacing: 0
-            anchors.top: parent.top
+            anchors.verticalCenter: parent.verticalCenter
 
             Clock {
                 id: clock
                 enabled: restContent.enabled
-                visible: true
+                visible: !morphPill.gamebarOnly && !morphPill.agentOnly
                 opacity: 1
-                anchors.top: parent.top
                 chrome: false
+            }
+
+            NotificationChip {
+                id: notificationChip
+                anchors.verticalCenter: parent.verticalCenter
+                visible: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb
+                opacity: visible ? 1 : 0
+                color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.OutCubic
+                    }
+                }
+                TapHandler {
+                    id: notificationChipTap
+                    onTapped: PillController.page = "notifications"
+                }
+
+                TapHandler {
+                    id: notificationChipTapAlternate
+                    onTapped: Notifications.clearAll()
+                    acceptedButtons: Qt.RightButton
+                }
+
+                HoverHandler {
+                    id: notificationChipHover
+                    cursorShape: Qt.PointingHandCursor
+                }
             }
 
             Item {
                 id: faceHost
-                width: face ? morphPill.face.implicitWidth + Config.spaceSm: 0
+                anchors.verticalCenter: parent.verticalCenter
+                width: face ? morphPill.face.implicitWidth + Config.spaceSm : 0
                 height: face ? morphPill.face.implicitHeight : 0
                 implicitWidth: width
                 implicitHeight: height
-                anchors.top: parent.top
                 clip: true
 
                 Behavior on width {
@@ -213,7 +295,7 @@ Item {
                     }
                 }
                 Behavior on height {
-                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0 && !morphPill.agentOnly
                     NumberAnimation {
                         duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
                         easing.type: PillController.activeFace === PillController.defaultFace ? Easing.InCubic : Easing.OutCubic
@@ -263,13 +345,23 @@ Item {
                     x: Config.spaceSm
                     chrome: false
                 }
+
+                Agent {
+                    id: agent
+                    readonly property bool faceActive: PillController.activeFace === "agent"
+                    enabled: faceActive && restContent.enabled
+                    visible: faceActive || opacity > 0
+                    opacity: 0
+                    x: Config.spaceSm
+                    chrome: false
+                }
             }
         }
 
         Idle {
             id: idle
             anchors.verticalCenter: parent.verticalCenter
-            visible: IdleInhibitor.inhibitIdle
+            visible: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly
         }
     }
 
@@ -338,4 +430,5 @@ Item {
     WorkspacesBehavior {}
     NotificationBehavior {}
     GameBarBehavior {}
+    AgentBehavior {}
 }
