@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import qs.modules.bar
 import qs.services
 import qs.modules.behaviors
@@ -34,8 +35,21 @@ Item {
         }
     }
 
+    RectangularShadow {
+        id: shadow
+        anchors.fill: rect
+        visible: !Gamemode.active
+        color: Colors.md3.shadow
+        radius: rect.radius
+        spread: 4
+        blur: 10
+        opacity: 0.7
+        offset: Qt.point(0, 1)
+    }
+
     property real morph: PillController.overlay !== "none" ? 1 : 0
 
+    // Animation when opening pill into overlay
     Behavior on morph {
         enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
@@ -44,11 +58,21 @@ Item {
         }
     }
 
+    property real hoverGrow: hover.hovered && morph === 0 ? 8 : 0
+
+    Behavior on hoverGrow {
+        enabled: morphPill.ready && Config.animMs > 0
+        NumberAnimation {
+            duration: Config.animMs
+            easing.type: Easing.OutCubic
+        }
+    }
+
     property real restW: 0
     property real restH: 0
 
-    readonly property real liveRestW: gamebarOnly ? (gamebar.implicitWidth + Config.shellPadH * 2) : (agentOnly ? (agent.implicitWidth + Config.shellPadH * 2) : agentOnly ? (agent.implicitWidth + Config.shellPadH * 2) : (restContent.implicitWidth + Config.shellPadH * 2))
-    readonly property real liveRestH: gamebarOnly ? (gamebar.implicitHeight + Config.shellPadV * 2) : (agentOnly ? (agent.implicitHeight + Config.shellPadV * 2) : agentOnly ? (agent.implicitHeight + Config.shellPadV * 2) : (restContent.implicitHeight + Config.shellPadV * 2))
+    readonly property real liveRestW: restContent.implicitWidth + Config.shellPadH * 2
+    readonly property real liveRestH: restContent.implicitHeight + Config.shellPadV * 2
 
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
@@ -83,8 +107,8 @@ Item {
         faceAnim.start();
     }
 
-    width: restW + (Config.controlPanelW - restW) * morph
-    height: restH + (Config.controlPanelH - restH) * morph
+    width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * morph
+    height: restH + hoverGrow * (1 - morph) + (Config.controlPanelH - restH) * morph
     implicitWidth: width
     implicitHeight: height
 
@@ -163,14 +187,16 @@ Item {
 
     Rectangle {
         id: rect
-        anchors.fill: parent
+        implicitWidth: parent.implicitWidth
+        implicitHeight: parent.implicitHeight
+        anchors.centerIn: parent
         color: Colors.md3.surface
         border.width: Config.borderWidth
         radius: Gamemode.active ? 0 : Math.min(height / 2, morphPill.restHeight / 2 + Config.shellPadV)
-        border.color: Colors.md3.outline_variant
+        border.color: Gamemode.active ? Colors.md3.outline_variant : "transparent"
 
         Behavior on radius {
-            enabled: !Gamemode.active && !morphPill.agentOnly
+            enabled: !Gamemode.active && !morphPill.agentOnly && !morphPill.gamebarOnly
             NumberAnimation {
                 duration: Config.animMs
                 easing.type: Easing.InOutCubic
@@ -244,7 +270,7 @@ Item {
             NotificationChip {
                 id: notificationChip
                 anchors.verticalCenter: parent.verticalCenter
-                visible: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb
+                visible: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly
                 opacity: visible ? 1 : 0
                 color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
 
@@ -361,7 +387,28 @@ Item {
         Idle {
             id: idle
             anchors.verticalCenter: parent.verticalCenter
-            visible: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly
+            visible: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded
+        }
+
+        QuickToggles {
+            id: quickToggles
+            anchors.verticalCenter: parent.verticalCenter
+            barHovered: hover.hovered
+            visible: !gamebarOnly && !agentOnly && (barHovered || expanded || implicitWidth > 0)
+            opacity: 1
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+
+        Item {
+            id: spacer
+            width: Config.spaceSm
+            height: 1
+            visible: !morphPill.gamebarOnly && !morphPill.agentOnly && idle.visible
         }
     }
 

@@ -16,7 +16,7 @@ PillShape {
     property int reveal: 0
 
     function linesOf(content) {
-        const max = 72;
+        const max = 800;
         const out = [];
         const parts = String(content).split("\n");
         for (let p = 0; p < parts.length; ++p) {
@@ -26,15 +26,6 @@ PillShape {
                 continue;
             }
             let rest = part;
-            while (rest.length > max) {
-                let cut = rest.lastIndexOf(" ", max);
-                if (cut <= 0)
-                    cut = max;
-                out.push(rest.slice(0, cut));
-                rest = rest.slice(cut);
-                while (rest.charAt(0) === " ")
-                    rest = rest.slice(1);
-            }
             if (rest.length > 0)
                 out.push(rest);
         }
@@ -76,7 +67,7 @@ PillShape {
         Item {
             id: chatHistory
             width: chatInput.width
-            height: root.historyShown ? Math.min(transcript.implicitHeight, 240) : 0
+            height: root.historyShown ? Math.min(transcript.implicitHeight, 400) : 0
             clip: true
             visible: opacity > 0
             opacity: root.historyShown && height > 0 ? 1 : 0
@@ -141,7 +132,7 @@ PillShape {
                             Text {
                                 id: label
                                 visible: fromUser
-                                width: parent.width * 0.55
+                                width: chatHistory.width
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignLeft
                                 color: Colors.md3.tertiary
@@ -150,12 +141,11 @@ PillShape {
                             Column {
                                 id: block
                                 visible: !fromUser
-                                width: parent.width * 0.55
-                                x: parent.width - width
+                                width: chatHistory.width
                                 spacing: 0
 
                                 Text {
-                                    width: parent.width
+                                    width: chatHistory.width
                                     wrapMode: Text.WordWrap
                                     horizontalAlignment: Text.AlignLeft
                                     color: Colors.md3.on_surface
@@ -163,7 +153,7 @@ PillShape {
                                 }
                                 Text {
                                     id: fresh
-                                    width: parent.width
+                                    width: chatHistory.width
                                     wrapMode: Text.WordWrap
                                     horizontalAlignment: Text.AlignLeft
                                     color: Colors.md3.on_surface
@@ -187,8 +177,8 @@ PillShape {
                         }
                     }
                     Text {
-                        width: parent.width * 0.55
-                        x: parent.width - width
+                        width: chatHistory.width * 0.55
+                        x: chatHistory.width - width
                         horizontalAlignment: Text.AlignRight
                         visible: Agents.busy
                         text: ".".repeat(thinking.step)
@@ -239,7 +229,7 @@ PillShape {
                 id: chatInput
                 anchors.verticalCenter: parent.verticalCenter
                 placeholderText: "Ask me anything!"
-                width: Math.max(implicitWidth, 600)
+                width: Math.max(implicitWidth, 960)
                 wrapMode: TextEdit.Wrap
                 font: StylizedFont.body
                 color: Colors.md3.on_surface
