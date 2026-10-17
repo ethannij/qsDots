@@ -15,8 +15,6 @@ PillShape {
             root.expanded = false;
     }
 
-    anchors.horizontalCenter: parent.horizontalCenter
-
     Column {
         spacing: root.expanded ? Config.spaceXs : 0
 

@@ -243,7 +243,7 @@ Item {
                 visible: shown || opacity > 0
                 opacity: shown ? 1 : 0
                 chrome: false
-                x: Config.pillPadH
+                padH: Config.pillPadH / 2
                 y: Config.pillPadV - 2
                 Behavior on opacity {
                     NumberAnimation {

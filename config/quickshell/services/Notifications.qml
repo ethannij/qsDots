@@ -19,14 +19,23 @@ Singleton {
             items[i].dismiss();
     }
 
+    function clearUnread() {
+        root.unreadCount = 0;
+    }
+
     onCountChanged: unreadCount = count - list.values.filter(notif => notif.read).length
 
     Connections {
         target: PillController
 
-        function onPageChanged() {
+        onPageChanged: {
             if (PillController.page === "notifications")
-                root.unreadCount = 0;
+                root.clearUnread();
+        }
+
+        onPanelOpenChanged: {
+            if (PillController.panelOpen && PillController.page === "notifications")
+                root.clearUnread();
         }
     }
 

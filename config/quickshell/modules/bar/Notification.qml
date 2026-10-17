@@ -35,4 +35,8 @@ PillShape {
             PillController.page = "notifications"
         }
     }
+
+    onTappedAlternate: {
+        PillController.forceDismiss();
+    }
 }

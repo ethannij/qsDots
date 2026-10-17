@@ -19,7 +19,12 @@ Singleton {
         if (text === "" || root.busy)
             return;
 
-        root.messages = root.messages.concat([{ role: "user", content: text }]);
+        root.messages = root.messages.concat([
+            {
+                role: "user",
+                content: text
+            }
+        ]);
         root.busy = true;
         root.error = "";
 
@@ -37,9 +42,7 @@ Singleton {
 
     Process {
         id: request
-        command: ["curl", "-sS", "--fail-with-body", "--max-time", "120",
-                  "-X", "POST", "-H", "Content-Type: application/json",
-                  "--data-binary", "@-", root.endpoint]
+        command: ["curl", "-sS", "--fail-with-body", "--max-time", "120", "-X", "POST", "-H", "Content-Type: application/json", "--data-binary", "@-", root.endpoint]
 
         stdout: StdioCollector {
             onStreamFinished: {
@@ -54,7 +57,13 @@ Singleton {
                         root.error = data.error?.message ?? "empty reply";
                         return;
                     }
-                    root.messages = root.messages.concat([{ role: "assistant", content }]);
+                    root.messages = root.messages.concat([
+                        {
+                            role: "assistant",
+                            content
+                        }
+                    ]);
+                    Quickshell.execDetached(["notify-send", "-a", "Agent", "Response Generated!"]);
                 } catch (e) {
                     root.error = "bad response";
                 }
