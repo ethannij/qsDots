@@ -24,7 +24,9 @@ Row {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-                onClicked: (mouse) => {
+
+                // Click actions for tray icons
+                onClicked: mouse => {
                     if (mouse.button === Qt.LeftButton)
                         icon.modelData.activate();
                     else if (mouse.button === Qt.MiddleButton)
@@ -33,19 +35,21 @@ Row {
                         menuAnchor.open();
                 }
 
-                QsMenuAnchor {
-                    id: menuAnchor
-
-                    menu: icon.modelData.menu
-                    anchor.item: icon
-                    //anchor.edges: Edges.Bottom
-                    //anchor.gravity: Edges.Bottom
+                // Scroll for tray icons that support it
+                onWheel: wheel => {
+                    if (wheel.angleDelta.y !== 0)
+                        icon.modelData.scroll(wheel.angleDelta.y, false);
+                    if (wheel.angleDelta.x !== 0)
+                        icon.modelData.scroll(wheel.angleDelta.x, true)
                 }
 
+                QsMenuAnchor {
+                    id: menuAnchor
+                    menu: icon.modelData.menu
+                    anchor.item: icon
+                }
             }
 
         }
-
     }
-
 }
