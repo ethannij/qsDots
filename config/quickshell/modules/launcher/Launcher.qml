@@ -56,12 +56,12 @@ Item {
                 onAccepted: launcher.launchSelected()
 
                 Keys.onShortcutOverride: event => {
-                    event.accepted = (event.key === Qt.Key_Escape)
+                    event.accepted = (event.key === Qt.Key_Escape);
                 }
 
                 Keys.onEscapePressed: event => {
-                    event.accepted = true
-                    PillController.closeLauncher()
+                    event.accepted = true;
+                    PillController.closeLauncher();
                 }
                 onTextChanged: {
                     launcher.query = text;
@@ -86,7 +86,7 @@ Item {
                         event.accepted = true;
                         if (list.currentIndex < list.count - 1)
                             list.currentIndex++;
-                    } 
+                    }
                 }
             }
         }
@@ -94,13 +94,88 @@ Item {
             id: filtered
             values: {
                 const allEntries = [...DesktopEntries.applications.values];
-                const q = launcher.query.trim();
-
-                if (q === "") {
-                    return allEntries;
-                } else {
-                    return allEntries.filter(d => d.name && d.name.toLowerCase().includes(q));
+                function fold(s) {
+                    return (s || "").toLowerCase();
                 }
+
+                function edit1(a, b) {
+                    if (Math.abs(a.length - b.length) > 1)
+                        return false;
+                    let i = 0, j = 0, edits = 0;
+                    while (i < a.length && j < b.length) {
+                        if (a[i] === b[j]) {
+                            i++;
+                            j++;
+                            continue;
+                        }
+                        if (++edits > 1)
+                            return false;
+                        if (a.length === b.length && i + 1 < a.length && j + 1 < b.length && a[i] === b[j + 1] && a[i + 1] === b[j]) {
+                            i += 2;
+                            j += 2;
+                        } else if (a.length >= b.length) {
+                            i++;
+                            if (a.length === b.length)
+                                j++;
+                        } else {
+                            j++;
+                        }
+                    }
+                    return edits + (a.length - i) + (b.length - j) <= 1;
+                }
+
+                function scoreText(hay, q) {
+                    if (!hay)
+                        return 0;
+                    if (hay === q)
+                        return 1000;
+                    if (hay.startsWith(q))
+                        return 800;
+                    if (hay.split(/[\s_\-./]+/).some(w => w.startsWith(q)))
+                        return 700;
+                    const at = hay.indexOf(q);
+                    if (at >= 0)
+                        return 500 - at;
+
+                    let hi = 0, score = 0, run = 0;
+                    for (let qi = 0; qi < q.length; qi++) {
+                        const found = hay.indexOf(q[qi], hi);
+                        if (found < 0) {
+                            score = 0;
+                            break;
+                        }
+                        const gap = found - hi;
+                        run = gap === 0 ? run + 1 : 1;
+                        const boundary = found === 0 || /[\s_\-./]/.test(hay[found - 1]);
+                        score += 8 + run * 6 + (boundary ? 8 : 0) - gap;
+                        hi = found + 1;
+                    }
+                    if (score > 0)
+                        return score;
+                    if (q.length >= 3 && edit1(hay, q))
+                        return 150;
+                    return 0;
+                }
+
+                function scoreEntry(entry, q) {
+                    const name = fold(entry.name);
+                    let best = scoreText(name, q);
+                    const id = fold(entry.id).replace(/\.desktop$/, "").replace(/[._]/g, " ");
+                    best = Math.max(best, Math.floor(scoreText(id, q) * 0.9));
+                    best = Math.max(best, Math.floor(scoreText(fold(entry.genericName), q) * 0.6));
+                    const keywords = (entry.keywords || []).join(" ");
+                    best = Math.max(best, Math.floor(scoreText(fold(keywords), q) * 0.5));
+                    return best;
+                }
+
+                const q = fold(launcher.query.trim());
+                if (q === "")
+                    return allEntries;
+
+                return allEntries.map(entry => ({
+                            entry,
+                            score: scoreEntry(entry, q)
+                        })).filter(row => row.score > 0).sort((a, b) => b.score - a.score || a.entry.name.length - b.entry.name.length).map(row => row.entry);
             }
         }
 

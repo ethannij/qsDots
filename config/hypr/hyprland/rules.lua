@@ -108,7 +108,7 @@ hl.window_rule({
 
 hl.workspace_rule({
 	workspace = "special:scratchpad",
-	animation = "slide bottom"
+	--animation = "slidevert"
 })
 
 hl.layer_rule({

@@ -27,7 +27,6 @@ hl.animation({ leaf = "workspaces",    enabled = true,  speed = 1.94, bezier = "
 hl.animation({ leaf = "workspacesIn",  enabled = true,  speed = 1.21, bezier = "almostLinear", style = "slide" })
 hl.animation({ leaf = "workspacesOut", enabled = true,  speed = 1.94, bezier = "almostLinear", style = "slide" })
 hl.animation({ leaf = "zoomFactor",    enabled = true,  speed = 7,    bezier = "quick" })
-hl.animation({ leaf = "specialWorkspace", enabled = true,  speed = 1.94, bezier = "almostLinear", style = "slidevert" })
-hl.animation({ leaf = "specialWorkspaceIn", enabled = true,  speed = 1.94, bezier = "almostLinear", style = "slidevert" })
-hl.animation({ leaf = "specialWorkspaceOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "slidevert" })
+hl.animation({ leaf = "specialWorkspaceIn", enabled = true,  speed = 1.94, bezier = "almostLinear", style = "slidevert top" })
+hl.animation({ leaf = "specialWorkspaceOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "slidevert bottom" })
 --hl.animation({ leaf = "specialWorksapce:magic"}), enabled = true, speed = 4
