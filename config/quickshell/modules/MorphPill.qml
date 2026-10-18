@@ -438,12 +438,12 @@ Item {
 
         Item {
             id: quickTogglesSlot
-            property real reveal: PillController.pillLock ? 0 : 1
+            property real reveal: PillController.pillLock || morphPill.gamebarOnly || morphPill.agentOnly ? 0 : 1
             width: quickToggles.implicitWidth * reveal
             height: quickToggles.implicitHeight
             anchors.verticalCenter: parent.verticalCenter
             clip: true
-            visible: width > 0 || reveal > 0
+            visible: width > 0 || reveal > 0 && shown
 
             Behavior on reveal {
                 NumberAnimation {
@@ -454,7 +454,6 @@ Item {
 
             QuickToggles {
                 id: quickToggles
-                property bool shown: !PillController.pillLock && !morphPill.gamebarOnly && !morphPill.agentOnly && (barHovered || expanded || implicitWidth > 0)
                 anchors.verticalCenter: parent.verticalCenter
                 barHovered: hover.hovered
             }

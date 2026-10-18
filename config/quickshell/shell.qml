@@ -38,10 +38,11 @@ ShellRoot {
             anchors.fill: parent
             color: Colors.md3.surface
 
-            Button {
+            Text {
                 anchors.centerIn: parent
-                text: "Lock"
-                onClicked: lock.lock()
+                font: StylizedFont.bold
+                text: PillController.activeFace === "gamebar" ? "gamebar" : "null"
+                color: Colors.md3.on_surface
             }
         }
     }
