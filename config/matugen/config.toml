@@ -169,3 +169,7 @@ post_hook = 'cat ~/.logseq/plugins/logseq-matugen-theme/colors.css > ~/.logseq/p
 [templates.quickshell]
 input_path = 'templates/quickshell.json'
 output_path = '~/.local/state/quickshell/generated/colors.json'
+
+[templates.youtubemusic]
+input_path = 'templates/youtubemusic.css'
+output_path = '~/.config/YouTube Music Desktop App/matugen.css'

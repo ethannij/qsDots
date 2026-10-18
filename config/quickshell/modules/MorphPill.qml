@@ -114,6 +114,7 @@ Item {
 
     clip: false
 
+    readonly property real clockShift: width > 0 && clock.width > 0 ? clock.mapToItem(morphPill, clock.width / 2, 0).x - width / 2 : 0
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
     readonly property real panelOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
 

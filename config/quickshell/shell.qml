@@ -2,19 +2,28 @@
 
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
 import QtQuick.Controls
-import Quickshell.Services.UPower
 import qs.modules
+import qs.modules.screenlock
 import qs.modules.windows
 import qs.modules.elements
 import qs.services
 import qs.config
+import qs.theme
 
 ShellRoot {
     id: root
 
     ControlBar {
+        id: bar
+        lockHeld: lock.locked && lock.covering
+    }
+
+    Lockscreen {
+        id: lock
+        barWidth: bar.pillWidth
+        barHeight: bar.pillHeight
+        clockShift: bar.clockShift
     }
 
     // Debug window
@@ -24,12 +33,16 @@ ShellRoot {
         visible: false
         title: "testWindow"
 
-        Button {
-            anchors.centerIn: parent
-            text: "Toggle WLED"
-            onClicked: WLED.toggle()
+        Rectangle {
+            id: rect
+            anchors.fill: parent
+            color: Colors.md3.surface
+
+            Button {
+                anchors.centerIn: parent
+                text: "Lock"
+                onClicked: lock.lock()
+            }
         }
-
     }
-
 }

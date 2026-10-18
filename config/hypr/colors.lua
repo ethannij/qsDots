@@ -1,105 +1,105 @@
 local colors = {
 
 
-      background = "rgb(131318)",
+      background = "rgb(141218)",
 
       error = "rgb(ffb4ab)",
 
       error_container = "rgb(93000a)",
 
-      inverse_on_surface = "rgb(313036)",
+      inverse_on_surface = "rgb(322f35)",
 
-      inverse_primary = "rgb(5a5891)",
+      inverse_primary = "rgb(64558f)",
 
-      inverse_surface = "rgb(e5e1e9)",
+      inverse_surface = "rgb(e6e1e9)",
 
-      on_background = "rgb(e5e1e9)",
+      on_background = "rgb(e6e1e9)",
 
       on_error = "rgb(690005)",
 
       on_error_container = "rgb(ffdad6)",
 
-      on_primary = "rgb(2b2a60)",
+      on_primary = "rgb(35275d)",
 
-      on_primary_container = "rgb(e2dfff)",
+      on_primary_container = "rgb(e8ddff)",
 
-      on_primary_fixed = "rgb(16134a)",
+      on_primary_fixed = "rgb(201047)",
 
-      on_primary_fixed_variant = "rgb(424078)",
+      on_primary_fixed_variant = "rgb(4c3e75)",
 
-      on_secondary = "rgb(2f2e42)",
+      on_secondary = "rgb(332d41)",
 
-      on_secondary_container = "rgb(e3e0f9)",
+      on_secondary_container = "rgb(e8def8)",
 
-      on_secondary_fixed = "rgb(1a1a2c)",
+      on_secondary_fixed = "rgb(1d192b)",
 
-      on_secondary_fixed_variant = "rgb(464559)",
+      on_secondary_fixed_variant = "rgb(494458)",
 
-      on_surface = "rgb(e5e1e9)",
+      on_surface = "rgb(e6e1e9)",
 
-      on_surface_variant = "rgb(c8c5d0)",
+      on_surface_variant = "rgb(cac4cf)",
 
-      on_tertiary = "rgb(472639)",
+      on_tertiary = "rgb(492532)",
 
-      on_tertiary_container = "rgb(ffd8ea)",
+      on_tertiary_container = "rgb(ffd9e3)",
 
-      on_tertiary_fixed = "rgb(2f1123)",
+      on_tertiary_fixed = "rgb(31101d)",
 
-      on_tertiary_fixed_variant = "rgb(603c50)",
+      on_tertiary_fixed_variant = "rgb(633b49)",
 
-      outline = "rgb(928f9a)",
+      outline = "rgb(948f99)",
 
-      outline_variant = "rgb(47464f)",
+      outline_variant = "rgb(49454e)",
 
-      primary = "rgb(c3c0ff)",
+      primary = "rgb(cebdfe)",
 
-      primary_container = "rgb(424078)",
+      primary_container = "rgb(4c3e75)",
 
-      primary_fixed = "rgb(e2dfff)",
+      primary_fixed = "rgb(e8ddff)",
 
-      primary_fixed_dim = "rgb(c3c0ff)",
+      primary_fixed_dim = "rgb(cebdfe)",
 
       scrim = "rgb(000000)",
 
-      secondary = "rgb(c7c4dd)",
+      secondary = "rgb(cbc3dc)",
 
-      secondary_container = "rgb(464559)",
+      secondary_container = "rgb(494458)",
 
-      secondary_fixed = "rgb(e3e0f9)",
+      secondary_fixed = "rgb(e8def8)",
 
-      secondary_fixed_dim = "rgb(c7c4dd)",
+      secondary_fixed_dim = "rgb(cbc3dc)",
 
       shadow = "rgb(000000)",
 
-      source_color = "rgb(3f3e4f)",
+      source_color = "rgb(2e2742)",
 
-      surface = "rgb(131318)",
+      surface = "rgb(141218)",
 
-      surface_bright = "rgb(39383f)",
+      surface_bright = "rgb(3b383e)",
 
-      surface_container = "rgb(201f25)",
+      surface_container = "rgb(211f24)",
 
-      surface_container_high = "rgb(2a292f)",
+      surface_container_high = "rgb(2b292f)",
 
-      surface_container_highest = "rgb(35343a)",
+      surface_container_highest = "rgb(36343a)",
 
-      surface_container_low = "rgb(1b1b21)",
+      surface_container_low = "rgb(1d1b20)",
 
-      surface_container_lowest = "rgb(0e0e13)",
+      surface_container_lowest = "rgb(0f0d13)",
 
-      surface_dim = "rgb(131318)",
+      surface_dim = "rgb(141218)",
 
-      surface_tint = "rgb(c3c0ff)",
+      surface_tint = "rgb(cebdfe)",
 
-      surface_variant = "rgb(47464f)",
+      surface_variant = "rgb(49454e)",
 
-      tertiary = "rgb(eab9d1)",
+      tertiary = "rgb(efb8c8)",
 
-      tertiary_container = "rgb(603c50)",
+      tertiary_container = "rgb(633b49)",
 
-      tertiary_fixed = "rgb(ffd8ea)",
+      tertiary_fixed = "rgb(ffd9e3)",
 
-      tertiary_fixed_dim = "rgb(eab9d1)",
+      tertiary_fixed_dim = "rgb(efb8c8)",
 
 }
 

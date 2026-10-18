@@ -1,0 +1,221 @@
+html:not(.style-scope) {
+    --ytmusic-color-black4: {{ colors.background.default.hex }} !important;
+    --ytmusic-color-blackpure: {{ colors.background.default.hex }} !important;
+    --ytmusic-color-black1: {{ colors.surface.default.hex }} !important;
+    --ytmusic-color-black2: {{ colors.surface_container.default.hex }} !important;
+    --ytmusic-color-black3: {{ colors.surface_container_high.default.hex }} !important;
+
+    --ytmusic-color-white1: {{ colors.on_surface.default.hex }} !important;
+    --ytmusic-color-white1-alpha10: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.10) !important;
+    --ytmusic-color-white1-alpha15: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.15) !important;
+    --ytmusic-color-white1-alpha20: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.20) !important;
+    --ytmusic-color-white1-alpha30: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.30) !important;
+    --ytmusic-color-white1-alpha50: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.50) !important;
+    --ytmusic-color-white1-alpha70: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.70) !important;
+
+    --ytmusic-color-grey1: {{ colors.on_surface_variant.default.hex }} !important;
+    --ytmusic-color-grey2: {{ colors.on_surface.default.hex }} !important;
+    --ytmusic-color-grey3: {{ colors.outline.default.hex }} !important;
+    --ytmusic-color-grey4: {{ colors.outline_variant.default.hex }} !important;
+    --ytmusic-color-grey5: {{ colors.on_surface_variant.default.hex }} !important;
+
+    --yt-spec-base-background: {{ colors.background.default.hex }} !important;
+    --yt-spec-raised-background: {{ colors.surface_container.default.hex }} !important;
+    --yt-spec-menu-background: {{ colors.surface_container.default.hex }} !important;
+    --yt-spec-text-primary: {{ colors.on_surface.default.hex }} !important;
+    --yt-spec-text-secondary: {{ colors.on_surface_variant.default.hex }} !important;
+    --yt-spec-text-disabled: {{ colors.outline.default.hex }} !important;
+    --yt-spec-outline: {{ colors.outline_variant.default.hex }} !important;
+    --yt-spec-call-to-action: {{ colors.primary.default.hex }} !important;
+    --yt-spec-static-brand-red: {{ colors.on_surface.default.hex }} !important;
+    --yt-spec-brand-background-solid: {{ colors.primary.default.hex }} !important;
+    --yt-spec-icon-active-other: {{ colors.primary.default.hex }} !important;
+    --yt-spec-themed-blue: {{ colors.primary.default.hex }} !important;
+    --yt-spec-badge-chip-background: {{ colors.surface_container_high.default.hex }} !important;
+
+    --ytmusic-static-brand-red: {{ colors.on_surface.default.hex }} !important;
+    --ytmusic-setting-item-toggle-active: {{ colors.primary.default.hex }} !important;
+    --ytmusic-dialog-background-color: {{ colors.surface_container.default.hex }} !important;
+    --ytmusic-brand-link-text: {{ colors.primary.default.hex }} !important;
+    --yt-spec-brand-link-text: {{ colors.primary.default.hex }} !important;
+    --ytmusic-caption-1_-_color: {{ colors.on_surface_variant.default.hex }} !important;
+}
+
+body,
+ytmusic-app-layout,
+ytmusic-player-page,
+ytmusic-detail-header-renderer {
+    background: {{ colors.background.default.hex }} !important;
+    color: {{ colors.on_surface.default.hex }} !important;
+}
+
+ytmusic-app-layout #nav-bar-background.ytmusic-app-layout,
+ytmusic-app-layout #mini-guide-background.ytmusic-app-layout,
+ytmusic-app-layout #player-bar-background.ytmusic-app-layout,
+ytmusic-nav-bar,
+ytmusic-player-bar,
+ytmusic-guide-renderer,
+ytmusic-app[is-bauhaus-sidenav-enabled] #guide-wrapper.ytmusic-app {
+    background: {{ colors.surface_container.default.hex }} !important;
+    border-color: {{ colors.surface_container.default.hex }} !important;
+}
+
+ytmusic-pivot-bar-item-renderer,
+.title.ytmusic-guide-entry-renderer,
+yt-formatted-string.title.style-scope.ytmusic-player-bar,
+.title.ytmusic-player-controls,
+.time-info.ytmusic-player-bar,
+.current-time.ytmusic-player-controls,
+.total-time.ytmusic-player-controls {
+    color: {{ colors.on_surface.default.hex }} !important;
+}
+
+ytmusic-pivot-bar-item-renderer.iron-selected,
+ytmusic-pivot-bar-item-renderer:hover,
+.content-info-wrapper.ytmusic-player-bar .byline.ytmusic-player-bar,
+.byline.ytmusic-player-controls,
+ytmusic-guide-entry-renderer {
+    color: {{ colors.primary.default.hex }} !important;
+}
+
+#progress-bar.ytmusic-player-bar {
+    --paper-slider-height: 2px;
+    --paper-progress-height: 2px;
+    --paper-slider-container-color: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.28) !important;
+    --paper-slider-secondary-color: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.42) !important;
+    --paper-slider-active-color: {{ colors.primary.default.hex }} !important;
+    --paper-slider-knob-color: {{ colors.primary.default.hex }} !important;
+    --paper-slider-knob-start-color: {{ colors.primary.default.hex }} !important;
+    --paper-slider-knob-start-border-color: {{ colors.primary.default.hex }} !important;
+    --paper-slider-bar-color: transparent !important;
+    height: 2px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+#progress-bar.ytmusic-player-bar #sliderContainer,
+#progress-bar.ytmusic-player-bar .bar-container,
+#progress-bar.ytmusic-player-bar #sliderBar,
+#progress-bar.ytmusic-player-bar #progressContainer {
+    height: 2px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    top: 0 !important;
+    bottom: auto !important;
+    background-color: transparent !important;
+}
+
+#progress-bar.ytmusic-player-bar #progressContainer {
+    background-color: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.28) !important;
+}
+
+#progress-bar.ytmusic-player-bar #secondaryProgress {
+    background-color: rgba({{ colors.on_surface.default.red }}, {{ colors.on_surface.default.green }}, {{ colors.on_surface.default.blue }}, 0.42) !important;
+}
+
+#progress-bar.ytmusic-player-bar #primaryProgress {
+    background-color: {{ colors.primary.default.hex }} !important;
+}
+
+ytmusic-player-bar:hover #progress-bar.ytmusic-player-bar {
+    --paper-slider-container-color: {{ colors.on_surface.default.hex }} !important;
+}
+
+ytmusic-player-bar:hover #progress-bar.ytmusic-player-bar #progressContainer {
+    background-color: {{ colors.on_surface.default.hex }} !important;
+}
+
+#progress-bar.ytmusic-player-bar .slider-knob {
+    top: -5px !important;
+    width: 12px !important;
+    height: 12px !important;
+    margin-left: -6px !important;
+}
+
+#progress-bar.ytmusic-player-bar .slider-knob-inner {
+    width: 8px !important;
+    height: 8px !important;
+    margin: 2px !important;
+    border: none !important;
+    transform: none !important;
+    background-color: {{ colors.primary.default.hex }} !important;
+}
+
+.volume-slider.ytmusic-player-bar,
+.expand-volume-slider.ytmusic-player-bar {
+    --paper-slider-container-color: {{ colors.outline_variant.default.hex }} !important;
+    --paper-slider-active-color: {{ colors.on_surface.default.hex }} !important;
+    --paper-slider-knob-color: {{ colors.on_surface.default.hex }} !important;
+}
+
+ytmusic-search-box,
+div.search-box.ytmusic-search-box,
+ytmusic-search-suggestion,
+#suggestion-list.ytmusic-search-box {
+    background: {{ colors.surface_container_high.default.hex }} !important;
+    color: {{ colors.on_surface.default.hex }} !important;
+}
+
+.yt-spec-button-shape-next--filled {
+    background: {{ colors.primary.default.hex }} !important;
+    color: {{ colors.on_primary.default.hex }} !important;
+}
+
+ytmusic-play-button-renderer .content-wrapper.ytmusic-play-button-renderer,
+ytmusic-play-button-renderer:hover .content-wrapper.ytmusic-play-button-renderer,
+ytmusic-play-button-renderer:focus .content-wrapper.ytmusic-play-button-renderer,
+ytmusic-item-thumbnail-overlay-renderer .yt-spec-button-shape-next--filled {
+    background: rgba({{ colors.background.default.red }}, {{ colors.background.default.green }}, {{ colors.background.default.blue }}, 0.42) !important;
+    color: {{ colors.on_surface.default.hex }} !important;
+    --ytmusic-play-button-icon-color: {{ colors.on_surface.default.hex }} !important;
+    box-shadow: none !important;
+}
+
+ytmusic-play-button-renderer yt-icon {
+    fill: {{ colors.on_surface.default.hex }} !important;
+}
+
+ytmusic-guide-entry-renderer #play-button,
+ytmusic-guide-entry-renderer ytmusic-play-button-renderer .content-wrapper,
+ytmusic-guide-entry-renderer .yt-spec-button-shape-next--filled {
+    background: {{ colors.primary.default.hex }} !important;
+    color: {{ colors.on_primary.default.hex }} !important;
+    --ytmusic-play-button-icon-color: {{ colors.on_primary.default.hex }} !important;
+}
+
+ytmusic-guide-entry-renderer #play-button yt-icon,
+ytmusic-guide-entry-renderer ytmusic-play-button-renderer yt-icon {
+    fill: {{ colors.on_primary.default.hex }} !important;
+    color: {{ colors.on_primary.default.hex }} !important;
+}
+
+.yt-spec-button-shape-next--outline,
+.yt-spec-button-shape-next--text {
+    color: {{ colors.primary.default.hex }} !important;
+    border-color: {{ colors.primary.default.hex }} !important;
+}
+
+ytmusic-dialog,
+tp-yt-paper-dialog.style-scope.ytmusic-popup-container,
+ytd-multi-page-menu-renderer,
+ytmusic-popup-container,
+tp-yt-paper-listbox#items.style-scope.ytmusic-menu-popup-renderer,
+yt-confirm-dialog-renderer {
+    background: {{ colors.surface_container.default.hex }} !important;
+    color: {{ colors.on_surface.default.hex }} !important;
+    border-color: {{ colors.outline_variant.default.hex }} !important;
+}
+
+tp-yt-paper-toggle-button[checked]:not([disabled]) .toggle-bar.tp-yt-paper-toggle-button,
+tp-yt-paper-toggle-button[checked]:not([disabled]) .toggle-button.tp-yt-paper-toggle-button {
+    background-color: {{ colors.primary.default.hex }} !important;
+}
+
+div.background-gradient.style-scope.ytmusic-browse-response,
+ytmusic-player-page[is-mweb-modernization-enabled] .background-gradient.ytmusic-player-page {
+    background-image: none !important;
+    background: {{ colors.background.default.hex }} !important;
+}

@@ -7,6 +7,11 @@ import qs.services
 import qs.theme
 
 Variants {
+    id: bars
+    property bool lockHeld: false
+    property real pillWidth: 0
+    property real pillHeight: 0
+    property real clockShift: 0
     model: Quickshell.screens
     PanelWindow {
         id: bar
@@ -64,7 +69,24 @@ Variants {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: Config.barMarginV
             visible: Config.showClock
+            opacity: bars.lockHeld ? 0 : 1
             z: 1
+        }
+
+        Binding {
+            target: bars
+            property: "pillWidth"
+            value: morphPill.restW
+        }
+        Binding {
+            target: bars
+            property: "pillHeight"
+            value: morphPill.restH
+        }
+        Binding {
+            target: bars
+            property: "clockShift"
+            value: morphPill.clockShift
         }
 
         IpcHandler {

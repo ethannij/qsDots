@@ -53,7 +53,7 @@ Item {
         },
         {
             label: "lock",
-            cmd: ["hyprlock"]
+            cmd: ["qs", "ipc", "call", "lockscreenIpc", "lock"]
         },
     ]
 
