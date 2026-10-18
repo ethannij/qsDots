@@ -16,16 +16,18 @@ Item {
 
     // Functions to lock and unlock
     function lock() {
-        if (locked)
+        if (locked || arming)
             return;
-        else
-            locked = true;
+        arming = true
+        PillController.pillLock = true;
+        armTimer.restart();
     }
 
     function unlock() {
         if (!locked || closing)
             return;
         closing = true;
+        arming = false;
     }
 
     // Release lockscreen post animation
@@ -39,6 +41,25 @@ Item {
             root.locked = false;
             root.releasing = false;
         });
+        pillUnlockTimer.restart();
+    }
+
+    // Timer to arm the lock, gives a moment to animate the pill into its default shape
+    Timer {
+        id: armTimer
+        interval: Config.animMs
+        onTriggered: root.locked = true
+    }
+
+    // Unlock the pill and fade back into normal
+    Timer {
+        id: pillUnlockTimer
+        interval: Config.animMs
+        repeat: false
+        running: false
+        onTriggered: {
+            PillController.pillLock = false;
+        }
     }
 
     // IPC handlers for apps to call lockscreen
@@ -57,6 +78,7 @@ Item {
 
     // Boilerplate properties
     property alias locked: lock.locked
+    property bool arming: false
 
     // Animation states
     property bool closing: false
@@ -69,8 +91,12 @@ Item {
     property real barHeight: 0
 
     // Covering the lockscreen when unlocked
-    onLockedChanged: if (!locked)
-        covering = false
+    onLockedChanged: if (!locked) {
+        covering = false;
+        PillController.pillLock = false;
+    } else if (locked) {
+        PillController.pillLock = true;
+    }
 
     // Timer to finish unlock while closing = true
     Timer {

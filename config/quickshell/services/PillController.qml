@@ -21,6 +21,7 @@ Singleton {
     property bool bluetoothOpen: false
     property bool wifiOpen: false
     property bool wallpaperSwitcherOpen: false
+    property bool pillLock: false
     readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : wallpaperSwitcherOpen ? "wallpaperSwitcher" : "none"
 
     // Input handling for super key
@@ -136,6 +137,7 @@ Singleton {
             faceTimer.restart();
     }
 
+    // Timer to dismiss faces
     Timer {
         id: faceTimer
 
@@ -160,10 +162,14 @@ Singleton {
     }
 
     function showPanel() {
-        panelOpen = true;
-        closeLauncher();
-        faceTimer.stop();
-        faceHeld = false;
+        if (pillLock)
+            return;
+        else {
+            panelOpen = true;
+            closeLauncher();
+            faceTimer.stop();
+            faceHeld = false;
+        }
     }
 
     function closePanel() {
@@ -176,7 +182,14 @@ Singleton {
     }
 
     function showLauncher() {
-        launcherOpen = true;
+        if (pillLock)
+            return;
+        else {
+            launcherOpen = true;
+            closePanel();
+            faceTimer.stop();
+            faceHeld = false;
+        }
         faceTimer.stop();
         faceHeld = false;
     }
@@ -188,13 +201,17 @@ Singleton {
     }
 
     function showBluetooth() {
-        closePanel();
-        closeLauncher();
-        closeWifi();
-        closeWallpaperSwitcher();
-        bluetoothOpen = true;
-        faceTimer.stop();
-        faceHeld = false;
+        if (pillLock)
+            return;
+        else {
+            closePanel();
+            closeLauncher();
+            closeWifi();
+            closeWallpaperSwitcher();
+            bluetoothOpen = true;
+            faceTimer.stop();
+            faceHeld = false;
+        }
     }
 
     function closeBluetooth() {
@@ -204,13 +221,17 @@ Singleton {
     }
 
     function showWifi() {
-        closePanel();
-        closeLauncher();
-        closeBluetooth();
-        closeWallpaperSwitcher();
-        wifiOpen = true;
-        faceTimer.stop();
-        faceHeld = false;
+        if (pillLock)
+            return;
+        else {
+            closePanel();
+            closeLauncher();
+            closeBluetooth();
+            closeWallpaperSwitcher();
+            wifiOpen = true;
+            faceTimer.stop();
+            faceHeld = false;
+        }
     }
 
     function closeWifi() {
@@ -220,13 +241,17 @@ Singleton {
     }
 
     function showWallpaperSwitcher() {
-        closePanel();
-        closeLauncher();
-        closeBluetooth();
-        closeWifi();
-        wallpaperSwitcherOpen = true;
-        faceTimer.stop();
-        faceHeld = false;
+        if (pillLock)
+            return;
+        else {
+            closePanel();
+            closeLauncher();
+            closeBluetooth();
+            closeWifi();
+            wallpaperSwitcherOpen = true;
+            faceTimer.stop();
+            faceHeld = false;
+        }
     }
 
     function closeWallpaperSwitcher() {

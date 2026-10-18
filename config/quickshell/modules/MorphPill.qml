@@ -17,6 +17,7 @@ Item {
     readonly property bool ready: restW > 0 && restH > 0
     readonly property bool gamebarOnly: PillController.activeFace === "gamebar"
     readonly property bool agentOnly: PillController.activeFace === "agent"
+    readonly property bool pillLock: PillController.pillLock
 
     readonly property Item face: {
         switch (PillController.activeFace) {
@@ -58,7 +59,7 @@ Item {
         }
     }
 
-    property real hoverGrow: hover.hovered && morph === 0 ? 8 : 0
+    property real hoverGrow: !morphPill.pillLock ? (hover.hovered && morph === 0 ? 8 : 0) : 0
 
     Behavior on hoverGrow {
         enabled: morphPill.ready && Config.animMs > 0
@@ -83,6 +84,12 @@ Item {
     onMorphChanged: if (morph === 0) {
         restW = liveRestW;
         restH = liveRestH;
+    }
+
+    onPillLockChanged: if (pillLock) {
+        PillController.closePanel();
+        PillController.faceHeld = false;
+        PillController.dismiss();
     }
 
     function snapHostOpacity() {
@@ -226,21 +233,32 @@ Item {
 
         Item {
             id: mediaSlot
+            property bool shown: (width > 0 || mediaChip.opacity > 0) && !morphPill.pillLock
             width: mediaChip.shown ? mediaChip.implicitWidth : 0
             height: mediaChip.implicitHeight
             clip: true
-            visible: width > 0 || mediaChip.opacity > 0
+            visible: shown || opacity > 0
+            opacity: shown ? 1 : 0
 
             Behavior on width {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
-                    duration: Config.animMsClose
-                    easing.type: Easing.InCubic
+                    duration: shown ? Config.animMsClose : Config.animMs
+                    easing.type: shown ? Easing.InCubic : Easing.OutCubic
+                }
+            }
+
+            Behavior on opacity {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: shown ? Config.animMs : Config.animMsClose
+                    easing.type: shown ? Easing.OutCubic : Easing.InCubic
                 }
             }
 
             MediaChip {
                 id: mediaChip
-                readonly property bool shown: Media.active && !Media.isIdle && (!morphPill.gamebarOnly && !morphPill.agentOnly)
+                readonly property bool shown: Media.active && !Media.isIdle && (!morphPill.gamebarOnly && !morphPill.agentOnly) && !PillController.pillLock
                 visible: shown || opacity > 0
                 opacity: shown ? 1 : 0
                 chrome: false
@@ -268,15 +286,19 @@ Item {
                 chrome: false
             }
 
-            NotificationChip {
-                id: notificationChip
+            Item {
+                id: notificationChipSlot
+                property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+                width: notificationChip.shown ? notificationChip.implicitWidth : 0
+                height: notificationChip.implicitHeight
                 anchors.verticalCenter: parent.verticalCenter
-                visible: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly
-                opacity: visible ? 1 : 0
-                color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
+                clip: true
+                visible: shown || opacity > 0
+                opacity: shown ? 1 : 0
 
-                Behavior on color {
-                    ColorAnimation {
+                Behavior on width {
+                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                    NumberAnimation {
                         duration: Config.animMs
                         easing.type: Easing.OutCubic
                     }
@@ -288,20 +310,41 @@ Item {
                         easing.type: Easing.OutCubic
                     }
                 }
-                TapHandler {
-                    id: notificationChipTap
-                    onTapped: PillController.page = "notifications"
-                }
 
-                TapHandler {
-                    id: notificationChipTapAlternate
-                    onTapped: Notifications.clearAll()
-                    acceptedButtons: Qt.RightButton
-                }
+                NotificationChip {
+                    id: notificationChip
+                    property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
 
-                HoverHandler {
-                    id: notificationChipHover
-                    cursorShape: Qt.PointingHandCursor
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                    TapHandler {
+                        id: notificationChipTap
+                        onTapped: PillController.page = "notifications"
+                    }
+
+                    TapHandler {
+                        id: notificationChipTapAlternate
+                        onTapped: Notifications.clearAll()
+                        acceptedButtons: Qt.RightButton
+                    }
+
+                    HoverHandler {
+                        id: notificationChipHover
+                        cursorShape: Qt.PointingHandCursor
+                    }
                 }
             }
 
@@ -331,7 +374,7 @@ Item {
 
                 Workspaces {
                     id: workspaces
-                    readonly property bool faceActive: PillController.activeFace === "workspaces"
+                    readonly property bool faceActive: PillController.activeFace === "workspaces" && !PillController.pillLock
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
@@ -343,7 +386,7 @@ Item {
 
                 Volume {
                     id: volume
-                    readonly property bool faceActive: PillController.activeFace === "volume"
+                    readonly property bool faceActive: PillController.activeFace === "volume" && !PillController.pillLock
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
@@ -354,7 +397,7 @@ Item {
 
                 Notification {
                     id: notification
-                    readonly property bool faceActive: PillController.activeFace === "notification"
+                    readonly property bool faceActive: PillController.activeFace === "notification" && !PillController.pillLock
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
@@ -365,7 +408,7 @@ Item {
 
                 GameBar {
                     id: gamebar
-                    readonly property bool faceActive: PillController.activeFace === "gamebar"
+                    readonly property bool faceActive: PillController.activeFace === "gamebar" && !PillController.pillLock
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
@@ -375,7 +418,7 @@ Item {
 
                 Agent {
                     id: agent
-                    readonly property bool faceActive: PillController.activeFace === "agent"
+                    readonly property bool faceActive: PillController.activeFace === "agent" && !PillController.pillLock
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
@@ -387,21 +430,33 @@ Item {
 
         Idle {
             id: idle
+            property bool shown: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded && !PillController.pillLock
             anchors.verticalCenter: parent.verticalCenter
-            visible: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded
+            visible: shown || opacity > 0
+            opacity: shown ? 1 : 0
         }
 
-        QuickToggles {
-            id: quickToggles
+        Item {
+            id: quickTogglesSlot
+            property real reveal: PillController.pillLock ? 0 : 1
+            width: quickToggles.implicitWidth * reveal
+            height: quickToggles.implicitHeight
             anchors.verticalCenter: parent.verticalCenter
-            barHovered: hover.hovered
-            visible: !gamebarOnly && !agentOnly && (barHovered || expanded || implicitWidth > 0)
-            opacity: 1
-            Behavior on opacity {
+            clip: true
+            visible: width > 0 || reveal > 0
+
+            Behavior on reveal {
                 NumberAnimation {
-                    duration: Config.animMs
-                    easing.type: Easing.OutCubic
+                    duration: Config.animMsClose
+                    easing.type: Easing.InCubic
                 }
+            }
+
+            QuickToggles {
+                id: quickToggles
+                property bool shown: !PillController.pillLock && !morphPill.gamebarOnly && !morphPill.agentOnly && (barHovered || expanded || implicitWidth > 0)
+                anchors.verticalCenter: parent.verticalCenter
+                barHovered: hover.hovered
             }
         }
 

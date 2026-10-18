@@ -87,6 +87,7 @@ Item {
 
         Item {
             id: expandSlot
+            implicitWidth: width
             width: (quickToggles.barHovered || quickToggles.expanded) ? expandIcon.implicitWidth : 0
             height: expandIcon.implicitHeight
             clip: true
@@ -119,6 +120,7 @@ Item {
         }
 
         Item {
+            implicitWidth: width
             width: quickToggles.expanded ? icons.implicitWidth + Config.spaceMd : 0
             height: icons.implicitHeight
             clip: true
