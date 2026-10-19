@@ -145,6 +145,7 @@ Item {
                         required property var modelData
                         source: modelData.icon
                         color: iconHover.hovered ? Colors.md3.primary : modelData.active ? Colors.md3.tertiary : Colors.md3.on_surface
+                        visible: modelData.visible ?? true
 
                         Behavior on color {
                             enabled: Config.animMs > 0
