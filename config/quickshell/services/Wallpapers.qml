@@ -1,5 +1,6 @@
 pragma Singleton
 import QtQuick
+import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
 import qs.config
@@ -133,6 +134,14 @@ Singleton {
             else
                 Wallpapers.stopCycle();
         }
+    }
+
+    FolderListModel {
+        id: wallWatch
+        folder: "file://" + root.wallDir
+        nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp"]
+        showDirs: false
+        onCountChanged: root.refetch();
     }
     Component.onCompleted: {
         fetcher.running = false;
