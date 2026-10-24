@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import QtQuick.Effects
 import Quickshell.Wayland
 import qs.config
 import qs.services
@@ -8,7 +9,7 @@ import qs.theme
 
 Variants {
     id: bars
-    property bool lockHeld: false
+    property bool lockHeld: PillController.lockHeld
     property real pillWidth: 0
     property real pillHeight: 0
     property real clockShift: 0
@@ -48,6 +49,7 @@ Variants {
             anchors.fill: parent
             color: Colors.md3.surface
             opacity: PillController.overlay !== "none" ? 0.5 : 0
+            //opacity: 0
             z: -1
 
             Item {

@@ -7,6 +7,8 @@ import Quickshell.Hyprland
 Singleton {
     id: handler
 
+    property bool lockHeld: true
+
     // Default properties for pill faces
     property string activeFace: "clock"
     property string defaultFace: "clock"

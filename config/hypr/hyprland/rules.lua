@@ -111,13 +111,6 @@ hl.workspace_rule({
 	--animation = "slidevert"
 })
 
-hl.layer_rule({
-	name = "Quickshell, background blur",
-	match = { namespace = "quickshell:bar" },
-	blur = true,
-	ignore_alpha = 0.5,
-})
-
 -- wlogout layer rule (blur)
 hl.layer_rule({
 	name = "wlogout blur",

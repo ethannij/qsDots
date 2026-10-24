@@ -5,6 +5,7 @@ import qs.services
 import qs.modules.behaviors
 import qs.theme
 import qs.config
+import qs.modules
 import qs.modules.elements
 import qs.modules.panel
 import qs.modules.launcher
@@ -34,18 +35,6 @@ Item {
         default:
             return null;
         }
-    }
-
-    RectangularShadow {
-        id: shadow
-        anchors.fill: rect
-        visible: !Gamemode.active
-        color: Colors.md3.shadow
-        radius: rect.radius
-        spread: 4
-        blur: 10
-        opacity: 0.7
-        offset: Qt.point(0, 1)
     }
 
     property real morph: PillController.overlay !== "none" ? 1 : 0
@@ -193,13 +182,26 @@ Item {
         }
     }
 
+    RectangularShadow {
+        id: shadow
+        anchors.fill: rect
+        blur: 30
+        visible: !Gamemode.active
+        offset: Qt.vector2d(0, 2)
+        spread: 5
+        color: Colors.md3.shadow
+        radius: rect.radius
+        opacity: 0.7
+    }
+
     Rectangle {
         id: rect
         implicitWidth: parent.implicitWidth
         implicitHeight: parent.implicitHeight
         anchors.centerIn: parent
+        //color: Gamemode.active ? Colors.md3.surface :Qt.alpha(Colors.md3.surface, 0.6)
         color: Colors.md3.surface
-        border.width: Config.borderWidth
+        border.width: Gamemode.active ? Config.borderWidth : 0
         radius: Gamemode.active ? 0 : Math.min(height / 2, morphPill.restHeight / 2 + Config.shellPadV)
         border.color: Gamemode.active ? Colors.md3.outline_variant : "transparent"
 
