@@ -51,7 +51,7 @@ Item {
             id: tapMiddle
             acceptedButtons: Qt.MiddleButton
             gesturePolicy: TapHandler.ReleaseWithinBounds
-            onTapped: Notifications.doNotDisturb = !Notifications.doNotDisturb
+            onTapped: Notifications.toggleDoNotDisturb()
         }
 
         Column {

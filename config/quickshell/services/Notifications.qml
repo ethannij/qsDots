@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 import qs.modules.panel
 import QtQuick
+import qs.services
 
 Singleton {
     id: root
@@ -10,7 +11,11 @@ Singleton {
     readonly property alias list: server.trackedNotifications
     readonly property int count: list.values.length
     property var latest: null
-    property bool doNotDisturb: false
+    readonly property bool doNotDisturb: States.doNotDisturb
+
+    function toggleDoNotDisturb() {
+        States.doNotDisturb = !States.doNotDisturb;
+    }
     property int unreadCount: 0
 
     function clearAll() {

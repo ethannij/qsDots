@@ -9,7 +9,7 @@ Singleton {
     property var stickyPlayer: null
 
     readonly property var player: {
-        const list = Mpris.players.values;
+        const list = Mpris.players?.values ?? [];
         const playing = list.find(p => p.isPlaying);
         if (playing)
             return playing;

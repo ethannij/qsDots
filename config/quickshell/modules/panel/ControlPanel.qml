@@ -719,13 +719,24 @@ Item {
         Item {
             id: notificationContainer
 
-            property bool notificationsOpen: Notifications.count > 0
+            property bool notificationsOpen: false
             property bool holdClosed: false
+            property bool listStateReady: false
+
+            function restoreList() {
+                if (listStateReady || !States.ready)
+                    return;
+                holdClosed = States.notificationListHeldClosed;
+                notificationsOpen = Notifications.count > 0 && !holdClosed;
+                listStateReady = true;
+            }
             readonly property real headerHeight: Math.max(notifLabel.implicitHeight, notifActions.implicitHeight)
             readonly property real sectionHeight: headerHeight + Config.spaceSm + notificationList.implicitHeight
             property real shownHeight: notificationsOpen ? sectionHeight : headerHeight
 
             function syncOpen() {
+                if (!listStateReady)
+                    return;
                 if (Notifications.count === 0) {
                     holdClosed = false;
                     notificationsOpen = false;
@@ -748,6 +759,18 @@ Item {
                     notificationContainer.syncOpen();
                 }
             }
+
+            Connections {
+                target: States
+                function onReadyChanged() {
+                    notificationContainer.restoreList();
+                }
+            }
+
+            Component.onCompleted: restoreList()
+
+            onHoldClosedChanged: if (listStateReady)
+                States.notificationListHeldClosed = holdClosed
 
             Behavior on shownHeight {
                 enabled: Config.animMs > 0
@@ -795,7 +818,7 @@ Item {
                     }
 
                     TapHandler {
-                        onTapped: Notifications.doNotDisturb = !Notifications.doNotDisturb
+                        onTapped: Notifications.toggleDoNotDisturb()
                     }
                 }
 

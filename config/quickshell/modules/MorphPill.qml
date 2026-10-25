@@ -248,16 +248,16 @@ Item {
             Behavior on width {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
-                    duration: shown ? Config.animMsClose : Config.animMs
-                    easing.type: shown ? Easing.InCubic : Easing.OutCubic
+                    duration: mediaSlot.shown ? Config.animMsClose : Config.animMs
+                    easing.type: mediaSlot.shown ? Easing.InCubic : Easing.OutCubic
                 }
             }
 
             Behavior on opacity {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
-                    duration: shown ? Config.animMs : Config.animMsClose
-                    easing.type: shown ? Easing.OutCubic : Easing.InCubic
+                    duration: mediaSlot.shown ? Config.animMs : Config.animMsClose
+                    easing.type: mediaSlot.shown ? Easing.OutCubic : Easing.InCubic
                 }
             }
 
@@ -271,8 +271,8 @@ Item {
                 y: Config.pillPadV - 2
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: shown ? Config.animMs : Config.animMsClose
-                        easing.type: shown ? Easing.OutCubic : Easing.InCubic
+                        duration: mediaChip.shown ? Config.animMs : Config.animMsClose
+                        easing.type: mediaChip.shown ? Easing.OutCubic : Easing.InCubic
                     }
                 }
             }

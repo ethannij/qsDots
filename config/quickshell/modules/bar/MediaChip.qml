@@ -51,8 +51,8 @@ PillShape {
                 Connections {
                     target: Media
                     function onIsPlayingChanged() {
-                        if (!Media.isPlaying)
-                            wave.levels = wave.rests;
+                        if (!Media.isPlaying && wave.levels)
+                            wave.levels = wave.rests ?? [];
                     }
                 }
 

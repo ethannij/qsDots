@@ -30,6 +30,8 @@ Singleton {
     property bool firstEvaluation: true
     property bool temperatureActive: false
     property string temperatureState: "auto"
+    property bool prefsReady: false
+    property bool holdGamma: false
 
     property int hour: Time.date.getHours()
     property int minute: Time.date.getMinutes()
@@ -121,12 +123,30 @@ Singleton {
     }
 
     onTemperatureStateChanged: {
+        if (prefsReady && States.temperatureState !== temperatureState)
+            States.temperatureState = temperatureState;
         if (root.temperatureState === "off")
             disableTemperature();
         if (root.temperatureState === "on")
             enableTemperature();
         if (root.temperatureState === "auto")
             evaluateTemperature();
+    }
+
+    onGammaChanged: {
+        if (prefsReady && !holdGamma && States.gamma !== gamma)
+            States.gamma = gamma;
+    }
+
+    function restorePrefs() {
+        if (prefsReady || !States.ready)
+            return;
+        const savedGamma = States.gamma;
+        const savedTemperature = States.temperatureState;
+        prefsReady = true;
+        temperatureState = savedTemperature;
+        setGamma(savedGamma);
+        evaluateTemperature();
     }
 
     onHourChanged: {
@@ -159,9 +179,11 @@ Singleton {
         target: "hyprsunsetIpc"
         function screenDim(): void {
             root.gammaRestore = root.gamma;
+            root.holdGamma = true;
             root.setGamma(40);
         }
         function screenBright(): void {
+            root.holdGamma = false;
             root.setGamma(root.gammaRestore);
         }
         function increaseGamma(): void {
@@ -189,7 +211,12 @@ Singleton {
         }
     }
 
-    Component.onCompleted: {
-        evaluateTemperature();
+    Connections {
+        target: States
+        function onReadyChanged() {
+            root.restorePrefs();
+        }
     }
+
+    Component.onCompleted: restorePrefs()
 }

@@ -4,10 +4,15 @@ import Quickshell
 import Quickshell.Wayland as Wayland
 import QtQuick
 import Quickshell.Io
+import qs.services
 
 Singleton {
     id: root
-    property bool inhibitIdle: false
+    readonly property bool inhibitIdle: States.inhibitIdle
+
+    function toggle() {
+        States.inhibitIdle = !States.inhibitIdle;
+    }
 
     Wayland.IdleInhibitor {
         id: inhibitor
@@ -27,7 +32,7 @@ Singleton {
         id: ipc
         target: "inhibitIdleIpc"
         function toggleIdle(): void {
-            root.inhibitIdle = !root.inhibitIdle;
+            root.toggle();
         }
     }
 }

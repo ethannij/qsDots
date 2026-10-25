@@ -9,3 +9,18 @@ home/.zshrc
 
 # Editor files
 .vscode/
+
+# Matugen rewrites these on every wallpaper. Templates stay tracked.
+config/hypr/colors.lua
+config/hypr/colors.conf
+config/wlogout/colors.css
+config/kitty/themes/Matugen.conf
+config/kitty/current-theme.conf
+config/gtk-3.0/colors.css
+config/gtk-4.0/colors.css
+config/nvim/colors/colors.vim
+config/matugen/generated/
+
+# Runtime quickshell state. The directory is stowed to ~/.local/state/quickshell.
+local/state/quickshell/generated/
+local/state/quickshell/states.json
