@@ -1,49 +1,512 @@
 @-moz-document domain("messages.google.com") {
-:root, .jKhXsc, .YzCcne {
-      --xhUGwc: var(--surface) !important;
-      --YLNNHc: var(--primary_fixed) !important;
-      --aYn2S: var(--surface_container_highest) !important;
-      --KIZPne: var(--on_surface_variant) !important;
-      --XKMDxc: var(--surface_container_low) !important;
-      --xPpiM: var(--surface) !important;
-      --XKMDxc: var(--surface) !important;
-      --Lm570b: var(--surface_bright) !important;
-      --JKqx2: var(--primary) !important;
-      --gS5jXb: var(--outline_variant) !important;
-      --m3c6: var(--surface_bright) !important;
-      --cIehld: var(--surface) !important;
+    /*
+     * Google Messages for web paints from these custom properties
+     * (conversation list, bubbles, composer, dialogs) plus Material's
+     * --mat-sys-* tokens. Both are set on component hosts, so the
+     * overrides have to land on those elements.
+     */
+    html,
+    body,
+    body * {
+        color-scheme: dark;
+
+        --mat-app-background-color: var(--surface) !important;
+        --mat-app-text-color: var(--on_surface) !important;
+        --mat-sys-background: var(--background) !important;
+        --mat-sys-on-background: var(--on_background) !important;
+        --mat-sys-surface: var(--surface) !important;
+        --mat-sys-surface-dim: var(--surface_dim) !important;
+        --mat-sys-surface-bright: var(--surface_bright) !important;
+        --mat-sys-surface-container-lowest: var(--surface_container_lowest) !important;
+        --mat-sys-surface-container-low: var(--surface_container_low) !important;
+        --mat-sys-surface-container: var(--surface_container) !important;
+        --mat-sys-surface-container-high: var(--surface_container_high) !important;
+        --mat-sys-surface-container-highest: var(--surface_container_highest) !important;
+        --mat-sys-surface-variant: var(--surface_variant) !important;
+        --mat-sys-surface-tint: var(--surface_tint) !important;
+        --mat-sys-on-surface: var(--on_surface) !important;
+        --mat-sys-on-surface-variant: var(--on_surface_variant) !important;
+        --mat-sys-inverse-surface: var(--inverse_surface) !important;
+        --mat-sys-inverse-on-surface: var(--inverse_on_surface) !important;
+        --mat-sys-inverse-primary: var(--inverse_primary) !important;
+        --mat-sys-outline: var(--outline) !important;
+        --mat-sys-outline-variant: var(--outline_variant) !important;
+        --mat-sys-primary: var(--primary) !important;
+        --mat-sys-on-primary: var(--on_primary) !important;
+        --mat-sys-primary-container: var(--primary_container) !important;
+        --mat-sys-on-primary-container: var(--on_primary_container) !important;
+        --mat-sys-primary-fixed: var(--primary_fixed) !important;
+        --mat-sys-primary-fixed-dim: var(--primary_fixed_dim) !important;
+        --mat-sys-on-primary-fixed: var(--on_primary_fixed) !important;
+        --mat-sys-on-primary-fixed-variant: var(--on_primary_fixed_variant) !important;
+        --mat-sys-secondary: var(--secondary) !important;
+        --mat-sys-on-secondary: var(--on_secondary) !important;
+        --mat-sys-secondary-container: var(--secondary_container) !important;
+        --mat-sys-on-secondary-container: var(--on_secondary_container) !important;
+        --mat-sys-secondary-fixed: var(--secondary_fixed) !important;
+        --mat-sys-secondary-fixed-dim: var(--secondary_fixed_dim) !important;
+        --mat-sys-on-secondary-fixed: var(--on_secondary_fixed) !important;
+        --mat-sys-on-secondary-fixed-variant: var(--on_secondary_fixed_variant) !important;
+        --mat-sys-tertiary: var(--tertiary) !important;
+        --mat-sys-on-tertiary: var(--on_tertiary) !important;
+        --mat-sys-tertiary-container: var(--tertiary_container) !important;
+        --mat-sys-on-tertiary-container: var(--on_tertiary_container) !important;
+        --mat-sys-tertiary-fixed: var(--tertiary_fixed) !important;
+        --mat-sys-tertiary-fixed-dim: var(--tertiary_fixed_dim) !important;
+        --mat-sys-on-tertiary-fixed: var(--on_tertiary_fixed) !important;
+        --mat-sys-on-tertiary-fixed-variant: var(--on_tertiary_fixed_variant) !important;
+        --mat-sys-error: var(--error) !important;
+        --mat-sys-on-error: var(--on_error) !important;
+        --mat-sys-error-container: var(--error_container) !important;
+        --mat-sys-on-error-container: var(--on_error_container) !important;
+        --mat-sys-scrim: var(--scrim) !important;
+        --mat-sys-shadow: var(--shadow) !important;
+        --mat-sys-link: var(--primary) !important;
+        --mat-sys-link-hover: var(--primary_fixed_dim) !important;
+        --mat-sys-link-visited: var(--tertiary) !important;
+
+        --gm3-sys-color-primary: var(--primary) !important;
+        --gm3-sys-color-on-primary: var(--on_primary) !important;
+        --gm3-sys-color-on-surface: var(--on_surface) !important;
+        --gm3-sys-color-on-surface-variant: var(--on_surface_variant) !important;
+        --gm3-sys-color-outline: var(--outline) !important;
+        --gm3-sys-color-secondary-container: var(--secondary_container) !important;
+        --gm3-sys-color-secondary-fixed: var(--secondary_fixed) !important;
+        --gm3-sys-color-on-secondary-fixed: var(--on_secondary_fixed) !important;
+
+        /* Page, list, and conversation surfaces */
+        --body-bg-color: var(--surface) !important;
+        --background-color: var(--surface) !important;
+        --empty-bg-color: var(--surface) !important;
+        --box-bg-color: var(--surface_container) !important;
+        --conv-container-host-bg-color: var(--surface) !important;
+        --main-nav-host-bg-color: var(--surface_container) !important;
+        --main-nav-host-border-color: var(--outline_variant) !important;
+        --side-panel-bg-color: var(--surface_container) !important;
+        --side-panel-text-color: var(--on_surface) !important;
+        --header-bg-color: var(--surface) !important;
+        --header-color: var(--on_surface) !important;
+        --header-back-button-color: var(--on_surface) !important;
+        --branded-header-bg-color: var(--surface) !important;
+        --branded-header-border-color: var(--outline_variant) !important;
+        --toolbar-bg-color: var(--surface) !important;
+        --toolbar-icon-color: var(--primary) !important;
+        --settings-bg-color: var(--surface) !important;
+        --conversation-loading-bg-color: var(--surface) !important;
+
+        --main-nav-header-color: var(--on_surface) !important;
+        --main-nav-header-menu-color: var(--on_surface_variant) !important;
+        --main-nav-empty-state-color: var(--on_surface_variant) !important;
+        --logo-text-color: var(--on_surface) !important;
+        --key-color: var(--on_surface) !important;
+        --fill-color: var(--on_surface) !important;
+
+        /* Conversation rows */
+        --conv-name-color: var(--on_surface) !important;
+        --conv-snippet-color: var(--on_surface_variant) !important;
+        --conv-notification-icon-fill: var(--on_surface_variant) !important;
+        --conv-list-item-menu-icon-color: var(--on_surface_variant) !important;
+        --conv-hover-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --list-grey-hover-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --list-grey-selected-bg-color: color-mix(in srgb, var(--primary) 16%, transparent) !important;
+        --conv-list-selected-indicator-bg-color: var(--primary) !important;
+        --conv-list-item-edit-mode-bg-color: color-mix(in srgb, var(--primary) 20%, transparent) !important;
+        --conv-list-item-checked-avatar-bg-color: var(--primary) !important;
+        --conv-list-item-checked-avatar-color: var(--on_primary) !important;
+        --conv-list-item-verification-badge-color: var(--primary) !important;
+        --conv-header-verification-badge-color: var(--primary) !important;
+        --conversation-rbm-color: var(--on_surface_variant) !important;
+        --conversations-load-more-bg-color: var(--surface_container_high) !important;
+        --conversations-load-more-color: var(--on_surface) !important;
+        --archived-conv-name-color: var(--on_surface) !important;
+        --archived-conv-snippet-color: var(--on_surface_variant) !important;
+        --archived-conv-timestamp-color: var(--on_surface_variant) !important;
+        --archived-conv-border-bottom-color: var(--outline_variant) !important;
+        --spam-and-blocked-conv-name-color: var(--on_surface) !important;
+        --spam-and-blocked-conv-snippet-color: var(--on_surface_variant) !important;
+        --spam-and-blocked-conv-timestamp-color: var(--on_surface_variant) !important;
+        --spam-and-blocked-conv-border-bottom-color: var(--outline_variant) !important;
+        --groups-conversations-header-color: var(--on_surface) !important;
+        --groups-list-label-color: var(--on_surface) !important;
+
+        /* Bubbles. RCS stays the stronger accent; SMS stays the lighter one. */
+        --incoming-bg-color: var(--surface_container_highest) !important;
+        --incoming-color: var(--on_surface) !important;
+        --incoming-edit-bg-color: var(--primary_container) !important;
+        --incoming-edit-color: var(--on_primary_container) !important;
+        --incoming-selection-bg-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
+        --rcs-incoming-bg-color: var(--surface_container_high) !important;
+        --rcs-outgoing-bg-color: var(--primary_container) !important;
+        --rcs-outgoing-color: var(--on_primary_container) !important;
+        --rcs-outgoing-edit-bg-color: var(--primary) !important;
+        --rcs-outgoing-edit-color: var(--on_primary) !important;
+        --rcs-outgoing-selection-bg-color: color-mix(in srgb, var(--scrim) 45%, transparent) !important;
+        --xms-outgoing-bg-color: var(--primary) !important;
+        --xms-outgoing-color: var(--on_primary) !important;
+        --xms-outgoing-edit-bg-color: var(--primary_container) !important;
+        --xms-outgoing-edit-color: var(--on_primary_container) !important;
+        --xms-outgoing-selection-bg-color: color-mix(in srgb, var(--scrim) 45%, transparent) !important;
+        --xms-outgoing-selection-color: var(--on_primary) !important;
+        --message-border-color: var(--outline_variant) !important;
+        --message-reply-header-container-color: var(--surface_container_high) !important;
+        --replied-to-message-container-color: var(--surface_container_high) !important;
+        --replied-to-message-outer--container-color: var(--surface) !important;
+        --replied-to-message-text-color: var(--on_surface) !important;
+        --tombstone-msg-background-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --tombstone-msg-color: var(--on_surface_variant) !important;
+        --msg-info-color: var(--on_surface_variant) !important;
+        --msg-info-failed-color: var(--error) !important;
+        --msg-failure-status-color: var(--on_surface_variant) !important;
+        --msg-failure-status-failed-color: var(--error) !important;
+        --msg-failure-status-button-disabled-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --msg-status-read-icon-color: var(--primary) !important;
+        --msg-actions-menu-fill-color: var(--on_surface_variant) !important;
+        --messages-load-more-bg-color: var(--surface_container_high) !important;
+        --messages-load-more-color: var(--on_surface) !important;
+        --messages-wrapper-participant-display-name-color: var(--on_surface) !important;
+        --typing-indicator-row-color: var(--on_surface_variant) !important;
+        --reaction-bg-color: var(--surface_container_lowest) !important;
+        --reaction-badge-count-text-color: var(--on_surface) !important;
+        --link-color: var(--primary) !important;
+        --link-disabled-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --bold-matching-text-color: var(--primary) !important;
+        --link-preview-background-color: var(--surface) !important;
+        --link-preview-border-color: var(--outline_variant) !important;
+        --link-preview-title-color: var(--on_surface) !important;
+        --link-preview-content-color: var(--on_surface_variant) !important;
+
+        /* Composer */
+        --compose-background-color: var(--surface_container_highest) !important;
+        --compose-readonly-bg-color: var(--surface_container_high) !important;
+        --compose-readonly-color: var(--on_surface_variant) !important;
+        --compose-readonly-action-button-bg-color: var(--surface_container_lowest) !important;
+        --compose-readonly-action-button-color: var(--primary) !important;
+        --input-bg-color: var(--surface_container_highest) !important;
+        --input-bg-fade-color: var(--surface) !important;
+        --input-bg-transparent-fade-color: transparent !important;
+        --input-color: var(--on_surface) !important;
+        --input-reply-header-container-color: var(--surface_container_high) !important;
+        --autosize-textarea-placeholder-color: var(--on_surface_variant) !important;
+        --search-bar-border-color: var(--outline) !important;
+        --search-bar-icon-fill: var(--on_surface_variant) !important;
+        --search-bar-input-color: var(--on_surface) !important;
+        --search-bar-placeholder-color: var(--on_surface_variant) !important;
+        --icon-button-color: var(--on_surface_variant) !important;
+        --icon-button-disabled-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --fab-icon-container-bg-color: var(--primary) !important;
+        --fab-icon-container-disabled-bg-color: color-mix(in srgb, var(--on_surface) 12%, transparent) !important;
+        --fab-label-color: var(--on_primary) !important;
+        --fab-label-disabled-color: var(--on_surface_variant) !important;
+        --fab-link-outline-color: var(--primary) !important;
+        --button-active-color: var(--primary) !important;
+        --button-inactive-color: var(--on_surface_variant) !important;
+        --button-hover-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --focus-ring-color: var(--primary) !important;
+        --long-press-reply-button-bg-color: var(--primary) !important;
+        --long-press-reply-button-icon-color: var(--on_primary) !important;
+
+        /* New conversation and contacts */
+        --new-conversation-bg-color: var(--surface) !important;
+        --new-conversation-button-color: var(--on_surface) !important;
+        --new-conversation-send-to-button-color: var(--on_surface) !important;
+        --new-conversation-anon-name-color: var(--on_surface) !important;
+        --new-conversation-group-icon-color: var(--on_surface_variant) !important;
+        --new-conv-sub-header-bg-color: var(--surface) !important;
+        --new-conv-sub-header-border-color: var(--outline_variant) !important;
+        --new-conv-sub-header-input-color: var(--on_surface) !important;
+        --new-conv-sub-header-label-color: var(--on_surface) !important;
+        --new-conv-sub-header-placeholder-color: var(--on_surface_variant) !important;
+        --new-conv-sub-header-add-more-people-color: var(--primary) !important;
+        --contact-chip-color: var(--on_surface) !important;
+        --contact-chip-outline-color: var(--outline_variant) !important;
+        --contact-chips-input-bg-color: var(--surface) !important;
+        --contact-chips-next-button-bg-color: var(--primary_container) !important;
+        --contact-row-checked-bg-color: var(--primary_container) !important;
+        --contact-row-hover-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --contact-row-info-name-color: var(--on_surface) !important;
+        --contact-row-info-number-color: var(--on_surface_variant) !important;
+        --contact-row-international-warning-color: var(--tertiary) !important;
+        --contact-grey700-fg-color: var(--on_surface_variant) !important;
+        --contact-grey900-fg-color: var(--on_surface) !important;
+        --contacts-list-label-color: var(--on_surface) !important;
+        --contacts-list-info-color: var(--on_surface_variant) !important;
+        --contacts-list-launch-color: var(--primary) !important;
+        --contacts-list-launch-icon-color: var(--primary) !important;
+        --contacts-list-missing-contacst-color: var(--on_surface) !important;
+        --contacts-load-more-bg-color: var(--surface_container_high) !important;
+        --contacts-load-more-color: var(--on_surface) !important;
+        --expanded-contact-chip-bg-color: var(--surface_container_highest) !important;
+        --expanded-contact-chip-name-color: var(--on_surface) !important;
+        --expanded-contact-chip-number-color: var(--on_surface_variant) !important;
+        --expanded-contact-chip-remove-bg-color: var(--surface) !important;
+        --conversation-picker-contact-hover-bg-color: var(--surface_container_highest) !important;
+        --conversation-picker-conv-name-color: var(--on_surface) !important;
+        --conversation-picker-conv-recipient-color: var(--on_surface_variant) !important;
+        --conversation-picker-dialog-title-color: var(--on_surface) !important;
+
+        /* Avatars keep separate hues so the list stays readable. */
+        --avatar-blue-bg-color: var(--primary_container) !important;
+        --avatar-blue-fill-color: var(--on_primary_container) !important;
+        --avatar-blue-bg-color-v1: var(--primary_container) !important;
+        --avatar-blue-fill-color-v1: var(--on_primary_container) !important;
+        --avatar-cyan-bg-color: var(--secondary_container) !important;
+        --avatar-cyan-fill-color: var(--on_secondary_container) !important;
+        --avatar-cyan-bg-color-v1: var(--secondary_container) !important;
+        --avatar-cyan-fill-color-v1: var(--on_secondary_container) !important;
+        --avatar-green-bg-color: var(--tertiary_container) !important;
+        --avatar-green-fill-color: var(--on_tertiary_container) !important;
+        --avatar-green-bg-color-v1: var(--tertiary_container) !important;
+        --avatar-green-fill-color-v1: var(--on_tertiary_container) !important;
+        --avatar-red-bg-color: var(--error_container) !important;
+        --avatar-red-fill-color: var(--on_error_container) !important;
+        --avatar-red-bg-color-v1: var(--error_container) !important;
+        --avatar-red-fill-color-v1: var(--on_error_container) !important;
+        --avatar-orange-bg-color: var(--primary_fixed) !important;
+        --avatar-orange-fill-color: var(--on_primary_fixed) !important;
+        --avatar-orange-bg-color-v1: var(--primary_fixed) !important;
+        --avatar-orange-fill-color-v1: var(--on_primary_fixed) !important;
+        --avatar-pink-bg-color: var(--secondary_fixed) !important;
+        --avatar-pink-fill-color: var(--on_secondary_fixed) !important;
+        --avatar-pink-bg-color-v1: var(--secondary_fixed) !important;
+        --avatar-pink-fill-color-v1: var(--on_secondary_fixed) !important;
+        --avatar-purple-bg-color: var(--tertiary_fixed) !important;
+        --avatar-purple-fill-color: var(--on_tertiary_fixed) !important;
+        --avatar-purple-bg-color-v1: var(--tertiary_fixed) !important;
+        --avatar-purple-fill-color-v1: var(--on_tertiary_fixed) !important;
+        --avatar-yellow-bg-color: var(--primary_fixed_dim) !important;
+        --avatar-yellow-fill-color: var(--on_primary_fixed) !important;
+        --avatar-yellow-bg-color-v1: var(--primary_fixed_dim) !important;
+        --avatar-yellow-fill-color-v1: var(--on_primary_fixed) !important;
+        --contact-cyan-fg-color: var(--secondary) !important;
+        --contact-green-fg-color: var(--tertiary) !important;
+        --contact-orange-fg-color: var(--primary_fixed_dim) !important;
+        --contact-pink-fg-color: var(--secondary) !important;
+        --contact-purple-fg-color: var(--tertiary) !important;
+        --contact-red-fg-color-v1: var(--error) !important;
+        --contact-yellow-fg-color: var(--primary) !important;
+        --conversation-avatar-disabled-group-icon-container-bg: var(--surface_container_high) !important;
+        --conversation-avatar-disabled-group-icon-fill: var(--on_surface_variant) !important;
+        --stack-avatar-background-color: var(--surface_container_high) !important;
+        --stack-avatar-content-color: var(--on_surface) !important;
+
+        /* Navigation drawer */
+        --nav-drawer-bg-color: var(--surface) !important;
+        --nav-drawer-border-color: var(--outline_variant) !important;
+        --nav-drawer-color: var(--on_surface) !important;
+        --nav-drawer-icon-color: var(--on_surface_variant) !important;
+        --nav-drawer-item-hover-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --nav-drawer-item-selected-bg-color: var(--primary_container) !important;
+        --nav-drawer-item-selected-color: var(--on_primary_container) !important;
+        --nav-drawer-item-selected-hover-bg-color: var(--primary_container) !important;
+        --nav-drawer-item-selected-hover-icon-color: var(--on_primary_container) !important;
+        --nav-drawer-open-in-new-icon-color: var(--on_surface_variant) !important;
+        --nav-drawer-unread-count-bg-color: var(--error) !important;
+        --nav-drawer-unread-count-color: var(--on_error) !important;
+        --nav-button-background: var(--on_surface_variant) !important;
+        --nav-icon-color: var(--on_surface_variant) !important;
+        --nav-icon-hover-color: var(--on_surface) !important;
+        --nav-grad-start-color: transparent !important;
+        --nav-grad-end-color: var(--surface_container_highest) !important;
+
+        /* Dialogs, details, banners */
+        --dialog-background-color: var(--surface_container_high) !important;
+        --dialog-bg-color: var(--surface_container_high) !important;
+        --dialog-title-color: var(--on_surface) !important;
+        --dialog-content-color: var(--on_surface_variant) !important;
+        --dialog-content-link-color: var(--primary) !important;
+        --dialog-cancel-color: var(--on_surface) !important;
+        --dialog-confirm-bg-color: var(--primary_container) !important;
+        --dialog-confirm-color: var(--primary) !important;
+        --dialog-dark-bg-button-color: var(--primary) !important;
+        --dialog-section-bg-color: var(--surface_container_highest) !important;
+        --dialog-section-title-color: var(--on_surface_variant) !important;
+        --details-dialog-bg-color: var(--surface_container_high) !important;
+        --details-dialog-title-color: var(--on_surface) !important;
+        --details-participant-name-color: var(--on_surface) !important;
+        --details-participant-info-color: var(--on_surface_variant) !important;
+        --details-section-title-color: var(--on_surface_variant) !important;
+        --details-section-button-color: var(--on_surface) !important;
+        --details-action-button-color-primary: var(--primary) !important;
+        --details-action-button-color-secondary: var(--surface_container_lowest) !important;
+        --details-section-add-people-button-color: var(--primary) !important;
+        --details-section-legacy-add-people-button-color: var(--primary) !important;
+        --details-block-and-report-button-color: var(--error) !important;
+        --details-e2ee-status-on-color: var(--tertiary) !important;
+        --details-e2ee-status-off-color: var(--error) !important;
+        --details-verification-badge-color: var(--primary) !important;
+        --cdk-overlay-backdrop-bg-color: color-mix(in srgb, var(--scrim) 55%, transparent) !important;
+        --bg-notifications-banner-background-color: var(--surface_container_highest) !important;
+        --bg-notifications-banner-title-color: var(--on_surface) !important;
+        --bg-notifications-banner-content-color: var(--on_surface_variant) !important;
+        --information-banner-background-color: var(--surface_container_highest) !important;
+        --information-banner-title-color: var(--on_surface) !important;
+        --information-banner-content-color: var(--on_surface_variant) !important;
+        --duo-banner-background-color: var(--surface_container_highest) !important;
+        --duo-banner-title-color: var(--on_surface) !important;
+        --duo-banner-content-color: var(--on_surface_variant) !important;
+        --spam-banner-bg-color: var(--surface_container_highest) !important;
+        --spam-banner-background-color: var(--surface_container_highest) !important;
+        --spam-banner-title-color: var(--on_surface) !important;
+        --spam-banner-body-color: var(--on_surface_variant) !important;
+        --spam-banner-content-color: var(--on_surface_variant) !important;
+        --spam-banner-icon-color: var(--error) !important;
+        --spam-icon-color: var(--error) !important;
+        --remember-banner-background-color: var(--surface_container_highest) !important;
+        --remember-banner-title-color: var(--on_surface) !important;
+
+        /* Settings, empty states, pairing */
+        --setting-title-color: var(--on_surface) !important;
+        --setting-subtitle-color: var(--on_surface_variant) !important;
+        --setting-border-color: var(--outline_variant) !important;
+        --messages-settings-button-color: var(--on_surface) !important;
+        --messages-settings-heading-color: var(--primary) !important;
+        --messages-settings-theme-section-title-color: var(--on_surface) !important;
+        --messages-settings-theme-image_border_color: var(--outline_variant) !important;
+        --external-setting-link-title-color: var(--on_surface) !important;
+        --external-setting-link-subtitle-color: var(--on_surface_variant) !important;
+        --external-setting-link-border-color: var(--outline_variant) !important;
+        --external-setting-link-launch-icon-color: var(--on_surface_variant) !important;
+        --empty-state-header-color: var(--on_surface) !important;
+        --empty-state-body-color: var(--on_surface_variant) !important;
+        --no-recent-chats-heading-color: var(--on_surface) !important;
+        --no-recent-chats-text-color: var(--on_surface) !important;
+        --no-recent-chats-svg-color: var(--primary) !important;
+        --no-archived-conv-text-color: var(--on_surface_variant) !important;
+        --no-group-convs-color: var(--on_surface_variant) !important;
+        --no-spam-and-blocked-conv-text-color: var(--on_surface_variant) !important;
+        --welcome-page-bg-color: var(--surface) !important;
+        --welcome-page-font-color: var(--on_surface) !important;
+        --welcome-page-content-font-color: var(--on_surface) !important;
+        --welcome-page-subtitle-color: var(--on_surface_variant) !important;
+        --welcome-page-tip-color: var(--on_surface_variant) !important;
+        --welcome-page-pair-link-color: var(--primary) !important;
+        --welcome-page-banner-background-color: color-mix(in srgb, var(--primary) 20%, transparent) !important;
+        --welcome-page-banner-foreground-color: var(--primary) !important;
+        --welcome-smartphone-color: var(--primary) !important;
+        --pair-bg-color: var(--surface) !important;
+        --pair-font-color: var(--on_surface) !important;
+        --pair-link-color: var(--primary) !important;
+        --pair-banner-bg-color: var(--surface_container) !important;
+        --pair-banner-text-color: var(--on_surface) !important;
+        --pair-banner-border-color: var(--outline_variant) !important;
+        --pair-banner-warning-bg-color: var(--error_container) !important;
+        --pair-banner-warning-color: var(--on_error_container) !important;
+        --authentication-bg-color: var(--surface) !important;
+        --authentication-hamburger-font-color: var(--on_surface) !important;
+        --authentication-instructions-title-font-color: var(--on_surface) !important;
+        --authentication-instructions-steps-font-color: var(--on_surface) !important;
+        --authentication-toggle-label-color: var(--on_surface) !important;
+        --authentication-learn-more-launch-icon-color: var(--primary) !important;
+        --authentication-toggle-animated-ripple-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --messages-setup-background-color: var(--surface) !important;
+        --messages-setup-title-font-color: var(--on_surface) !important;
+        --messages-setup-tip-color: var(--on_surface_variant) !important;
+        --messages-setup-link-color: var(--primary) !important;
+        --messages-setup-banner-background-color: color-mix(in srgb, var(--primary) 20%, transparent) !important;
+        --messages-setup-banner-foreground-color: var(--primary) !important;
+        --main-landing-host-bg-color: var(--surface) !important;
+        --main-landing-title-color: var(--on_surface) !important;
+        --main-landing-sub-title-color: var(--on_surface_variant) !important;
+        --landing-page-header-bg-color: var(--surface) !important;
+        --landing-page-header-border-color: var(--outline_variant) !important;
+        --landing-page-footer-font-color: var(--on_surface_variant) !important;
+        --landing-page-footer-font-color-hover: var(--on_surface) !important;
+        --install-messages-button-color: var(--primary) !important;
+        --install-messages-learn-more-color: var(--primary) !important;
+        --install-messages-dialog-bracket-color: var(--primary) !important;
+        --install-messages-tip-color: var(--on_surface_variant) !important;
+        --unable-to-connect-bg-color: var(--surface) !important;
+        --unable-to-connect-font-color: var(--on_surface) !important;
+        --unable-to-connect-subtitle-color: var(--on_surface_variant) !important;
+        --sign-in-banner-bg-color: var(--surface_container) !important;
+        --sign-in-banner-instructions-font-color: var(--on_surface) !important;
+        --update-bugle-bg-color: var(--surface) !important;
+        --update-bugle-font-color: var(--on_surface) !important;
+        --update-bugle-link-color: var(--primary) !important;
+
+        /* Rich cards, files, mentions, media */
+        --mws-rich-card-actions-bg-color: var(--surface) !important;
+        --mws-rich-card-content-bg-color: var(--surface_container) !important;
+        --mws-rich-card-content-title-color: var(--on_surface) !important;
+        --mws-rich-card-content-description-color: var(--on_surface_variant) !important;
+        --mws-rich-card-content-button-bg-color: var(--surface_container_lowest) !important;
+        --mws-rich-card-content-button-hover-bg-color: var(--surface_container_high) !important;
+        --mws-rich-card-content-button-text-color: var(--on_surface) !important;
+        --mws-rich-card-content-button-icon-bg-color: var(--primary_container) !important;
+        --mws-rich-card-content-button-icon-fill-color: var(--on_primary_container) !important;
+        --mws-rich-card-content-placeholder-bg-color: var(--surface_container_high) !important;
+        --mws-rich-card-content-placeholder-icon-color: var(--on_surface_variant) !important;
+        --mention-name-color: var(--on_surface) !important;
+        --mention-notice-bg-color: var(--primary_container) !important;
+        --mention-notice-color: var(--on_primary_container) !important;
+        --mention-pill-bg-color: var(--primary_fixed) !important;
+        --mention-pill-color: var(--on_primary_fixed) !important;
+        --mention-pill-incoming-bg: var(--surface_container) !important;
+        --mention-pill-incoming-color: var(--primary) !important;
+        --mention-pill-outgoing-bg: var(--primary_container) !important;
+        --mention-pill-outgoing-color: var(--on_primary_container) !important;
+        --mention-selected-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --mentions-list-bg-color: var(--surface_container_high) !important;
+        --suggestions-list-bg-color: var(--surface_container_high) !important;
+        --suggestion-selected-bg-color: color-mix(in srgb, var(--on_surface) 8%, transparent) !important;
+        --suggestion-shortcode-color: var(--primary) !important;
+        --file-icon-bg-color: var(--primary_container) !important;
+        --file-icon-color: var(--on_primary_container) !important;
+        --file-download-icon-bg-color: var(--primary_container) !important;
+        --file-download-icon-color: var(--on_surface_variant) !important;
+        --file-download-title-color: var(--on_surface) !important;
+        --file-download-size-color: var(--on_surface_variant) !important;
+        --download-icon-color: var(--on_surface_variant) !important;
+        --audio-player-btn-bg-color: var(--primary) !important;
+        --audio-player-btn-spinner-color: var(--on_primary) !important;
+        --audio-player-btn-disabled-bg-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --audio-player-duration-color: var(--on_surface) !important;
+        --audio-player-duration-disabled-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --audio-player-download-icon-color: var(--on_surface_variant) !important;
+        --audio-player-error-message-icon-bg-color: var(--surface_container_high) !important;
+        --audio-player-error-message-icon-color: var(--on_surface) !important;
+        --audio-player-error-message-text-color: var(--on_surface) !important;
+        --inline-video-fallback-placeholder-bg: var(--surface_container) !important;
+        --inline-video-playback-error-bg: var(--surface_container) !important;
+        --inline-video-uploading-placeholder-bg: var(--surface_container) !important;
+        --unsupported-video-info-color: var(--on_surface_variant) !important;
+        --unsupported-video-info-icon-fill: var(--on_surface_variant) !important;
+        --drag-drop-overlay-bg-color: color-mix(in srgb, var(--scrim) 72%, transparent) !important;
+        --drag-drop-overlay-icon-bg-color: var(--surface) !important;
+        --drag-drop-overlay-icon-color: var(--primary) !important;
+        --skeleton-loader-background-color: var(--surface_container_high) !important;
+        --skeleton-loader-mid-gradient-color: var(--surface_container_lowest) !important;
+        --scrollbar-thumb-color: var(--outline) !important;
+        --scroll-bar-bg-color: color-mix(in srgb, var(--on_surface) 12%, transparent) !important;
+        --selector-bg-color: var(--scrim) !important;
+        --selector-container-bg-color: var(--surface_container_highest) !important;
+        --actions-buttons-top-color: var(--outline_variant) !important;
+        --unarchive-button-color: var(--primary) !important;
+        --more-results-on-phone-color: var(--on_surface_variant) !important;
+        --sim-drop-down-arrow-color: var(--on_surface_variant) !important;
+        --tab-header-border-color: var(--outline_variant) !important;
+        --picker-font-color: var(--on_surface) !important;
+        --picker-button-fill-color: var(--on_surface_variant) !important;
+        --picker-button-selected-fill-color: var(--on_surface) !important;
+        --picker-button-disabled-fill-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --picker-tab-focus-bg-color: var(--surface_container_high) !important;
+        --emoji-diversity-picker-bg-color: var(--surface_container_highest) !important;
+        --emoji-picker-diversity-indicator-color: var(--on_surface_variant) !important;
+        --gif-picker-chevron-color: var(--on_surface_variant) !important;
+        --gif-picker-disabled-chevron-color: color-mix(in srgb, var(--on_surface) 38%, transparent) !important;
+        --sticker-icon-button-color: var(--on_surface_variant) !important;
+        --sticker-pack-title-color: var(--on_surface) !important;
+        --sticker-pack-artist-color: var(--on_surface_variant) !important;
+        --sticker-empty-text-color: var(--on_surface_variant) !important;
+        --sticker-empty-search-text-color: var(--on_surface_variant) !important;
+        --sticker-favorited-color: var(--primary) !important;
+        --recent-sticker-empty-text-color: var(--on_surface_variant) !important;
     }
-    
-    .RNNXgb, .aajZCb, .kzKS5c {
-      background: var(--surface_container_high) !important;
-    }
-    
-    .sbhl, .NrdQVe, .NzSfif {
-      background: var(--surface_container) !important;
-    }
-    
-    .ho072b, .qEn1od, .Vt1EGb, .f6F9Be, .c93Gbe {
-      background: var(--surface) !important;
-    }
-    
-    .T14B5e input[type="submit"] {
-      background-color: var(--surface_container) !important;
-      border: 1px solid var(--outline_variant) !important;
-    }
-    .T14B5e input[type="submit"]:hover {
-      background-color: var(--surface_container) !important;
-      border: 1px solid var(--outline) !important;
-    }
-    
-    .RDmXvc {
-      background-image: linear-gradient(transparent 0px,var(--surface) 52px,var(--xhUGwc) 80px) !important;
-    }
-    
-    .vIifob {
-      background: var(--surface_bright) !important;
-    }
-    
-    .DV7the {
-      color: var(--primary) !important;
+
+    body,
+    body.dark-theme,
+    body.dark-mode {
+        background-color: var(--surface) !important;
+        color: var(--on_surface) !important;
     }
 }

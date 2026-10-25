@@ -19,7 +19,8 @@ Item {
         anchors.centerIn: parent
         width: parent.implicitWidth + Config.controlPanelStatsSpacing
         height: parent.implicitHeight + Config.controlPanelStatsSpacing 
-        color: Colors.md3.surface_container_low
+        color: "transparent"
+        borderColor: "transparent"
 
 
     Row {

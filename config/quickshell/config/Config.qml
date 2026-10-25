@@ -25,7 +25,7 @@ Singleton {
 
     // Control Panel
     readonly property int controlPanelW: 680
-    readonly property int controlPanelH: 500
+    readonly property int controlPanelH: 700
     readonly property int controlPanelPadding: spaceMd
     readonly property int controlPanelHeaderHeight: 40
     readonly property int controlPanelHeaderInset: spaceMd

@@ -104,8 +104,10 @@ Item {
         faceAnim.start();
     }
 
+    readonly property real openH: PillController.overlay === "panel" ? panel.implicitHeight + Config.controlPanelPadding * 2 : Config.controlPanelH
+
     width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * morph
-    height: restH + hoverGrow * (1 - morph) + (Config.controlPanelH - restH) * morph
+    height: restH + hoverGrow * (1 - morph) + (openH - restH) * morph
     implicitWidth: width
     implicitHeight: height
 
@@ -480,6 +482,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
 
         ControlPanel {
+            id: panel
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }

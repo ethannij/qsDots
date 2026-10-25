@@ -17,7 +17,8 @@ Item {
         anchors.centerIn: parent
         width: row.implicitWidth + Config.spaceMd * 2
         height: row.implicitHeight + Config.spaceMd
-        color: Colors.md3.surface_container_low
+        color: "transparent"
+        borderColor: "transparent"
 
         Row {
             id: row

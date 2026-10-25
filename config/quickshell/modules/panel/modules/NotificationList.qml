@@ -4,11 +4,18 @@ import qs.config
 import qs.theme
 
 Item {
+    id: root
+
+    readonly property int maxHeight: 280
+    implicitHeight: list.count === 0 ? emptyLabel.implicitHeight + Config.spaceLg : Math.min(list.contentHeight, maxHeight)
+
     ListView {
+        id: list
         anchors.fill: parent
         model: Notifications.list
         clip: true
         spacing: Config.spaceMd
+        boundsBehavior: Flickable.StopAtBounds
 
         delegate: NotificationCard {
             required property var modelData
@@ -16,13 +23,14 @@ Item {
             height: implicitHeight
             notification: modelData
         }
-
     }
+
     Text {
-    anchors.centerIn: parent
-    visible: Notifications.list.values.length === 0
-    text: "No notifications"
-    font: StylizedFont.body
-    color: Colors.md3.on_surface_variant
-}
+        id: emptyLabel
+        anchors.centerIn: parent
+        visible: list.count === 0
+        text: "No notifications"
+        font: StylizedFont.body
+        color: Colors.md3.on_surface_variant
+    }
 }

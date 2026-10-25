@@ -295,7 +295,8 @@ import qs.modules.elements
 Item {
     id: controlPanel
     width: Config.controlPanelW - Config.controlPanelPadding * 2
-    height: Config.controlPanelH - Config.controlPanelPadding * 2
+    implicitHeight: panelColumn.implicitHeight
+    height: implicitHeight
     visible: opacity > 0
 
     property string page: PillController.page
@@ -313,7 +314,10 @@ Item {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        id: panelColumn
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         spacing: Config.spaceMd
 
         Item {
@@ -559,9 +563,25 @@ Item {
                 anchors.verticalCenter: brightnessSlider.verticalCenter
                 anchors.margins: Config.spaceMd
                 backgroundColor: mouseIcon.containsMouse ? Colors.md3.surface_variant : "transparent"
-                iconColor: Colors.md3.on_surface
+                iconColor: mouseIcon.containsMouse ? Colors.md3.primary : Colors.md3.on_surface
                 source: Hyprsunset.activeTemperatureIconURL
                 radius: width
+
+                Behavior on iconColor {
+                    enabled: Config.animMs > 0
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+
+                Behavior on backgroundColor {
+                    enabled: Config.animMs > 0
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
 
                 MouseArea {
                     id: mouseIcon
@@ -612,10 +632,22 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
             Layout.preferredHeight: 168
             Layout.maximumHeight: 168
             radius: 12
             color: Colors.md3.surface_container_highest
+            property real playerVisible: Media.active ? 1 : 0
+            opacity: playerVisible
+            visible: playerVisible > 0
+
+            Behavior on opacity {
+                enabled: Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.InOutCubic
+                }
+            }
 
             MediaPlayer {
                 id: mediaPlayer
@@ -623,50 +655,9 @@ Item {
             }
         }
 
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            Text {
-                id: notifLabel
-                anchors.left: parent.left
-                anchors.top: parent.top
-                text: "Notifications"
-                font: StylizedFont.tooltip
-                color: Colors.md3.on_surface_variant
-            }
-
-            Text {
-                id: clearNotifs
-                anchors.right: parent.right
-                anchors.verticalCenter: notifLabel.verticalCenter
-                visible: Notifications.count > 0
-                text: "Clear"
-                font: StylizedFont.tooltip
-                color: clearNotifsHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
-
-                HoverHandler {
-                    id: clearNotifsHover
-                    cursorShape: Qt.PointingHandCursor
-                }
-
-                TapHandler {
-                    onTapped: Notifications.clearAll()
-                }
-            }
-
-            NotificationList {
-                anchors.top: notifLabel.bottom
-                anchors.topMargin: Config.spaceSm
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-            }
-        }
-
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignBottom
+            Layout.alignment: Qt.AlignTop
             spacing: Config.spaceSm
 
             Row {
@@ -721,6 +712,125 @@ Item {
                         gesturePolicy: TapHandler.ReleaseWithinBounds
                         onTapped: PillController.trayOpen = !PillController.trayOpen
                     }
+                }
+            }
+        }
+
+        Item {
+            id: notificationContainer
+
+            property bool notificationsOpen: true
+            readonly property bool hasNotifications: Notifications.count > 0
+            readonly property real headerHeight: Math.max(notifLabel.implicitHeight, clearNotifs.implicitHeight)
+            readonly property real sectionHeight: headerHeight + Config.spaceSm + notificationList.implicitHeight
+            property real shownHeight: !hasNotifications ? 0 : notificationsOpen ? sectionHeight : headerHeight
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
+            Layout.preferredHeight: shownHeight
+            Layout.maximumHeight: shownHeight
+            implicitHeight: sectionHeight
+            visible: shownHeight > 0
+            clip: true
+
+            Behavior on shownHeight {
+                enabled: Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.InOutCubic
+                }
+            }
+
+            Text {
+                id: notifLabel
+                anchors.left: parent.left
+                anchors.top: parent.top
+                text: "Notifications"
+                font: StylizedFont.tooltip
+                color: Colors.md3.on_surface_variant
+            }
+
+            Text {
+                id: notifCount
+                anchors.left: notifLabel.right
+                anchors.leftMargin: Config.spaceSm
+                anchors.verticalCenter: notifLabel.verticalCenter
+                visible: !notificationContainer.notificationsOpen
+                text: Notifications.count
+                font: StylizedFont.tooltip
+                color: Colors.md3.tertiary
+            }
+
+            Text {
+                id: clearNotifs
+                anchors.right: parent.right
+                anchors.verticalCenter: notifLabel.verticalCenter
+                visible: Notifications.count > 0
+                text: "Clear"
+                font: StylizedFont.tooltip
+                color: clearNotifsHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+
+                HoverHandler {
+                    id: clearNotifsHover
+                    cursorShape: Qt.PointingHandCursor
+                }
+
+                TapHandler {
+                    onTapped: Notifications.clearAll()
+                }
+            }
+
+            NotificationList {
+                id: notificationList
+                anchors.top: notifLabel.bottom
+                anchors.topMargin: Config.spaceSm
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: implicitHeight
+            }
+        }
+        Item {
+            id: notificationToggle
+            property real shownHeight: notificationContainer.hasNotifications ? notificationToggleIcon.implicitHeight / 2 : 0
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            Layout.preferredHeight: shownHeight
+            Layout.maximumHeight: shownHeight
+            visible: shownHeight > 0
+
+            Behavior on shownHeight {
+                enabled: Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing.InOutCubic
+                }
+            }
+
+            IconButton {
+                id: notificationToggleIcon
+                anchors.centerIn: parent
+                source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bar/arrow_down.svg"))
+                iconColor: notificationToggleIconHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
+                backgroundColor: "transparent"
+                radius: width
+                rotation: notificationContainer.notificationsOpen ? 180 : 0
+
+                Behavior on rotation {
+                    enabled: Config.animMs > 0
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+
+                HoverHandler {
+                    id: notificationToggleIconHover
+                    cursorShape: Qt.PointingHandCursor
+                }
+                TapHandler {
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: notificationContainer.notificationsOpen = !notificationContainer.notificationsOpen
                 }
             }
         }
