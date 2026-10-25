@@ -84,13 +84,16 @@ Item {
         spacing: Config.spaceSm
 
         Repeater {
+            id: quickToggleModel
             model: [wifi, bluetooth, wled, idle, gamemode, oled]
 
             QuickToggle {
+                id: quickToggle
                 required property var modelData
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 visible: modelData.visible ?? true
+                radius: height / 4
                 source: modelData.icon
                 active: modelData.active
                 onTapped: modelData.trigger()

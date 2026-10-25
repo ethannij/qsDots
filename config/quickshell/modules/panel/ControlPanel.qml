@@ -719,19 +719,35 @@ Item {
         Item {
             id: notificationContainer
 
-            property bool notificationsOpen: true
-            readonly property bool hasNotifications: Notifications.count > 0
-            readonly property real headerHeight: Math.max(notifLabel.implicitHeight, clearNotifs.implicitHeight)
+            property bool notificationsOpen: Notifications.count > 0
+            property bool holdClosed: false
+            readonly property real headerHeight: Math.max(notifLabel.implicitHeight, notifActions.implicitHeight)
             readonly property real sectionHeight: headerHeight + Config.spaceSm + notificationList.implicitHeight
-            property real shownHeight: !hasNotifications ? 0 : notificationsOpen ? sectionHeight : headerHeight
+            property real shownHeight: notificationsOpen ? sectionHeight : headerHeight
+
+            function syncOpen() {
+                if (Notifications.count === 0) {
+                    holdClosed = false;
+                    notificationsOpen = false;
+                    return;
+                }
+                if (!holdClosed)
+                    notificationsOpen = true;
+            }
 
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             Layout.preferredHeight: shownHeight
             Layout.maximumHeight: shownHeight
             implicitHeight: sectionHeight
-            visible: shownHeight > 0
             clip: true
+
+            Connections {
+                target: Notifications
+                function onCountChanged() {
+                    notificationContainer.syncOpen();
+                }
+            }
 
             Behavior on shownHeight {
                 enabled: Config.animMs > 0
@@ -761,22 +777,43 @@ Item {
                 color: Colors.md3.tertiary
             }
 
-            Text {
-                id: clearNotifs
+            Row {
+                id: notifActions
                 anchors.right: parent.right
                 anchors.verticalCenter: notifLabel.verticalCenter
-                visible: Notifications.count > 0
-                text: "Clear"
-                font: StylizedFont.tooltip
-                color: clearNotifsHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+                spacing: Config.spaceMd
 
-                HoverHandler {
-                    id: clearNotifsHover
-                    cursorShape: Qt.PointingHandCursor
+                Text {
+                    id: dndButton
+                    text: "zzz"
+                    font: StylizedFont.tooltip
+                    color: Notifications.doNotDisturb || dndHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+
+                    HoverHandler {
+                        id: dndHover
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    TapHandler {
+                        onTapped: Notifications.doNotDisturb = !Notifications.doNotDisturb
+                    }
                 }
 
-                TapHandler {
-                    onTapped: Notifications.clearAll()
+                Text {
+                    id: clearNotifs
+                    visible: Notifications.count > 0
+                    text: "Clear"
+                    font: StylizedFont.tooltip
+                    color: clearNotifsHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+
+                    HoverHandler {
+                        id: clearNotifsHover
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    TapHandler {
+                        onTapped: Notifications.clearAll()
+                    }
                 }
             }
 
@@ -791,21 +828,9 @@ Item {
         }
         Item {
             id: notificationToggle
-            property real shownHeight: notificationContainer.hasNotifications ? notificationToggleIcon.implicitHeight / 2 : 0
-
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-            Layout.preferredHeight: shownHeight
-            Layout.maximumHeight: shownHeight
-            visible: shownHeight > 0
-
-            Behavior on shownHeight {
-                enabled: Config.animMs > 0
-                NumberAnimation {
-                    duration: Config.animMs
-                    easing.type: Easing.InOutCubic
-                }
-            }
+            Layout.preferredHeight: notificationToggleIcon.implicitHeight / 2
 
             IconButton {
                 id: notificationToggleIcon
@@ -830,7 +855,10 @@ Item {
                 }
                 TapHandler {
                     gesturePolicy: TapHandler.ReleaseWithinBounds
-                    onTapped: notificationContainer.notificationsOpen = !notificationContainer.notificationsOpen
+                    onTapped: {
+                        notificationContainer.notificationsOpen = !notificationContainer.notificationsOpen;
+                        notificationContainer.holdClosed = !notificationContainer.notificationsOpen;
+                    }
                 }
             }
         }
