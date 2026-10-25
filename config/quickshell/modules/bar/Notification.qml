@@ -7,6 +7,8 @@ import qs.services
 PillShape {
     id: root
 
+    cursorShape: Qt.ArrowCursor
+
     readonly property var notif: Notifications.latest
 
     Text {
@@ -26,7 +28,7 @@ PillShape {
         width: Math.min(implicitWidth, 600)
 
         font: StylizedFont.body
-        color: Colors.md3.tertiary
+        color: root.hovered ? Colors.md3.primary : Colors.md3.tertiary
     }
 
     onTapped: {

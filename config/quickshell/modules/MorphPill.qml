@@ -239,9 +239,13 @@ Item {
         Item {
             id: mediaSlot
             property bool shown: (width > 0 || mediaChip.opacity > 0) && !morphPill.pillLock
-            width: mediaChip.shown ? mediaChip.implicitWidth : 0
+            // The row gap and the chip's own right padding sit outside the
+            // waveform. Fold both into the clock so the bars sit as close
+            // to the time as the notification count does on the other side.
+            readonly property real clockGap: Config.spaceSm + mediaChip.padH
+            width: mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0
             height: mediaChip.implicitHeight
-            clip: true
+            clip: width < mediaChip.implicitWidth - clockGap
             visible: shown || opacity > 0
             opacity: shown ? 1 : 0
 
@@ -348,7 +352,6 @@ Item {
 
                     HoverHandler {
                         id: notificationChipHover
-                        cursorShape: Qt.PointingHandCursor
                     }
                 }
             }
@@ -448,7 +451,9 @@ Item {
             height: quickToggles.implicitHeight
             anchors.verticalCenter: parent.verticalCenter
             clip: true
-            visible: width > 0 || reveal > 0
+            //visible: width > 0 || reveal > 0
+            visible: false
+           
 
             Behavior on reveal {
                 NumberAnimation {

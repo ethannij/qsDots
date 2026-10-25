@@ -18,6 +18,7 @@ Item {
         anchors.fill: parent
         implicitWidth: row.implicitWidth
         implicitHeight: row.implicitHeight
+        cursorShape: Qt.ArrowCursor
 
         RowLayout {
             id: row
@@ -28,7 +29,7 @@ Item {
                 id: icon
                 Layout.alignment: Qt.AlignVCenter
                 source: Audio.icon
-                color: Colors.md3.tertiary
+                color: root.hovered ? Colors.md3.primary : Colors.md3.tertiary
             }
 
             PillSlider {
@@ -44,8 +45,8 @@ Item {
                 sliderSize: text.height / 2
                 backgroundColor: Colors.md3.surface_variant
                 borderColor: Colors.md3.shadow
-                fillColor: Colors.md3.tertiary
-                iconColor: Colors.md3.on_tertiary
+                fillColor: root.hovered ? Colors.md3.primary : Colors.md3.tertiary
+                iconColor: root.hovered ? Colors.md3.on_primary : Colors.md3.on_tertiary
 
             }
 
@@ -59,7 +60,7 @@ Item {
                     return " " + Audio.vol + "%";
                 }
 
-                color: Audio.muted ? Colors.md3.error : Colors.md3.tertiary
+                color: Audio.muted ? Colors.md3.error : root.hovered ? Colors.md3.primary : Colors.md3.tertiary
                 font: StylizedFont.body
             }
         }

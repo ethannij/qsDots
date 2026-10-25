@@ -9,6 +9,7 @@ PillShape {
     id: root
 
     property bool expanded: false
+    cursorShape: Qt.ArrowCursor
 
     onVisibleChanged: {
         if (!visible)
@@ -85,11 +86,14 @@ PillShape {
                 
                 HoverHandler {
                     id: titleHover
+                    cursorShape: Qt.ArrowCursor
                 }
                 TapHandler {
                     id: titleTap
                     gesturePolicy: TapHandler.ReleaseWithinBounds
-                    onTapped: root.expanded = !root.expanded
+                    //onTapped: root.expanded = !root.expanded
+                    onTapped: PillController.togglePanel();
+
                 }
             }
 
@@ -98,6 +102,7 @@ PillShape {
                 width: root.expanded ? Config.spaceMd + navRow.implicitWidth : 0
                 height: Math.max(wave.height, navRow.implicitHeight)
                 clip: false
+                visible: false
 
                 Behavior on width {
                     NumberAnimation {
