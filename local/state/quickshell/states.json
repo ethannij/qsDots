@@ -1,5 +1,5 @@
 {
     "gamemode": false,
-    "oled": true,
+    "oled": false,
     "wallpaperCycleSeconds": 0
 }

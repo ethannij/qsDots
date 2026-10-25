@@ -14,7 +14,7 @@ Item {
     property int padH: Config.pillPadH
     property int padV: Config.pillPadV
     property bool interactive: true
-    property string cursorShape: Qt.PointingHandCursor
+    property var cursorShape: Qt.PointingHandCursor
 
     default property alias content: content.data
     readonly property alias hovered: hover.hovered

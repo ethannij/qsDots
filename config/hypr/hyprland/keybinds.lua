@@ -61,6 +61,9 @@ hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "right" 
 hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.move({ direction = "up" }))
 hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.move({ direction = "down" }))
 
+-- Change size of windows with mainMod + "," and "+"
+hl.bind(mainMod .. " + Comma", hl.dsp.window.resize({ x = -50, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + Period", hl.dsp.window.resize({ x = 50, y = 0, relative = true }), { repeating = true })
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
 for i = 1, 10 do

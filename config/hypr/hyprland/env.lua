@@ -1,3 +1,4 @@
+hl.env("QT_LOGGING_RULES", "qt.qpa.wayland.textinput.warning=false;quickshell.dbus.properties.warning=false")
 hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("XCURSOR_THEME", "Moga-White")

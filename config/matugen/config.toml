@@ -3,8 +3,9 @@ command = "awww img --transition-type random --transition-step 90 --transition-f
 set = true
 
 [config.custom_keywords]
-font_main = "JetBrainsMono Nerd Font Mono"
-font_main_propo = "JetBrainsMono Nerd Font Propo"
+font_main = "Google Sans Code"
+font_main_propo = "Google Sans"
+font_main_file = "/usr/share/fonts/TTF/GoogleSans-Regular.ttf"
 font_size_normal = "12"
 font_size_large = "16"
 font_size_small = "10"
@@ -52,6 +53,7 @@ output_path = 'generated/firefox_websites.css'
 [templates.vscode-raw]
 input_path = 'templates/vscode-colors'
 output_path = '~/.cache/matugen/vscode-colors'
+post_hook = '~/.config/matugen/post-hook-scripts/cursor-glass-theme.mjs'
 
 [templates.vscode-json]
 input_path = 'templates/vscode-colors.json'
@@ -60,7 +62,7 @@ output_path = '~/.cache/matugen/vscode-colors.json'
 [templates.steam]
 input_path = 'templates/steam-colors.css'
 output_path = '~/.config/AdwSteamGtk/custom.css'
-post_hook =  'adwaita-steam-gtk -i'
+post_hook = 'adwaita-steam-gtk -i && ~/.config/matugen/post-hook-scripts/steam-reload.sh'
 
 [templates.qt5ct]
 input_path = 'templates/qtct-colors.conf'

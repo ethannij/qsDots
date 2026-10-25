@@ -28,13 +28,8 @@ Singleton {
     Connections {
         target: PillController
 
-        onPageChanged: {
-            if (PillController.page === "notifications")
-                root.clearUnread();
-        }
-
-        onPanelOpenChanged: {
-            if (PillController.panelOpen && PillController.page === "notifications")
+        function onPanelOpenChanged() {
+            if (PillController.panelOpen)
                 root.clearUnread();
         }
     }

@@ -70,7 +70,7 @@ Singleton {
             return Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/weather/cloudy.svg")); // Default to cloudy
         }
     }
-    
+
     Process {
         id: weatherFetcher
 
@@ -79,13 +79,22 @@ Singleton {
 
         stdout: StdioCollector {
             onStreamFinished: {
-                const data = JSON.parse(text);
-                const now = data.current_condition[0];
-                root.weatherType = now.weatherCode;
-                root.weatherTemperature = now.temp_F + "°F";
+                const cleanText = text.trim();
+                if (cleanText.length === 0)
+                    return;
+
+                try {
+                    const data = JSON.parse(cleanText);
+                    if (data && data.current_condition && data.current_condition[0]) {
+                        const now = data.current_condition[0];
+                        root.weatherType = now.weatherCode;
+                        root.weatherTemperature = now.temp_F + "°F";
+                    }
+                } catch (error) {
+                    console.error("Error parsing weather data:", error);
+                }
             }
         }
-
     }
 
     Timer {
@@ -99,5 +108,5 @@ Singleton {
             weatherFetcher.running = false;
             weatherFetcher.running = true;
         }
-      }
+    }
 }

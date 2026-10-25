@@ -446,7 +446,7 @@ Item {
             height: quickToggles.implicitHeight
             anchors.verticalCenter: parent.verticalCenter
             clip: true
-            visible: width > 0 || reveal > 0 && shown
+            visible: width > 0 || reveal > 0
 
             Behavior on reveal {
                 NumberAnimation {

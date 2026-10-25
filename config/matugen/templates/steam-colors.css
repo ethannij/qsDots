@@ -1,30 +1,53 @@
 /*
-* GTK 4 Colors
-* Converted from Matugen template
+* Adwaita for Steam 4 colors.
+* The skin paints from these variables. The older --adw-*-rgb channels are unused,
+* so overriding those leaves the default Adwaita grey in place.
 */
 
 :root {
-    --adw-accent-rgb: {{ colors.primary.default.red }} {{ colors.primary.default.green }} {{ colors.primary.default.blue }};
-    --adw-accent-bg-rgb: {{ colors.primary.default.red }} {{ colors.primary.default.green }} {{ colors.primary.default.blue }};
-    --adw-accent-fg-rgb: {{ colors.on_primary.default.red }} {{ colors.on_primary.default.green }} {{ colors.on_primary.default.blue }};
+    --adw-accent-bg-light: {{ colors.primary.default.hex }};
+    --adw-accent-bg-dark: {{ colors.primary.default.hex }};
+    --adw-accent-fg: {{ colors.on_primary.default.hex }};
 
-    --adw-window-bg-rgb: {{ colors.background.default.red }} {{ colors.background.default.green }} {{ colors.background.default.blue }};
-    --adw-window-fg-rgb: {{ colors.on_background.default.red }} {{ colors.on_background.default.green }} {{ colors.on_background.default.blue }};
+    --adw-destructive-bg-light: {{ colors.error.default.hex }};
+    --adw-destructive-bg-dark: {{ colors.error.default.hex }};
+    --adw-destructive-fg: {{ colors.on_error.default.hex }};
 
-    --adw-headerbar-bg-rgb: {{ colors.surface_dim.default.red }} {{ colors.surface_dim.default.green }} {{ colors.surface_dim.default.blue }};
-    --adw-headerbar-fg-rgb: {{ colors.on_surface.default.red }} {{ colors.on_surface.default.green }} {{ colors.on_surface.default.blue }};
+    --adw-error-bg-light: {{ colors.error.default.hex }};
+    --adw-error-bg-dark: {{ colors.error.default.hex }};
+    --adw-error-fg: {{ colors.on_error.default.hex }};
 
-    --adw-popover-bg-rgb: {{ colors.surface_dim.default.red }} {{ colors.surface_dim.default.green }} {{ colors.surface_dim.default.blue }};
-    --adw-popover-fg-rgb: {{ colors.on_surface.default.red }} {{ colors.on_surface.default.green }} {{ colors.on_surface.default.blue }};
+    --adw-success-bg-light: {{ colors.tertiary.default.hex }};
+    --adw-success-bg-dark: {{ colors.tertiary.default.hex }};
+    --adw-success-fg: {{ colors.on_tertiary.default.hex }};
 
-    --adw-view-bg-rgb: {{ colors.surface.default.red }} {{ colors.surface.default.green }} {{ colors.surface.default.blue }};
-    --adw-view-fg-rgb: {{ colors.on_surface.default.red }} {{ colors.on_surface.default.green }} {{ colors.on_surface.default.blue }};
+    --adw-window-bg: {{ colors.background.default.hex }};
+    --adw-window-fg: {{ colors.on_background.default.hex }};
 
-    --adw-card-bg-rgb: {{ colors.surface.default.red }} {{ colors.surface.default.green }} {{ colors.surface.default.blue }};
-    --adw-card-fg-rgb: {{ colors.on_surface.default.red }} {{ colors.on_surface.default.green }} {{ colors.on_surface.default.blue }};
+    --adw-headerbar-bg: {{ colors.surface_dim.default.hex }};
+    --adw-headerbar-fg: {{ colors.on_surface.default.hex }};
+    --adw-headerbar-backdrop: {{ colors.background.default.hex }};
 
-    --adw-sidebar-bg-rgb: {{ colors.background.default.red }} {{ colors.background.default.green }} {{ colors.background.default.blue }};
-    --adw-sidebar-fg-rgb: {{ colors.on_background.default.red }} {{ colors.on_background.default.green }} {{ colors.on_background.default.blue }};
-    --adw-sidebar-border-rgb: {{ colors.background.default.red }} {{ colors.background.default.green }} {{ colors.background.default.blue }};
-    --adw-sidebar-backdrop-rgb: {{ colors.background.default.red }} {{ colors.background.default.green }} {{ colors.background.default.blue }};
+    --adw-view-bg: {{ colors.surface.default.hex }};
+    --adw-view-fg: {{ colors.on_surface.default.hex }};
+
+    --adw-card-bg: {{ colors.surface_container_high.default.hex }};
+    --adw-card-fg: {{ colors.on_surface.default.hex }};
+
+    --adw-sidebar-bg: {{ colors.surface_container.default.hex }};
+    --adw-sidebar-fg: {{ colors.on_surface.default.hex }};
+    --adw-sidebar-backdrop: {{ colors.surface_container_low.default.hex }};
+
+    --adw-secondary-sidebar-bg: {{ colors.surface_container_low.default.hex }};
+    --adw-secondary-sidebar-fg: {{ colors.on_surface.default.hex }};
+    --adw-secondary-sidebar-backdrop: {{ colors.surface_container_lowest.default.hex }};
+
+    --adw-dialog-bg: {{ colors.surface_container_highest.default.hex }};
+    --adw-dialog-fg: {{ colors.on_surface.default.hex }};
+
+    --adw-popover-bg: {{ colors.surface_container_high.default.hex }};
+    --adw-popover-fg: {{ colors.on_surface.default.hex }};
+
+    --adw-thumbnail-bg: {{ colors.surface_container_highest.default.hex }};
+    --adw-thumbnail-fg: {{ colors.on_surface.default.hex }};
 }

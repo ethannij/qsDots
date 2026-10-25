@@ -4,8 +4,9 @@ import Quickshell
 import QtQuick
 
 Singleton {
-    readonly property string proportionalFamily: "JetBrainsMono Nerd Font Propo"
-    readonly property string monospaceFamily: "JetBrainsMono Nerd Font Mono"
+    readonly property string proportionalFamily: "Google Sans"
+    readonly property string monospaceFamily: "Google Sans Code"
+    readonly property string iconFamily: "JetBrainsMono Nerd Font Propo"
 
     readonly property font body: Qt.font({
         family: proportionalFamily,
@@ -16,11 +17,11 @@ Singleton {
     readonly property font bold: Qt.font({
         family: proportionalFamily,
         pointSize: 14,
-        weight: 1000
+        weight: 700
     })
 
     readonly property font icon: Qt.font({
-        family: proportionalFamily,
+        family: iconFamily,
         pointSize: 16,
         weight: 400
     })
