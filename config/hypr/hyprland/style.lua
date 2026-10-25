@@ -19,7 +19,7 @@ hl.config({
 		resize_on_border = false,
 
 		-- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
-		--allow_tearing = true,
+		allow_tearing = true,
 
 		layout = "dwindle",
 	},
@@ -67,10 +67,11 @@ hl.config({
 		no_warps = true,
 		inactive_timeout = 3,
 		no_break_fs_vrr = true,
+		no_hardware_cursors = 1,
 	},
 
 	debug = {
-		full_cm_proto = true,
+		--full_cm_proto = true,
 		--vfr = false,
 		--overlay = true
 	},

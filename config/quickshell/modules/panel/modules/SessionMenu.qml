@@ -59,6 +59,7 @@ Item {
 
     Rectangle {
         id: background
+        z: 1
 
         color: Colors.md3.secondary_container
         border.color: Colors.md3.on_surface

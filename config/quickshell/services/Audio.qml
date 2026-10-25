@@ -14,13 +14,31 @@ Singleton {
     readonly property int vol: ready ? Math.round(sink.audio.volume * 100) : 0
 
     readonly property string description: ready ? sink.description : ""
-    
+    readonly property string nickname: ready ? sink.nickname : ""
+    readonly property string name: ready ? sink.name : ""
+    readonly property string iconName: ready ? (sink.properties["device.icon-name"] || "") : ""
+
+    readonly property string deviceType: {
+        const type = iconName;
+        switch (type) {
+            case type.includes("headphone"):
+                return "headphones";
+            case type.includes("headset"):
+                return "headset";
+            case type.includes("speaker"):
+                return "speakers";
+            case type.includes("handsfree"):
+                return "handsfree";
+            default: "speakers"
+        }
+    }
+
     function setDefaultSink(node) {
         if (!node)
             return;
         Pipewire.preferredDefaultAudioSink = node;
     }
-    
+
     function toggleMute() {
         if (!ready)
             return;
@@ -64,5 +82,4 @@ Singleton {
     PwObjectTracker {
         objects: [root.sink, root.sinks]
     }
-
 }

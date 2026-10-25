@@ -1,182 +1,237 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
 import qs.services
 import qs.config
 import qs.theme
 
 Item {
     id: root
-    implicitHeight: column.implicitHeight
-    implicitWidth: column.implicitWidth
 
-    Rectangle {
+    readonly property real coverSize: Math.min(Math.max(height - Config.spaceLg * 2, 0), 200)
+    property bool glide: true
+
+    Item {
+        id: backdrop
         anchors.fill: parent
-        color: Colors.md3.surface_container
-        radius: Config.radiusBox
-        border.width: Config.borderWidth
-        border.color: Colors.md3.outline_variant
+        visible: artImage.status === Image.Ready
+
+        Image {
+            id: artImage
+            anchors.centerIn: parent
+            width: parent.width * 1.6
+            height: parent.height * 1.6
+            source: Media.artURL
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                blurEnabled: true
+                blur: 1
+                blurMax: 32
+                autoPaddingEnabled: false
+            }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: Colors.md3.surface
+            opacity: 0.55
+        }
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: backdropMask
+        }
     }
 
-    ColumnLayout {
-        id: column
+    Rectangle {
+        id: backdropMask
+        anchors.fill: backdrop
+        radius: 12
+        visible: false
+        layer.enabled: true
+    }
+
+    RowLayout {
         anchors.fill: parent
-        anchors.margins: Config.spaceMd
-        spacing: Config.spaceMd
+        anchors.margins: Config.spaceLg
+        spacing: Config.spaceLg
 
         Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumHeight: width
+            id: cover
+            Layout.preferredWidth: root.coverSize
+            Layout.preferredHeight: root.coverSize
+            Layout.alignment: Qt.AlignVCenter
 
             Rectangle {
-                anchors.centerIn: parent
-                width: Math.min(parent.width, parent.height)
-                height: width
-                radius: Config.radiusBox
+                anchors.fill: parent
+                radius: 12
                 color: Colors.md3.surface_container_highest
-                clip: true
+            }
+
+            Text {
+                anchors.centerIn: parent
+                visible: art.status !== Image.Ready
+                text: "󰝚"
+                font: StylizedFont.display
+                color: Colors.md3.on_surface_variant
+                opacity: 0.4
+            }
+
+            Image {
+                id: art
+                anchors.fill: parent
+                source: Media.artURL
+                fillMode: Image.PreserveAspectCrop
+                asynchronous: true
+                visible: false
+            }
+
+            Rectangle {
+                id: coverMask
+                anchors.fill: parent
+                radius: 12
+                visible: false
+                layer.enabled: true
+            }
+
+            OpacityMask {
+                anchors.fill: parent
+                source: art
+                maskSource: coverMask
+                visible: art.status === Image.Ready
+            }
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            spacing: Config.spaceMd
+
+            Column {
+                Layout.fillWidth: true
+                spacing: Config.spaceXs
 
                 Text {
-                    anchors.centerIn: parent
-                    visible: art.status !== Image.Ready
-                    text: "󰝚"
-                    font: StylizedFont.display
+                    width: parent.width
+                    text: Media.title || "Nothing playing"
+                    elide: Text.ElideRight
+                    maximumLineCount: 1
+                    font: StylizedFont.bold
+                    color: Colors.md3.on_surface
+                }
+
+                Text {
+                    width: parent.width
+                    text: Media.artist || Media.name || ""
+                    elide: Text.ElideRight
+                    maximumLineCount: 1
+                    visible: text.length > 0
+                    font: StylizedFont.tooltip
                     color: Colors.md3.on_surface_variant
-                    opacity: 0.4
-                }
-
-                Image {
-                    id: art
-                    anchors.fill: parent
-                    source: Media.artURL
-                    fillMode: Image.PreserveAspectCrop
-                    asynchronous: true
-                    visible: status === Image.Ready
                 }
             }
-        }
 
-        Column {
-            Layout.fillWidth: true
-            spacing: Config.spaceXs
+            Column {
+                Layout.fillWidth: true
+                spacing: Config.spaceXs
 
-            Text {
-                width: parent.width
-                text: Media.title || "Nothing playing"
-                elide: Text.ElideRight
-                maximumLineCount: 1
-                font: StylizedFont.bold
-                color: Colors.md3.on_surface
-            }
-
-            Text {
-                width: parent.width
-                text: Media.artist || Media.name || ""
-                elide: Text.ElideRight
-                maximumLineCount: 1
-                visible: text.length > 0
-                font: StylizedFont.tooltip
-                color: Colors.md3.on_surface_variant
-            }
-        }
-
-        Column {
-            Layout.fillWidth: true
-            spacing: Config.spaceXs
-
-            Item {
-                width: parent.width
-                height: 8
-
-                Rectangle {
-                    id: track
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 4
-                    radius: height / 2
-                    color: Colors.md3.surface_container_highest
+                Item {
+                    width: parent.width
+                    height: 8
 
                     Rectangle {
-                        id: fill
-                        width: parent.width * Media.progress
-                        height: parent.height
-                        radius: parent.radius
-                        color: Colors.md3.primary
+                        id: track
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: 4
+                        radius: height / 2
+                        color: Qt.alpha(Colors.md3.on_surface, 0.22)
 
-                        Behavior on width {
-                            enabled: root.glide && !seekMouse.pressed
-                            NumberAnimation {
-                                duration: Media.progressTick
-                                easing.type: Easing.Linear
+                        Rectangle {
+                            id: fill
+                            width: parent.width * Media.progress
+                            height: parent.height
+                            radius: parent.radius
+                            color: Colors.md3.primary
+
+                            Behavior on width {
+                                enabled: root.glide && !seekMouse.pressed
+                                NumberAnimation {
+                                    duration: Media.progressTick
+                                    easing.type: Easing.Linear
+                                }
                             }
+                        }
+
+                        Rectangle {
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: Colors.md3.primary
+                            x: fill.width - width / 2
+                            anchors.verticalCenter: track.verticalCenter
+                            visible: Media.length > 0
                         }
                     }
 
-                    Rectangle {
-                        width: 8
-                        height: 8
-                        radius: 4
-                        color: Colors.md3.primary
-                        x: fill.width - width / 2
-                        anchors.verticalCenter: track.verticalCenter
-                        visible: Media.length > 0
+                    MouseArea {
+                        id: seekMouse
+                        anchors.fill: parent
+                        enabled: Media.canSeek
+                        cursorShape: Media.canSeek ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        onClicked: mouse => Media.seekTo(mouse.x / width)
+                        onPositionChanged: mouse => {
+                            if (pressed)
+                                Media.seekTo(mouse.x / width);
+                        }
                     }
                 }
 
-                MouseArea {
-                    id: seekMouse
-                    anchors.fill: parent
-                    enabled: Media.canSeek
-                    cursorShape: Media.canSeek ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    onClicked: mouse => Media.seekTo(mouse.x / width)
-                    onPositionChanged: mouse => {
-                        if (pressed)
-                            Media.seekTo(mouse.x / width);
+                Item {
+                    width: parent.width
+                    height: posLabel.implicitHeight
+
+                    Text {
+                        id: posLabel
+                        anchors.left: parent.left
+                        text: root.fmtTime(track.width > 0 ? fill.width / track.width * Media.length : 0)
+                        font: StylizedFont.tooltip
+                        color: Colors.md3.on_surface_variant
+                    }
+
+                    Text {
+                        anchors.right: parent.right
+                        text: root.fmtTime(Media.length)
+                        font: StylizedFont.tooltip
+                        color: Colors.md3.on_surface_variant
                     }
                 }
             }
 
-            Item {
-                width: parent.width
-                height: posLabel.implicitHeight
+            Row {
+                spacing: Config.spaceLg
 
-                Text {
-                    id: posLabel
-                    anchors.left: parent.left
-                    text: root.fmtTime(track.width > 0 ? fill.width / track.width * Media.length : 0)
-                    font: StylizedFont.tooltip
-                    color: Colors.md3.on_surface_variant
+                NavBtn {
+                    text: "󰒮"
+                    available: Media.canGoPrevious
+                    onClicked: Media.previous()
                 }
-
-                Text {
-                    anchors.right: parent.right
-                    text: root.fmtTime(Media.length)
-                    font: StylizedFont.tooltip
-                    color: Colors.md3.on_surface_variant
+                NavBtn {
+                    text: Media.isPlaying ? "󰏤" : "󰐊"
+                    available: Media.canToggle
+                    font: StylizedFont.label
+                    onClicked: Media.toggle()
                 }
-            }
-        }
-
-        Row {
-            Layout.alignment: Qt.AlignHCenter
-            spacing: Config.spaceLg
-
-            NavBtn {
-                text: "󰒮"
-                available: Media.canGoPrevious
-                onClicked: Media.previous()
-            }
-            NavBtn {
-                text: Media.isPlaying ? "󰏤" : "󰐊"
-                available: Media.canToggle
-                font: StylizedFont.label
-                onClicked: Media.toggle()
-            }
-            NavBtn {
-                text: "󰒭"
-                available: Media.canGoNext
-                onClicked: Media.next()
+                NavBtn {
+                    text: "󰒭"
+                    available: Media.canGoNext
+                    onClicked: Media.next()
+                }
             }
         }
     }
@@ -207,8 +262,6 @@ Item {
             onClicked: btn.clicked()
         }
     }
-
-    property bool glide: true
 
     Connections {
         target: Media

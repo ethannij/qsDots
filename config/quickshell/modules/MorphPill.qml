@@ -19,6 +19,7 @@ Item {
     readonly property bool gamebarOnly: PillController.activeFace === "gamebar"
     readonly property bool agentOnly: PillController.activeFace === "agent"
     readonly property bool pillLock: PillController.pillLock
+    property alias dateShown: clock.showDate
 
     readonly property Item face: {
         switch (PillController.activeFace) {
@@ -201,9 +202,9 @@ Item {
         anchors.centerIn: parent
         //color: Gamemode.active ? Colors.md3.surface :Qt.alpha(Colors.md3.surface, 0.6)
         color: Colors.md3.surface
-        border.width: Gamemode.active ? Config.borderWidth : 0
+        border.width: Gamemode.active || OLED.active ? Config.borderWidth : 0
         radius: Gamemode.active ? 0 : Math.min(height / 2, morphPill.restHeight / 2 + Config.shellPadV)
-        border.color: Gamemode.active ? Colors.md3.outline_variant : "transparent"
+        border.color: Gamemode.active || OLED.active ? Colors.md3.outline_variant : "transparent"
 
         Behavior on radius {
             enabled: !Gamemode.active && !morphPill.agentOnly && !morphPill.gamebarOnly
@@ -473,6 +474,7 @@ Item {
         name: "panel"
         morph: morphPill.morph
         contentOpacity: morphPill.panelOpacity
+        width: Config.controlPanelW - Config.controlPanelPadding * 2
         anchors.top: parent.top
         anchors.topMargin: Config.controlPanelPadding
         anchors.horizontalCenter: parent.horizontalCenter

@@ -47,9 +47,8 @@ Variants {
         Rectangle {
             id: background
             anchors.fill: parent
-            color: Colors.md3.surface
+            color: "transparent"
             opacity: PillController.overlay !== "none" ? 0.5 : 0
-            //opacity: 0
             z: -1
 
             Item {

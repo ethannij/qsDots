@@ -21,6 +21,7 @@ PillShape {
             }
         }
     }
-    onTapped: clockItem.showDate = !clockItem.showDate
-    onTappedAlternate: PillController.togglePanel();
+    onTapped: PillController.togglePanel();
+    onTappedAlternate: clockItem.showDate = !clockItem.showDate
+    cursorShape: Qt.ArrowCursor
 }

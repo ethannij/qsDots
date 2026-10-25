@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import qs.config
 import qs.modules.elements
@@ -6,12 +7,9 @@ import qs.services
 import qs.theme
 
 Item {
-    // Widget Grid Container, define widgets and behaviors here
     id: root
 
-    // Set the size of the widget grid
-    implicitWidth: grid.implicitWidth
-    implicitHeight: grid.implicitHeight
+    implicitHeight: Config.iconSize + Config.spaceXl
 
     // To add widgets, first define the widget as a QtObject
     QtObject {
@@ -78,32 +76,25 @@ Item {
         }
     }
 
-    PillShape {
-        id: pill
-        interactive: false
-        anchors.centerIn: parent
-        width: parent.implicitWidth + Config.controlPanelStatsSpacing
-        height: parent.implicitHeight + Config.controlPanelStatsSpacing
-        color: Colors.md3.surface_container_low
+    RowLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height
+        spacing: Config.spaceSm
 
-        Grid {
-            id: grid
-            spacing: Config.spaceMd
-            columns: 4
-            rows: 2
+        Repeater {
+            model: [wifi, bluetooth, wled, idle, gamemode, oled]
 
-            // Add QtObjects to repeater to add to widget grid
-            Repeater {
-                model: [wifi, bluetooth, wled, idle, gamemode, oled]
-
-                QuickToggle {
-                    required property var modelData
-                    visible: modelData.visible ?? true
-                    source: modelData.icon
-                    active: modelData.active
-                    onTapped: modelData.trigger()
-                    onTappedAlternate: modelData.triggerAlternate()
-                }
+            QuickToggle {
+                required property var modelData
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                visible: modelData.visible ?? true
+                source: modelData.icon
+                active: modelData.active
+                onTapped: modelData.trigger()
+                onTappedAlternate: modelData.triggerAlternate()
             }
         }
     }
