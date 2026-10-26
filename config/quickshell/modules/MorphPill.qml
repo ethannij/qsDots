@@ -65,6 +65,9 @@ Item {
     readonly property real liveRestW: restContent.implicitWidth + Config.shellPadH * 2
     readonly property real liveRestH: restContent.implicitHeight + Config.shellPadV * 2
 
+    property string travelOverlay: "none"
+    readonly property bool panelTravel: travelOverlay === "panel"
+
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
 
@@ -74,6 +77,7 @@ Item {
     onMorphChanged: if (morph === 0) {
         restW = liveRestW;
         restH = liveRestH;
+        travelOverlay = "none";
     }
 
     onPillLockChanged: if (pillLock) {
@@ -106,8 +110,11 @@ Item {
 
     readonly property real openH: PillController.overlay === "panel" ? panel.implicitHeight + Config.controlPanelPadding * 2 : Config.controlPanelH
 
-    width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * morph
-    height: restH + hoverGrow * (1 - morph) + (openH - restH) * morph
+    readonly property real depart: panelTravel ? Math.min(morph / 0.22, 1) : 0
+    readonly property real grow: panelTravel ? Math.max(morph - 0.22, 0) / 0.78 : morph
+
+    width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * grow
+    height: restH + hoverGrow * (1 - morph) + (openH - restH) * grow
     implicitWidth: width
     implicitHeight: height
 
@@ -127,6 +134,11 @@ Item {
         target: PillController
         function onActiveFaceChanged() {
             morphPill.runFaceAnim();
+        }
+
+        function onOverlayChanged() {
+            if (PillController.overlay !== "none")
+                morphPill.travelOverlay = PillController.overlay;
         }
     }
 
@@ -197,6 +209,24 @@ Item {
         opacity: 0.7
     }
 
+    Clock {
+        id: clock
+        z: morphPill.panelTravel ? 2 : 1
+        chrome: false
+        opacity: morphPill.panelTravel ? 1 : morphPill.restOpacity
+        visible: opacity > 0 && !morphPill.gamebarOnly && !morphPill.agentOnly
+        enabled: visible
+
+        readonly property real slotX: restContent.x + dynamicContent.x + clockSlot.x
+        readonly property real slotY: restContent.y + dynamicContent.y + clockSlot.y
+        readonly property real openY: Config.controlPanelPadding + (Config.controlPanelHeaderHeight - height) / 2
+        x: {
+            const open = (morphPill.width - width) / 2;
+            return morphPill.panelTravel ? slotX + (open - slotX) * morphPill.grow : slotX;
+        }
+        y: morphPill.panelTravel ? slotY + (openY - slotY) * morphPill.grow : slotY
+    }
+
     Rectangle {
         id: rect
         implicitWidth: parent.implicitWidth
@@ -230,11 +260,16 @@ Item {
     Row {
         id: restContent
         enabled: PillController.overlay === "none"
-        opacity: morphPill.restOpacity
+        opacity: morphPill.panelTravel ? 1 - depart : morphPill.restOpacity
         visible: true
-        anchors.centerIn: parent
-        spacing: Config.spaceSm
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: morphPill.panelTravel ? Config.spaceSm * (1 - morphPill.depart) : Config.spaceSm
         layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
+
+        y: {
+            const shellH = morphPill.panelTravel ? morphPill.restH + morphPill.hoverGrow * (1 - morphPill.morph) : morphPill.height;
+            return (shellH - height) / 2;
+        }
 
         Item {
             id: mediaSlot
@@ -243,7 +278,10 @@ Item {
             // waveform. Fold both into the clock so the bars sit as close
             // to the time as the notification count does on the other side.
             readonly property real clockGap: Config.spaceSm + mediaChip.padH
-            width: mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0
+            width: {
+                const full = mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0;
+                return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
+            }
             height: mediaChip.implicitHeight
             clip: width < mediaChip.implicitWidth - clockGap
             visible: shown || opacity > 0
@@ -287,18 +325,20 @@ Item {
             spacing: 0
             anchors.verticalCenter: parent.verticalCenter
 
-            Clock {
-                id: clock
-                enabled: restContent.enabled
-                visible: !morphPill.gamebarOnly && !morphPill.agentOnly
-                opacity: 1
-                chrome: false
+            Item {
+                id: clockSlot
+                width: !morphPill.gamebarOnly && !morphPill.agentOnly ? clock.implicitWidth : 0
+                height: clock.implicitHeight
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             Item {
                 id: notificationChipSlot
                 property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
-                width: notificationChip.shown ? notificationChip.implicitWidth : 0
+                width: {
+                    const full = notificationChip.shown ? notificationChip.implicitWidth + Config.spaceSm : 0;
+                    return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
+                }
                 height: notificationChip.implicitHeight
                 anchors.verticalCenter: parent.verticalCenter
                 clip: true
@@ -359,7 +399,10 @@ Item {
             Item {
                 id: faceHost
                 anchors.verticalCenter: parent.verticalCenter
-                width: face ? morphPill.face.implicitWidth + Config.spaceSm : 0
+                width: {
+                    const full = face ? morphPill.face.implicitWidth : 0;
+                    return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
+                }
                 height: face ? morphPill.face.implicitHeight : 0
                 implicitWidth: width
                 implicitHeight: height
@@ -386,9 +429,9 @@ Item {
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
-                    x: Config.spaceSm
                     anchors.top: parent.top
                     chrome: false
+                    padH: 0
                     animateWidths: faceActive && morphPill.morph === 0
                 }
 
@@ -398,9 +441,9 @@ Item {
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
-                    x: Config.spaceSm
                     anchors.top: parent.top
                     chrome: false
+                    padH: 0
                 }
 
                 Notification {
@@ -409,9 +452,9 @@ Item {
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
-                    x: Config.spaceSm
                     anchors.top: parent.top
                     chrome: false
+                    padH: 0
                 }
 
                 GameBar {
@@ -420,7 +463,6 @@ Item {
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
-                    x: Config.spaceSm
                     chrome: false
                 }
 
@@ -430,7 +472,6 @@ Item {
                     enabled: faceActive && restContent.enabled
                     visible: faceActive || opacity > 0
                     opacity: 0
-                    x: Config.spaceSm
                     chrome: false
                 }
             }
@@ -440,6 +481,8 @@ Item {
             id: idle
             property bool shown: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded && !PillController.pillLock
             anchors.verticalCenter: parent.verticalCenter
+            width: morphPill.panelTravel ? implicitWidth * (1 - morphPill.depart) : implicitWidth
+            clip: true
             visible: shown || opacity > 0
             opacity: shown ? 1 : 0
         }
@@ -453,7 +496,6 @@ Item {
             clip: true
             //visible: width > 0 || reveal > 0
             visible: false
-           
 
             Behavior on reveal {
                 NumberAnimation {
@@ -467,13 +509,6 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 barHovered: hover.hovered
             }
-        }
-
-        Item {
-            id: spacer
-            width: Config.spaceSm
-            height: 1
-            visible: !morphPill.gamebarOnly && !morphPill.agentOnly && idle.visible
         }
     }
 

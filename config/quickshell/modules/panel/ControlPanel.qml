@@ -360,6 +360,7 @@ Item {
                 anchors.centerIn: parent
                 chrome: false
                 showDate: morphPill.dateShown
+                visible: false
             }
 
             WeatherInfo {

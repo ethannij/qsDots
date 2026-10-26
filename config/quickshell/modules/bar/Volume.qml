@@ -11,6 +11,7 @@ Item {
     implicitHeight: Config.barHeight
     implicitWidth: root.implicitWidth
     property alias chrome: root.chrome
+    property alias padH: root.padH
 
     PillShape {
         id: root
