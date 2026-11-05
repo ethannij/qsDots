@@ -2,12 +2,8 @@
 
 import QtQuick
 import Quickshell
-import QtQuick.Controls
-import QtQuick.Effects
 import qs.modules
 import qs.modules.screenlock
-import qs.modules.windows
-import qs.modules.elements
 import qs.services
 import qs.config
 import qs.theme
@@ -36,13 +32,7 @@ ShellRoot {
 
         Rectangle {
             anchors.fill: parent
-            color: Colors.md3.surface
-            Text {
-                anchors.centerIn: parent
-                color: Colors.md3.on_surface
-                font: StylizedFont.title
-                text: Audio.nickname
-            }
+            color: Colors.palette.tertiary50
         }
     }
 }
