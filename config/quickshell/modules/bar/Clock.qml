@@ -10,14 +10,14 @@ PillShape {
 
     Text {
         id: clockText
-        text: clockItem.showDate ? Qt.formatDateTime(Time.date, Config.dateFormat) : Qt.formatDateTime(Time.date, Config.clockFormat)
+        text: clockItem.showDate ? Qt.formatDateTime(Time.date, Config.dateFormat) : Qt.formatDateTime(Time.date, States.twentyFourHourClock ? Config.twentyFourHourClockFormat : Config.clockFormat)
         font: StylizedFont.bold
         color: clockItem.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
 
         Behavior on color {
             ColorAnimation {
                 duration: Config.animMs
-                easing.type: Easing.InOutCubic
+                easing.type: Easing[Config.animEasing]
             }
         }
     }

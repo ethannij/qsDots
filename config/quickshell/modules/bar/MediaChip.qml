@@ -22,7 +22,7 @@ PillShape {
         Behavior on spacing {
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: Easing.InOutCubic
+                easing.type: Easing[Config.animEasing]
             }
         }
 
@@ -93,12 +93,12 @@ PillShape {
                 }
             }
 
-            Connections {
+            /*Connections {
                 target: Media
                 function onProgressChanged() {
                     root.glide = Math.abs(Media.progress - root.shown) < 0.08;
                 }
-            }
+            }*/
         }
     }
 }

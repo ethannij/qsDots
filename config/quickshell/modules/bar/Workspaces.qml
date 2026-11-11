@@ -66,14 +66,14 @@ PillShape {
                     enabled: workspaces.animateWidths
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
@@ -88,7 +88,7 @@ PillShape {
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Config.animMs
-                            easing.type: Easing.InOutCubic
+                            easing.type: Easing[Config.animEasing]
                         }
                     }
                 }

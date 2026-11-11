@@ -89,6 +89,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "Quickshell Settings Window",
+	match = {
+		title = "QsDots Settings",
+	},
+	float = true
+})
+
+hl.window_rule({
 	name = "Quickshell Wifi Manager",
 	match = {
 		title = "Wifi Manager",

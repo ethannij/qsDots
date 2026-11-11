@@ -1,0 +1,11 @@
+{
+    "doNotDisturb": false,
+    "gamemode": false,
+    "gamma": 100,
+    "inhibitIdle": false,
+    "notificationListHeldClosed": false,
+    "oled": false,
+    "temperatureState": "off",
+    "twentyFourHourClock": false,
+    "wallpaperCycleSeconds": 0
+}

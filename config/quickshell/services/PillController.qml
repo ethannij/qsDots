@@ -24,6 +24,7 @@ Singleton {
     property bool wifiOpen: false
     property bool wallpaperSwitcherOpen: false
     property bool pillLock: false
+    property bool settingsWindowOpen: false
     readonly property string overlay: panelOpen ? "panel" : launcherOpen ? "launcher" : bluetoothOpen ? "bluetooth" : wifiOpen ? "wifi" : wallpaperSwitcherOpen ? "wallpaperSwitcher" : "none"
 
     // Input handling for super key

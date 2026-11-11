@@ -3,11 +3,15 @@ import Quickshell
 import qs.services
 
 Singleton {
-    // Timing
+    // Animations
     readonly property int animMsClose: animMs === 0 ? 0 : 180
-    readonly property int animMs: Gamemode.active ? 0 : 300
+    readonly property int animMs: Gamemode.active ? 0 : 250
     readonly property int ttlMs: 1500
     readonly property int holdMs: 200
+    readonly property string animEasingOut: "OutBack"
+    readonly property string animEasingIn: "InBack"
+    readonly property string animEasing: "InOutBack"
+
 
     // Spacing scale
     readonly property int spaceXs: 2
@@ -36,10 +40,11 @@ Singleton {
 
     // Clock
     readonly property string clockFormat: "h:mm AP"
+    readonly property string twentyFourHourClockFormat: "HH:mm"
     readonly property string dateFormat: "MMM, dd"
 
     // Workspaces
-    readonly property int workspaceCount: 5
+    readonly property int workspaceCount: States.workspaceCount
     readonly property int workspaceSpacing: 7
     readonly property int workspacePadH: 18
     readonly property real workspaceItemGap: widgetSpacing / 3
@@ -79,4 +84,5 @@ Singleton {
 
     // Wallpaper
     readonly property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
+    readonly property int wallpaperCycleSeconds: States.wallpaperCycleSeconds
 }

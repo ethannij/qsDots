@@ -45,7 +45,7 @@ Item {
         enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
             duration: PillController.overlay !== "none" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.overlay !== "none" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.overlay !== "none" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
     }
 
@@ -55,7 +55,8 @@ Item {
         enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
             duration: Config.animMs
-            easing.type: Easing.OutCubic
+            //easing.type: Config.animEasingOut.type
+            easing.type: Easing[Config.animEasingOut]
         }
     }
 
@@ -150,7 +151,7 @@ Item {
             target: mediaChip
             property: "opacity"
             duration: !Media.isIdle ? Config.animMs : Config.animMsClose
-            easing.type: !Media.isIdle ? Easing.OutCubic : Easing.InCubic
+            easing.type: !Media.isIdle ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
 
         NumberAnimation {
@@ -158,35 +159,35 @@ Item {
             target: workspaces
             property: "opacity"
             duration: PillController.activeFace === "workspaces" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "workspaces" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.activeFace === "workspaces" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
         NumberAnimation {
             id: volumeOpAnim
             target: volume
             property: "opacity"
             duration: PillController.activeFace === "volume" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "volume" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.activeFace === "volume" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
         NumberAnimation {
             id: notifOpAnim
             target: notification
             property: "opacity"
             duration: PillController.activeFace === "notification" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "notification" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.activeFace === "notification" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
         NumberAnimation {
             id: gamebarOpAnim
             target: gamebar
             property: "opacity"
             duration: PillController.activeFace === "gamebar" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "gamebar" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.activeFace === "gamebar" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
         NumberAnimation {
             id: agentOpAnim
             target: agent
             property: "opacity"
             duration: PillController.activeFace === "agent" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "agent" ? Easing.OutCubic : Easing.InCubic
+            easing.type: PillController.activeFace === "agent" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
         }
     }
 
@@ -242,7 +243,7 @@ Item {
             enabled: !Gamemode.active && !morphPill.agentOnly && !morphPill.gamebarOnly
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: Easing.InOutCubic
+                easing.type: Easing[Config.animEasing]
             }
         }
 
@@ -291,7 +292,7 @@ Item {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: mediaSlot.shown ? Config.animMsClose : Config.animMs
-                    easing.type: mediaSlot.shown ? Easing.InCubic : Easing.OutCubic
+                    easing.type: mediaSlot.shown ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
                 }
             }
 
@@ -299,7 +300,7 @@ Item {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: mediaSlot.shown ? Config.animMs : Config.animMsClose
-                    easing.type: mediaSlot.shown ? Easing.OutCubic : Easing.InCubic
+                    easing.type: mediaSlot.shown ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
                 }
             }
 
@@ -314,7 +315,7 @@ Item {
                 Behavior on opacity {
                     NumberAnimation {
                         duration: mediaChip.shown ? Config.animMs : Config.animMsClose
-                        easing.type: mediaChip.shown ? Easing.OutCubic : Easing.InCubic
+                        easing.type: mediaChip.shown ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
                     }
                 }
             }
@@ -349,14 +350,14 @@ Item {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.OutCubic
+                        easing.type: Easing[Config.animEasingOut]
                     }
                 }
 
                 Behavior on opacity {
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.OutCubic
+                        easing.type: Easing[Config.animEasingOut]
                     }
                 }
 
@@ -369,14 +370,14 @@ Item {
                     Behavior on color {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing.OutCubic
+                            easing.type: Easing[Config.animEasingOut]
                         }
                     }
 
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Config.animMs
-                            easing.type: Easing.OutCubic
+                            easing.type: Easing[Config.animEasingOut]
                         }
                     }
                     TapHandler {
@@ -412,14 +413,14 @@ Item {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                     NumberAnimation {
                         duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
-                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing.InCubic : Easing.OutCubic
+                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
                     }
                 }
                 Behavior on height {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0 && !morphPill.agentOnly
                     NumberAnimation {
                         duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
-                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing.InCubic : Easing.OutCubic
+                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
                     }
                 }
 
@@ -500,7 +501,7 @@ Item {
             Behavior on reveal {
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing.InCubic
+                    easing.type: Easing[Config.animEasingIn]
                 }
             }
 

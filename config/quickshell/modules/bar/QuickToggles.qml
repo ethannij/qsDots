@@ -96,7 +96,7 @@ Item {
                 enabled: Config.animMs > 0
                 NumberAnimation {
                     duration: quickToggles.expanded ? Config.animMs : Config.animMsClose
-                    easing.type: quickToggles.expanded ? Easing.OutCubic : Easing.InCubic
+                    easing.type: quickToggles.expanded ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
                 }
             }
 
@@ -129,7 +129,7 @@ Item {
                 enabled: Config.animMs > 0
                 NumberAnimation {
                     duration: quickToggles.expanded ? Config.animMs : Config.animMsClose
-                    easing.type: quickToggles.expanded ? Easing.OutCubic : Easing.InCubic
+                    easing.type: quickToggles.expanded ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
                 }
             }
 
@@ -151,7 +151,7 @@ Item {
                             enabled: Config.animMs > 0
                             ColorAnimation {
                                 duration: Config.animMs
-                                easing.type: Easing.OutCubic
+                                easing.type: Easing[Config.animEasingOut]
                             }
                         }
 

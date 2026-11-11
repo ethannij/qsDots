@@ -11,9 +11,13 @@ Singleton {
 
     property bool ready: false
 
+    property alias twentyFourHourClock: adapter.twentyFourHourClock
+    property alias workspaceCount: adapter.workspaceCount
+    property alias wallpaperCycleSeconds: adapter.wallpaperCycleSeconds
+    property alias wallpaperDirectory: adapter.wallpaperDirectory
+
     property alias oled: adapter.oled
     property alias gamemode: adapter.gamemode
-    property alias wallpaperCycleSeconds: adapter.wallpaperCycleSeconds
     property alias doNotDisturb: adapter.doNotDisturb
     property alias inhibitIdle: adapter.inhibitIdle
     property alias temperatureState: adapter.temperatureState
@@ -38,9 +42,13 @@ Singleton {
 
         JsonAdapter {
             id: adapter
+            property bool twentyFourHourClock: false
+            property int workspaceCount: 5
+            property int wallpaperCycleSeconds: 0
+            property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
+
             property bool oled: false
             property bool gamemode: false
-            property int wallpaperCycleSeconds: 0
             property bool doNotDisturb: false
             property bool inhibitIdle: false
             property string temperatureState: "auto"

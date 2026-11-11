@@ -76,14 +76,14 @@ PillShape {
                 enabled: root.animateHistory
                 NumberAnimation {
                     duration: Config.animMs
-                    easing.type: Easing.InOutCubic
+                    easing.type: Easing[Config.animEasing]
                     onFinished: root.animateHistory = false
                 }
             }
             Behavior on opacity {
                 NumberAnimation {
                     duration: Config.animMs
-                    easing.type: Easing.InOutCubic
+                    easing.type: Easing[Config.animEasing]
                 }
             }
             Flickable {
@@ -166,7 +166,7 @@ PillShape {
                                         from: 0
                                         to: 1
                                         duration: 260
-                                        easing.type: Easing.OutCubic
+                                        easing.type: Easing[Config.animEasingOut]
                                     }
                                     onTextChanged: {
                                         if (text !== "")
@@ -220,7 +220,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
             }
@@ -286,7 +286,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
             }
@@ -313,7 +313,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
             }

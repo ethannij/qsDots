@@ -181,13 +181,13 @@ Item {
                             from: 0.5
                             to: 0.8
                             duration: 180000
-                            easing.type: Easing.InOutCubic
+                            easing.type: Easing[Config.animEasing]
                         }
                         NumberAnimation {
                             from: 0.8
                             to: 0.3
                             duration: 180000
-                            easing.type: Easing.InOutCubic
+                            easing.type: Easing[Config.animEasing]
                         }
                     }
 
@@ -224,13 +224,13 @@ Item {
                 Behavior on faceW {
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
                 Behavior on faceH {
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
                 x: (parent.width - width) / 2
@@ -241,7 +241,7 @@ Item {
                     NumberAnimation {
                         id: openAnim
                         duration: 700
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                         onRunningChanged: {
                             if (openAnim.running || !root.closing || lockPill.open > 0)
                                 return;
@@ -340,7 +340,7 @@ Item {
                             Behavior on opacity {
                                 NumberAnimation {
                                     duration: Config.animMs / 2
-                                    easing.type: Easing.OutCubic
+                                    easing.type: Easing[Config.animEasingOut]
                                 }
                             }
                         }
@@ -356,7 +356,7 @@ Item {
                             Behavior on opacity {
                                 NumberAnimation {
                                     duration: 140
-                                    easing.type: Easing.OutCubic
+                                    easing.type: Easing[Config.animEasingOut]
                                 }
                             }
                             Behavior on color {
@@ -378,7 +378,7 @@ Item {
                             Behavior on opacity {
                                 NumberAnimation {
                                     duration: 140
-                                    easing.type: Easing.OutCubic
+                                    easing.type: Easing[Config.animEasingOut]
                                 }
                             }
                             background: null

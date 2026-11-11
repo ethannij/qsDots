@@ -82,8 +82,15 @@ Item {
 
             WeatherInfo {
                 anchors.left: clock.right
-                anchors.right: sessionMenu.left
+                anchors.right: settingsButton.left
                 anchors.verticalCenter: parent.verticalCenter
+            }
+
+            SettingsButton {
+                id: settingsButton
+                anchors.rightMargin: Config.spaceMd
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: sessionMenu.left
             }
 
             SessionMenu {
@@ -145,7 +152,7 @@ Item {
                     enabled: Config.animMs > 0
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
@@ -153,7 +160,7 @@ Item {
                     enabled: Config.animMs > 0
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
@@ -289,7 +296,7 @@ Item {
                     enabled: Config.animMs > 0
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
@@ -297,7 +304,7 @@ Item {
                     enabled: Config.animMs > 0
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 
@@ -363,7 +370,7 @@ Item {
                 enabled: Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMs
-                    easing.type: Easing.InOutCubic
+                    easing.type: Easing[Config.animEasing]
                 }
             }
 
@@ -410,7 +417,7 @@ Item {
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Config.animMs
-                            easing.type: Easing.InOutCubic
+                            easing.type: Easing[Config.animEasing]
                         }
                     }
                 }
@@ -494,7 +501,7 @@ Item {
                 enabled: Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMs
-                    easing.type: Easing.InOutCubic
+                    easing.type: Easing[Config.animEasing]
                 }
             }
 
@@ -586,7 +593,7 @@ Item {
                     enabled: Config.animMs > 0
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing.InOutCubic
+                        easing.type: Easing[Config.animEasing]
                     }
                 }
 

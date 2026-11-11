@@ -73,7 +73,7 @@ Item {
         Behavior on opacity {
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: Easing.InOutCubic
+                easing.type: Easing[Config.animEasing]
             }
         }
 
@@ -103,24 +103,27 @@ Item {
                             enabled: background.opacity > 0
                             cursorShape: Qt.PointingHandCursor
                         }
-
-                        TapHandler {
-                            id: entryTap
-                            enabled: background.opacity > 0
-                            //gesturePolicy: TapHandler.ReleaseWithinBounds
-                            onTapped: {
-                                // Prevents LEDs from staying on after shutdown (because how are you supposed to turn them off without rebooting)
-                                const cmd = entry.modelData.cmd;
-                                function go() {
-                                    Quickshell.execDetached(cmd);
-                                    PillController.closeOverlay();
-                                }
-                                if (entry.modelData.label === "shutdown" && WLED.wledExists && WLED.on) {
-                                    WLED.toggle();
-                                    go();
-                                } else
-                                    go();
+                    }
+                    // Moved tap handler here to stop clicking OLED toggle through the sleep button, that was fun to track down lmao
+                    TapHandler {
+                        id: entryTap
+                        enabled: background.opacity > 0
+                        gesturePolicy: TapHandler.ReleaseWithinBounds
+                        onTapped: {
+                            // Prevents LEDs from staying on after shutdown (because how are you supposed to turn them off without rebooting)
+                            const cmd = entry.modelData.cmd;
+                            function go() {
+                                Quickshell.execDetached(cmd);
+                                PillController.closeOverlay();
                             }
+                            if (entry.modelData.label === "shutdown" && WLED.wledExists && WLED.on) {
+                                WLED.toggle();
+                                go();
+                            } else if (entry.modelData.label === "sleep") {
+                                Quickshell.execDetached(["qs", "ipc", "call", "lockscreenIpc", "lock"]) // sleep also locks screen
+                                go();
+                            } else
+                                go();
                         }
                     }
                 }
