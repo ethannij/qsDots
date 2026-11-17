@@ -68,6 +68,8 @@ Item {
 
     property string travelOverlay: "none"
     readonly property bool panelTravel: travelOverlay === "panel"
+    // Stays on through the close so the row can fade back in after the shell is still.
+    property bool fadeContent: false
 
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
@@ -78,7 +80,18 @@ Item {
     onMorphChanged: if (morph === 0) {
         restW = liveRestW;
         restH = liveRestH;
+        const returning = travelOverlay === "panel";
         travelOverlay = "none";
+        if (returning)
+            contentFadeTimer.restart();
+        else
+            fadeContent = false;
+    }
+
+    Timer {
+        id: contentFadeTimer
+        interval: Config.animMs
+        onTriggered: morphPill.fadeContent = false
     }
 
     onPillLockChanged: if (pillLock) {
@@ -109,9 +122,16 @@ Item {
         faceAnim.start();
     }
 
-    readonly property real openH: PillController.overlay === "panel" ? panel.implicitHeight + Config.controlPanelPadding * 2 : Config.controlPanelH
+    // controlPanelH is the fixed size of the other overlays. The control panel
+    // is shorter, and swapping to that fallback the frame it closes makes the
+    // shell jump larger before it shrinks.
+    property real travelH: Config.controlPanelH
+    readonly property real livePanelH: panel.implicitHeight + Config.controlPanelPadding * 2
+    readonly property real openH: panelTravel ? travelH : Config.controlPanelH
 
-    readonly property real depart: panelTravel ? Math.min(morph / 0.22, 1) : 0
+    onLivePanelHChanged: if (PillController.overlay === "panel" && livePanelH > 0)
+        travelH = livePanelH
+
     readonly property real grow: panelTravel ? Math.max(morph - 0.22, 0) / 0.78 : morph
 
     width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * grow
@@ -138,8 +158,14 @@ Item {
         }
 
         function onOverlayChanged() {
-            if (PillController.overlay !== "none")
+            if (PillController.overlay === "panel") {
+                morphPill.fadeContent = true;
+                morphPill.travelOverlay = "panel";
+                if (morphPill.livePanelH > 0)
+                    morphPill.travelH = morphPill.livePanelH;
+            } else if (PillController.overlay !== "none") {
                 morphPill.travelOverlay = PillController.overlay;
+            }
         }
     }
 
@@ -151,7 +177,7 @@ Item {
             target: mediaChip
             property: "opacity"
             duration: !Media.isIdle ? Config.animMs : Config.animMsClose
-            easing.type: !Media.isIdle ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
 
         NumberAnimation {
@@ -159,35 +185,35 @@ Item {
             target: workspaces
             property: "opacity"
             duration: PillController.activeFace === "workspaces" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "workspaces" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
         NumberAnimation {
             id: volumeOpAnim
             target: volume
             property: "opacity"
             duration: PillController.activeFace === "volume" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "volume" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
         NumberAnimation {
             id: notifOpAnim
             target: notification
             property: "opacity"
             duration: PillController.activeFace === "notification" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "notification" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
         NumberAnimation {
             id: gamebarOpAnim
             target: gamebar
             property: "opacity"
             duration: PillController.activeFace === "gamebar" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "gamebar" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
         NumberAnimation {
             id: agentOpAnim
             target: agent
             property: "opacity"
             duration: PillController.activeFace === "agent" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.activeFace === "agent" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: Easing[Config.animEasingStandard]
         }
     }
 
@@ -261,11 +287,19 @@ Item {
     Row {
         id: restContent
         enabled: PillController.overlay === "none"
-        opacity: morphPill.panelTravel ? 1 - depart : morphPill.restOpacity
+        opacity: morphPill.panelTravel ? 0 : morphPill.restOpacity
         visible: true
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: morphPill.panelTravel ? Config.spaceSm * (1 - morphPill.depart) : Config.spaceSm
+        spacing: Config.spaceSm
         layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
+
+        Behavior on opacity {
+            enabled: morphPill.fadeContent && Config.animMs > 0
+            NumberAnimation {
+                duration: Config.animMs
+                easing.type: Easing[Config.animEasingStandard]
+            }
+        }
 
         y: {
             const shellH = morphPill.panelTravel ? morphPill.restH + morphPill.hoverGrow * (1 - morphPill.morph) : morphPill.height;
@@ -279,10 +313,7 @@ Item {
             // waveform. Fold both into the clock so the bars sit as close
             // to the time as the notification count does on the other side.
             readonly property real clockGap: Config.spaceSm + mediaChip.padH
-            width: {
-                const full = mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0;
-                return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
-            }
+            width: mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0
             height: mediaChip.implicitHeight
             clip: width < mediaChip.implicitWidth - clockGap
             visible: shown || opacity > 0
@@ -291,16 +322,16 @@ Item {
             Behavior on width {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
-                    duration: mediaSlot.shown ? Config.animMsClose : Config.animMs
-                    easing.type: mediaSlot.shown ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
+                    duration: Config.animMs
+                    easing.type: Easing[Config.animEasingStandard]
                 }
             }
 
             Behavior on opacity {
                 enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
-                    duration: mediaSlot.shown ? Config.animMs : Config.animMsClose
-                    easing.type: mediaSlot.shown ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+                    duration: Config.animMs
+                    easing.type: Easing[Config.animEasingStandard]
                 }
             }
 
@@ -314,8 +345,8 @@ Item {
                 y: Config.pillPadV - 2
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: mediaChip.shown ? Config.animMs : Config.animMsClose
-                        easing.type: mediaChip.shown ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingStandard]
                     }
                 }
             }
@@ -336,10 +367,7 @@ Item {
             Item {
                 id: notificationChipSlot
                 property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
-                width: {
-                    const full = notificationChip.shown ? notificationChip.implicitWidth + Config.spaceSm : 0;
-                    return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
-                }
+                width: notificationChip.shown ? notificationChip.implicitWidth + Config.spaceSm : 0
                 height: notificationChip.implicitHeight
                 anchors.verticalCenter: parent.verticalCenter
                 clip: true
@@ -350,14 +378,14 @@ Item {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasingOut]
+                        easing.type: Easing[Config.animEasingStandard]
                     }
                 }
 
                 Behavior on opacity {
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasingOut]
+                        easing.type: Easing[Config.animEasingStandard]
                     }
                 }
 
@@ -370,14 +398,14 @@ Item {
                     Behavior on color {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingStandard]
                         }
                     }
 
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingStandard]
                         }
                     }
                     TapHandler {
@@ -400,10 +428,7 @@ Item {
             Item {
                 id: faceHost
                 anchors.verticalCenter: parent.verticalCenter
-                width: {
-                    const full = face ? morphPill.face.implicitWidth : 0;
-                    return morphPill.panelTravel ? full * (1 - morphPill.depart) : full;
-                }
+                width: face ? morphPill.face.implicitWidth : 0
                 height: face ? morphPill.face.implicitHeight : 0
                 implicitWidth: width
                 implicitHeight: height
@@ -413,14 +438,14 @@ Item {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
                     NumberAnimation {
                         duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
-                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
+                        easing.type: Easing[Config.animEasingStandard]
                     }
                 }
                 Behavior on height {
                     enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0 && !morphPill.agentOnly
                     NumberAnimation {
                         duration: PillController.activeFace === PillController.defaultFace ? Config.animMsClose : Config.animMs
-                        easing.type: PillController.activeFace === PillController.defaultFace ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
+                        easing.type: Easing[Config.animEasingStandard]
                     }
                 }
 
@@ -482,7 +507,7 @@ Item {
             id: idle
             property bool shown: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded && !PillController.pillLock
             anchors.verticalCenter: parent.verticalCenter
-            width: morphPill.panelTravel ? implicitWidth * (1 - morphPill.depart) : implicitWidth
+            width: implicitWidth
             clip: true
             visible: shown || opacity > 0
             opacity: shown ? 1 : 0
@@ -501,7 +526,7 @@ Item {
             Behavior on reveal {
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing[Config.animEasingIn]
+                    easing.type: Easing[Config.animEasingStandard]
                 }
             }
 
