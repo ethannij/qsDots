@@ -12,13 +12,24 @@ Item {
 
     PillShape {
         id: pill
-        interactive: false
+        interactive: true
 
         anchors.centerIn: parent
         width: row.implicitWidth + Config.spaceMd * 2
         height: row.implicitHeight + Config.spaceMd
-        color: "transparent"
+        color: hovered ? Colors.md3.surface_variant : "transparent"
         borderColor: "transparent"
+
+        onTapped: Quickshell.execDetached(["xdg-open", "https://weather.com"])
+
+        Behavior on color {
+          enabled: Config.animMs > 0
+          ColorAnimation {
+            duration: Config.animMs
+            easing.type: Easing[Config.animEasingInOut]
+          }
+        }
+        
 
         Row {
             id: row

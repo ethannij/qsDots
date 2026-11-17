@@ -14,7 +14,7 @@ Window {
     width: 1200
     height: 800
     visible: PillController.settingsWindowOpen
-    //visible: true -- debug
+    //visible: true // -- debug
     onVisibleChanged: {
         if (visible) {
             return;
@@ -56,7 +56,6 @@ Window {
 
             ListView {
                 id: settingsListView
-                //anchors.fill: parent
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -67,6 +66,7 @@ Window {
                     id: settingsItem
                     required property string title
                     property bool active: root.activeTab === title
+                    width: parent.width
 
                     radius: height / 2
                     color: active ? Colors.md3.primary_container : hovered ? Colors.md3.surface_variant : Colors.md3.secondary_container
@@ -218,38 +218,62 @@ Window {
                                 color: Colors.md3.on_surface
                             }
 
-                            Row {
-                                id: wallpaperRow
+                            Column {
+                                id: wallpaperColumn
                                 spacing: Config.spaceMd
                                 anchors.top: wallpaperTitle.bottom
-                                
-                                Text {
-                                    id: wallpaperCycleSecondsText
-                                    text: "Wallpaper Cycle Seconds"
-                                    font: StylizedFont.bold
-                                    color: Colors.md3.on_surface
+
+                                Row {
+                                    id: wallpaperRow
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        id: wallpaperCycleSecondsText
+                                        text: "Wallpaper Cycle Seconds"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    UserInput {
+                                        id: wallpaperCycleSecondsInput
+                                        anchors.verticalCenter: wallpaperCycleSecondsText.verticalCenter
+                                        text: States.wallpaperCycleSeconds
+                                        onAccepted: {
+                                            const n = parseInt(text, 10);
+                                            if (Number.isFinite(n) && n > 0)
+                                                Wallpapers.startCycle(n);
+                                            else
+                                                Wallpapers.stopCycle();
+                                            focus = false;
+                                        }
+
+                                        Keys.onEscapePressed: {
+                                            text = Wallpapers.cycleSeconds > 0 ? String(Wallpapers.cycleSeconds) : "";
+                                        }
+
+                                        Keys.onEnterPressed: {
+                                            accepted();
+                                            focus = false;
+                                        }
+                                    }
                                 }
 
-                                UserInput {
-                                    id: wallpaperCycleSecondsInput
-                                    anchors.verticalCenter: wallpaperCycleSecondsText.verticalCenter
-                                    text: States.wallpaperCycleSeconds
-                                    onAccepted: {
-                                        const n = parseInt(text, 10);
-                                        if (Number.isFinite(n) && n > 0)
-                                            Wallpapers.startCycle(n);
-                                        else
-                                            Wallpapers.stopCycle();
-                                        focus = false;
+                                Row {
+                                    id: wallpaperDirectoryRow
+                                    spacing: Config.spaceMd
+                                    Text {
+                                        id: wallpaperDirectoryText
+                                        text: "Wallpaper Directory"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
                                     }
-
-                                    Keys.onEscapePressed: {
-                                        text = Wallpapers.cycleSeconds > 0 ? String(Wallpapers.cycleSeconds) : "";
-                                    }
-
-                                    Keys.onEnterPressed: {
-                                        accepted();
-                                        focus = false;
+                                    UserInput {
+                                        id: wallpaperDirectoryInput
+                                        anchors.verticalCenter: wallpaperDirectoryText.verticalCenter
+                                        text: States.wallpaperDirectory
+                                        onAccepted: {
+                                            States.wallpaperDirectory = text;
+                                        }
                                     }
                                 }
                             }
@@ -264,9 +288,17 @@ Window {
                     anchors.margins: Config.spaceMd
 
                     Text {
+                        id: appearanceTitle
                         text: "Appearance"
                         font: StylizedFont.title
                         color: Colors.md3.on_surface
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                    }
+                    Column {
+                        id: appearanceColumn
+                        spacing: Config.spaceMd
+                        anchors.top: appearanceTitle.bottom
                     }
                 }
                 Item {

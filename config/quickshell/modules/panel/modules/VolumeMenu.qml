@@ -77,6 +77,7 @@ Item {
                         id: menuMouse
                         anchors.fill: parent
                         hoverEnabled: true
+                        z: 2
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             Audio.setDefaultSink(modelData);

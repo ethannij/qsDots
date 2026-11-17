@@ -83,6 +83,6 @@ Singleton {
     readonly property int barIconSize: 18
 
     // Wallpaper
-    readonly property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
+    readonly property string wallpaperDirectory: States.wallpaperDirectory
     readonly property int wallpaperCycleSeconds: States.wallpaperCycleSeconds
 }
