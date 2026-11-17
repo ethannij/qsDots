@@ -11,9 +11,6 @@ Singleton {
     readonly property string animEasingOut: "OutBack"
     readonly property string animEasingIn: "InBack"
     readonly property string animEasing: "InOutBack"
-    // No overshoot. Used by content inside the pill, not the shell morph.
-    readonly property string animEasingStandard: "OutCubic"
-
 
     // Spacing scale
     readonly property int spaceXs: 2

@@ -22,7 +22,7 @@ PillShape {
         Behavior on spacing {
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: Easing[Config.animEasingStandard]
+                easing.type: Easing[Config.animEasing]
             }
         }
 
