@@ -13,8 +13,8 @@ Window {
 
     width: 1200
     height: 800
-    //visible: PillController.settingsWindowOpen
-    visible: true // -- debug
+    visible: PillController.settingsWindowOpen
+    //visible: true // -- debug
     onVisibleChanged: {
         if (visible) {
             return;

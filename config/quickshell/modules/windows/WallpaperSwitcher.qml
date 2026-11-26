@@ -192,7 +192,7 @@ Item {
                     id: delegateTap
                     gesturePolicy: TapHandler.ReleaseWithinBounds
                     onTapped: {
-                        Wallpapers.apply(delegate.modelData);
+                        Wallpapers.apply(delegate.modelData, false, ColorScheme.colorScheme);
                         PillController.closePanel();
                     }
                 }
