@@ -12,7 +12,12 @@ import qs.modules.elements
 Item {
     id: controlPanel
     width: Config.controlPanelW - Config.controlPanelPadding * 2
-    implicitHeight: panelColumn.implicitHeight
+    implicitHeight: {
+        const content = panelColumn.implicitHeight;
+        if (!sliders.volumeSourceMenuOpen)
+            return content;
+        return Math.max(content, volumeSourceMenu.y + volumeSourceMenu.height);
+    }
     height: implicitHeight
     visible: opacity > 0
 
@@ -189,102 +194,6 @@ Item {
                     gesturePolicy: TapHandler.ReleaseWithinBounds
                     acceptedButtons: Qt.RightButton
                     onTapped: Audio.toggleMute()
-                }
-            }
-
-            Rectangle {
-                id: volumeSourceMenu
-                width: 232
-                height: sinkList.height + 8
-                visible: sliders.volumeSourceMenuOpen
-                color: Colors.md3.surface_container_highest
-                radius: 12
-                clip: true
-                anchors.top: volumeSourceIcon.bottom
-                anchors.topMargin: Config.spaceSm
-                anchors.left: volumeSlider.left
-
-                function sinkLabel(node) {
-                    const raw = node.description || node.nickname || node.name;
-                    return raw.replace(/\s+(Analog|Digital|Pro Audio|Mono|Multichannel).*$/, "");
-                }
-
-                ListView {
-                    id: sinkList
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.margins: 4
-                    height: contentHeight
-                    model: Audio.sinks
-                    spacing: 2
-                    interactive: false
-                    clip: true
-
-                    delegate: Item {
-                        id: sinkRow
-                        required property var modelData
-                        width: ListView.view.width
-                        height: 36
-                        readonly property bool active: modelData === Audio.sink
-
-                        Rectangle {
-                            anchors.fill: parent
-                            radius: 8
-                            color: sinkHover.hovered ? Colors.md3.surface_bright : "transparent"
-                        }
-
-                        ColorizedIcon {
-                            id: speaker
-                            anchors.left: parent.left
-                            anchors.leftMargin: 10
-                            anchors.verticalCenter: parent.verticalCenter
-                            source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/high.svg"))
-                            size: 18
-                            color: sinkRow.active ? Colors.md3.primary : Colors.md3.on_surface_variant
-                        }
-
-                        Text {
-                            anchors.left: speaker.right
-                            anchors.leftMargin: 10
-                            anchors.right: check.left
-                            anchors.rightMargin: 8
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: volumeSourceMenu.sinkLabel(sinkRow.modelData)
-                            font: StylizedFont.tooltip
-                            color: sinkRow.active ? Colors.md3.primary : Colors.md3.on_surface
-                            elide: Text.ElideRight
-                        }
-
-                        Item {
-                            id: check
-                            width: 16
-                            height: 16
-                            anchors.right: parent.right
-                            anchors.rightMargin: 10
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Text {
-                                anchors.centerIn: parent
-                                visible: sinkRow.active
-                                text: "\u2713"
-                                color: Colors.md3.primary
-                                font: StylizedFont.tooltip
-                            }
-                        }
-
-                        HoverHandler {
-                            id: sinkHover
-                            cursorShape: Qt.PointingHandCursor
-                        }
-
-                        TapHandler {
-                            onTapped: {
-                                Audio.setDefaultSink(sinkRow.modelData);
-                                sliders.volumeSourceMenuOpen = false;
-                            }
-                        }
-                    }
                 }
             }
 
@@ -612,6 +521,131 @@ Item {
                     onTapped: {
                         notificationContainer.notificationsOpen = !notificationContainer.notificationsOpen;
                         notificationContainer.holdClosed = !notificationContainer.notificationsOpen;
+                    }
+                }
+            }
+        }
+    }
+
+    Item {
+        id: volumeSourceLayer
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height
+        z: 10
+        visible: sliders.volumeSourceMenuOpen
+
+        TapHandler {
+            enabled: !menuHover.hovered
+            acceptedButtons: Qt.AllButtons
+            gesturePolicy: TapHandler.WithinBounds
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            onTapped: sliders.volumeSourceMenuOpen = false
+        }
+
+        Rectangle {
+            id: volumeSourceMenu
+            width: 232
+            height: sinkColumn.implicitHeight + 8
+            color: Colors.md3.surface_container_highest
+            radius: 12
+            clip: true
+            x: volumeSlider.mapToItem(volumeSourceLayer, 0, 0).x
+            y: volumeSourceIcon.mapToItem(volumeSourceLayer, 0, volumeSourceIcon.height).y + Config.spaceSm
+
+            function sinkLabel(node) {
+                const raw = node.description || node.nickname || node.name;
+                return raw.replace(/\s+(Analog|Digital|Pro Audio|Mono|Multichannel).*$/, "");
+            }
+
+            HoverHandler {
+                id: menuHover
+            }
+
+            TapHandler {
+                acceptedButtons: Qt.AllButtons
+                gesturePolicy: TapHandler.WithinBounds
+                grabPermissions: PointerHandler.CanTakeOverFromAnything
+            }
+
+            Column {
+                id: sinkColumn
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: 4
+                spacing: 2
+
+                Repeater {
+                    model: Audio.sinks
+
+                    Item {
+                        id: sinkRow
+                        required property var modelData
+                        width: sinkColumn.width
+                        height: 36
+                        readonly property bool active: modelData === Audio.sink
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: 8
+                            color: sinkHover.hovered ? Colors.md3.surface_bright : "transparent"
+                        }
+
+                        ColorizedIcon {
+                            id: speaker
+                            anchors.left: parent.left
+                            anchors.leftMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/audio/high.svg"))
+                            size: 18
+                            color: sinkRow.active ? Colors.md3.primary : Colors.md3.on_surface_variant
+                        }
+
+                        Text {
+                            anchors.left: speaker.right
+                            anchors.leftMargin: 10
+                            anchors.right: check.left
+                            anchors.rightMargin: 8
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: volumeSourceMenu.sinkLabel(sinkRow.modelData)
+                            font: StylizedFont.tooltip
+                            color: sinkRow.active ? Colors.md3.primary : Colors.md3.on_surface
+                            elide: Text.ElideRight
+                        }
+
+                        Item {
+                            id: check
+                            width: 16
+                            height: 16
+                            anchors.right: parent.right
+                            anchors.rightMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Text {
+                                anchors.centerIn: parent
+                                visible: sinkRow.active
+                                text: "\u2713"
+                                color: Colors.md3.primary
+                                font: StylizedFont.tooltip
+                            }
+                        }
+
+                        HoverHandler {
+                            id: sinkHover
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            gesturePolicy: TapHandler.WithinBounds
+                            grabPermissions: PointerHandler.CanTakeOverFromAnything
+                            onTapped: {
+                                Audio.setDefaultSink(sinkRow.modelData);
+                                sliders.volumeSourceMenuOpen = false;
+                            }
+                        }
                     }
                 }
             }
