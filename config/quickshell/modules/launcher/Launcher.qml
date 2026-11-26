@@ -223,7 +223,7 @@ Item {
 
                     Text {
                         id: label
-                        color: "white"
+                        color: Colors.md3.on_surface
                         text: modelData.name
                         font.pointSize: 13
                         elide: Text.ElideRight

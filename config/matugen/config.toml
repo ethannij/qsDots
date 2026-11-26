@@ -114,6 +114,11 @@ output_path = '~/.config/obs-studio/themes/matugen.obt'
 [templates.heroic]
 input_path = 'templates/heroic.css'
 output_path = '~/.config/heroic/themes/matugen.css'
+post_hook = '~/.config/matugen/post-hook-scripts/heroic-reload.sh'
+
+[templates.vesktop]
+input_path = 'templates/midnight-discord.css'
+output_path = '~/.config/vesktop/themes/midnight-discord.css'
 
 [templates.rofi]
 input_path = 'templates/rofi.rasi'

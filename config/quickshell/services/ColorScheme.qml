@@ -47,12 +47,10 @@ Singleton {
 
     onColorSchemeChanged: {
         Wallpapers.reapply();
-        Quickshell.execDetached(["notify-send", "Color scheme changed to " + root.colorScheme]);
     }
 
     function setScheme(scheme) {
         States.colorScheme = scheme;
         Wallpapers.reapply();
-        Quickshell.execDetached(["notify-send", "Color scheme changed to " + scheme]);
     }
 }
