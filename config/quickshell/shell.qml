@@ -42,7 +42,7 @@ ShellRoot {
             color: Colors.md3.surface
 
             Text {
-                text: PillController.settingsWindowOpen
+                text: States.colorScheme
                 font: StylizedFont.title
                 color: Colors.md3.on_surface
                 anchors.centerIn: parent

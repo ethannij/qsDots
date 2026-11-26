@@ -29,7 +29,7 @@ Item {
         enabled: root.interactive
         cursorShape: root.cursorShape
     }
-    
+
     TapHandler {
         enabled: root.interactive
         gesturePolicy: TapHandler.ReleaseWithinBounds
@@ -46,10 +46,17 @@ Item {
     Rectangle {
         visible: root.chrome
         anchors.fill: parent
-        color: root.color
-        border.width: root.borderWidth
-        border.color: root.borderColor
         radius: root.radius
+        color: root.borderWidth > 0 ? root.borderColor : root.color
+        antialiasing: true
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: root.borderWidth
+            radius: Math.max(0, root.radius - root.borderWidth)
+            color: root.color
+            visible: root.borderWidth > 0
+            antialiasing: true
+        }
     }
 
     Row {

@@ -67,15 +67,6 @@ Item {
         }
     }
 
-    QtObject {
-        id: oled
-        property url icon: OLED.icon
-        property bool active: OLED.active
-        function trigger() {
-            OLED.toggle();
-        }
-    }
-
     RowLayout {
         anchors.left: parent.left
         anchors.right: parent.right
@@ -85,7 +76,7 @@ Item {
 
         Repeater {
             id: quickToggleModel
-            model: [wifi, bluetooth, wled, idle, gamemode, oled]
+            model: [wifi, bluetooth, wled, idle, gamemode]
 
             QuickToggle {
                 id: quickToggle

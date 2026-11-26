@@ -18,6 +18,8 @@ Singleton {
     readonly property url icon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/wallpaper.svg"))
     readonly property url cycleIcon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/cycle.svg"))
 
+    readonly property string colorScheme: ColorScheme.colorScheme
+
     readonly property string wallDir: Config.wallpaperDirectory // path to fullsize image
 
     // Read currently set wallpaper
@@ -37,12 +39,12 @@ Singleton {
     }
 
     // Apply wallpaper (also stops random wallpaper cycle if it's running)
-    function apply(name, fromCycle) {
+    function apply(name, fromCycle, colorScheme) {
         if (!name)
             return;
         if (!fromCycle)
             stopCycle();
-        matugen.command = matugenCommand(originalPath(name));
+        matugen.command = matugenCommand(originalPath(name), colorScheme);
         matugen.running = false;
         matugen.running = true;
     }
@@ -56,20 +58,20 @@ Singleton {
         apply(pick[Math.floor(Math.random() * pick.length)], !!fromCycle);
     }
 
-    // Determine matugen command based on OLED state
-    function matugenCommand(imagePath) {
+    // Determine matugen command based on color scheme
+    function matugenCommand(imagePath, colorScheme) {
         const cmd = ["matugen", "--source-color-index", "0", "--continue-on-error"];
-        if (OLED.active)
+        if (colorScheme === "oled")
             cmd.push("--import-json", Quickshell.env("HOME") + "/.config/matugen/oled.json");
-        // cmd.push("--lightness-dark", "-0.1"); // Alternative approach
-
+        else if (colorScheme === "light")
+            cmd.push("--mode", "light");
         cmd.push("image", imagePath);
         return cmd;
     }
 
     // Reapply colorscheme and wallpaper (for OLED toggle)
     function reapply() {
-        apply(currentName, true);
+        apply(currentName, true, ColorScheme.colorScheme);
     }
 
     readonly property int cycleSeconds: States.wallpaperCycleSeconds

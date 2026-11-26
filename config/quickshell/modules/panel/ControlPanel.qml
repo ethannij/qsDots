@@ -72,6 +72,12 @@ Item {
                 }
             }
 
+            LightDarkToggle {
+                anchors.left: wallpapers.right
+                anchors.leftMargin: Config.spaceMd
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             Clock {
                 id: clock
                 anchors.centerIn: parent

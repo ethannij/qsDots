@@ -16,7 +16,7 @@ Singleton {
     property alias wallpaperCycleSeconds: adapter.wallpaperCycleSeconds
     property alias wallpaperDirectory: adapter.wallpaperDirectory
 
-    property alias oled: adapter.oled
+    property alias colorScheme: adapter.colorScheme
     property alias gamemode: adapter.gamemode
     property alias doNotDisturb: adapter.doNotDisturb
     property alias inhibitIdle: adapter.inhibitIdle
@@ -46,8 +46,7 @@ Singleton {
             property int workspaceCount: 5
             property int wallpaperCycleSeconds: 0
             property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
-
-            property bool oled: false
+            property string colorScheme: "light"
             property bool gamemode: false
             property bool doNotDisturb: false
             property bool inhibitIdle: false

@@ -71,15 +71,6 @@ Item {
         }
     }
 
-    QtObject {
-        id: oled
-        property url icon: OLED.icon
-        property bool active: OLED.active
-        function trigger() {
-            OLED.toggle();
-        }
-    }
-
     // UI
     Row {
         id: row
@@ -139,7 +130,7 @@ Item {
                 spacing: Config.spaceSm
 
                 Repeater {
-                    model: [wifi, bluetooth, wled, idle, gamemode, oled]
+                    model: [wifi, bluetooth, wled, idle, gamemode]
 
                     ColorizedIcon {
                         required property var modelData

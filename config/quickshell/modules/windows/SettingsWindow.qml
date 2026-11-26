@@ -13,8 +13,8 @@ Window {
 
     width: 1200
     height: 800
-    visible: PillController.settingsWindowOpen
-    //visible: true // -- debug
+    //visible: PillController.settingsWindowOpen
+    visible: true // -- debug
     onVisibleChanged: {
         if (visible) {
             return;
@@ -287,6 +287,14 @@ Window {
                     visible: root.activeTab === "Appearance"
                     anchors.margins: Config.spaceMd
 
+                    function schemeName(value) {
+                        if (value === "light")
+                            return "Light";
+                        if (value === "oled")
+                            return "OLED";
+                        return "Dark";
+                    }
+
                     Text {
                         id: appearanceTitle
                         text: "Appearance"
@@ -295,10 +303,44 @@ Window {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.top: parent.top
                     }
-                    Column {
-                        id: appearanceColumn
+
+                    Row {
+                        id: colorSchemeRow
                         spacing: Config.spaceMd
+                        anchors.left: parent.left
                         anchors.top: appearanceTitle.bottom
+
+                        Text {
+                            id: colorSchemeLabel
+                            text: "Color Scheme"
+                            font: StylizedFont.bold
+                            color: Colors.md3.on_surface
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        DropdownMenu {
+                            id: colorSchemeDropdown
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: appearancePage.schemeName(ColorScheme.colorScheme)
+                            textRole: "text"
+                            direction: "down"
+                            radius: Config.radiusPill
+                            menuRadius: Config.radiusPill
+                            borderWidth: Config.borderWidth
+                            borderColor: Colors.md3.shadow
+                            labelColor: Colors.md3.on_surface
+                            itemColor: Colors.md3.on_surface
+                            itemFont: StylizedFont.body
+                            labelFont: StylizedFont.body
+                            labelAlignment: Text.AlignHCenter
+                            menuPadding: Config.spaceSm
+                            onSelected: modelData => ColorScheme.setScheme(modelData.value)
+                            model: [
+                                { text: "Light", value: "light" },
+                                { text: "Dark", value: "dark" },
+                                { text: "OLED", value: "oled" }
+                            ]
+                        }
                     }
                 }
                 Item {

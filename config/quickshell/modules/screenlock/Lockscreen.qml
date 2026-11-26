@@ -292,10 +292,10 @@ Item {
                     id: pill
                     clip: true
                     anchors.fill: parent
-                    hasBorder: OLED.active ? false : true
+                    hasBorder: States.colorScheme === "oled" ? false : true
                     radius: Gamemode.active ? 0 :height / 2
-                    borderWidth: OLED.active || Gamemode.active ? Config.borderWidth : 0
-                    borderColor: OLED.active || Gamemode.active ? Colors.md3.outline_variant : "transparent"
+                    borderWidth: States.colorScheme === "oled" || Gamemode.active ? Config.borderWidth : 0
+                    borderColor: States.colorScheme === "oled" || Gamemode.active ? Colors.md3.outline_variant : "transparent"
 
                     property bool holdPrompt: false
                     property string notice: ""

@@ -261,9 +261,9 @@ Item {
         anchors.centerIn: parent
         //color: Gamemode.active ? Colors.md3.surface :Qt.alpha(Colors.md3.surface, 0.6)
         color: Colors.md3.surface
-        border.width: Gamemode.active || OLED.active ? Config.borderWidth : 0
+        border.width: Gamemode.active || ColorScheme.colorScheme === "oled" ? Config.borderWidth : 0
         radius: Gamemode.active ? 0 : Math.min(height / 2, morphPill.restHeight / 2 + Config.shellPadV)
-        border.color: Gamemode.active || OLED.active ? Colors.md3.outline_variant : "transparent"
+        border.color: Gamemode.active || ColorScheme.colorScheme === "oled" ? Colors.md3.outline_variant : "transparent"
 
         Behavior on radius {
             enabled: !Gamemode.active && !morphPill.agentOnly && !morphPill.gamebarOnly
