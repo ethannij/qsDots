@@ -22,7 +22,7 @@ Item {
     property alias orientation: slider.orientation
     property alias snapMode: slider.snapMode
 
-    property color backgroundColor: Colors.md3.surface_variant
+    property color backgroundColor: Colors.role.track
     property color borderColor: Colors.md3.shadow
     property color fillColor: Colors.md3.primary
     property color iconColor: Colors.md3.on_primary

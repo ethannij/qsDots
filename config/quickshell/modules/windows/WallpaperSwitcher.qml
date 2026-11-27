@@ -71,7 +71,7 @@ Item {
                     id: icon
 
                     source: Wallpapers.cycleIcon
-                    backgroundColor: stateHover.hovered ? Colors.md3.surface_variant : "transparent"
+                    backgroundColor: stateHover.hovered ? Colors.role.hover : "transparent"
                     iconColor: stateHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -98,7 +98,7 @@ Item {
             PillShape {
                 interactive: false
                 anchors.right: parent.right
-                color: Colors.md3.surface_variant
+                color: Colors.role.chip
 
                 TextInput {
                     id: intervalInput

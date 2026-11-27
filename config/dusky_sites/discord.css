@@ -13,10 +13,10 @@
         --neutral-76: var(--surface_container) !important;
         --neutral-73: var(--surface_container_high) !important;
         
-        /* Accent Colors */
-        --blurple-65: var(--primary_container) !important;
-        --blurple-60: var(--secondary_container) !important;
-        --blurple-50: var(--primary_container) !important;
+        /* Accent Colors — use ink (primary), not pastel *_container fills */
+        --blurple-65: var(--primary) !important;
+        --blurple-60: var(--secondary) !important;
+        --blurple-50: var(--primary) !important;
         --blurple-36: var(--primary) !important;
         --blurple-14: var(--primary) !important;
         --blurple-10: var(--surface_bright) !important;
@@ -29,7 +29,7 @@
         
         --reaction-background-reacted-default: var(--inverse_on_surface) !important;
         --brand-10a: var(--inverse_on_surface) !important;
-        --brand-560: var(--on_primary_container) !important;
+        --brand-560: var(--on_primary) !important;
         --message-highlight-background-hover: var(--inverse_on_surface) !important;
         --message-highlight-background-default: var(--inverse_on_surface) !important;
     }

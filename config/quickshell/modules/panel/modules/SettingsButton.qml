@@ -7,7 +7,7 @@ import qs.services
 IconButton {
     id: root
     source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/system/settings.svg"))
-    backgroundColor: buttonHover.hovered ? Colors.md3.surface_variant : "transparent"
+    backgroundColor: buttonHover.hovered ? Colors.role.hover : "transparent"
     iconColor: buttonHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
 
     HoverHandler {

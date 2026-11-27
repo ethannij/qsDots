@@ -8,7 +8,7 @@ import qs.modules.elements
 IconButton {
     id: root
     source: ColorScheme.icon
-    backgroundColor: buttonHover.hovered ? Colors.md3.surface_variant : "transparent"
+    backgroundColor: buttonHover.hovered ? Colors.role.hover : "transparent"
     iconColor: buttonHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
 
     HoverHandler {

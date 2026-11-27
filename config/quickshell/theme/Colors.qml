@@ -10,6 +10,56 @@ Singleton {
     property alias palette: jsonAdapter.palette
     property alias wallpaper: jsonAdapter.wallpaper
 
+    // AI Disclosure, colors moved to semantic roles by AI to help me keep things consistent across the shell
+    // With so many colors in the md3 palette, it's too easy to randomly choose colors for elements sharing the same role
+
+    // Semantic roles shared by the shell. Prefer these over picking raw
+    // md3.surface_* tokens in components so hover/chip/panel stay consistent
+    // across light, dark, and oled. Keep this mapping in sync with
+    // config/matugen/templates/{quickshell.json,colors.css}.
+    //
+    // Elevation ladder (light mode darkens as it rises):
+    //   sunken < panel < chip < hover/track/raised
+    readonly property QtObject role: QtObject {
+        // Hover / pressed wash on transparent or surface chrome
+        // (icon buttons, list rows, battery pills). One step above chip.
+        readonly property color hover: jsonAdapter.md3.surface_container_highest
+
+        // Resting control fill on surface (toggles, workspace chips,
+        // idle settings tabs, off-state wifi/bt buttons).
+        readonly property color chip: jsonAdapter.md3.surface_container_high
+
+        // Slider / switch tracks and similar recessed interactive wells.
+        readonly property color track: jsonAdapter.md3.surface_container_highest
+
+        // Nested content panes (settings body, notification cards).
+        readonly property color panel: jsonAdapter.md3.surface_container
+
+        // Elevated overlays on a panel (menus, inputs, dropdowns, tooltips).
+        readonly property color raised: jsonAdapter.md3.surface_container_highest
+
+        // Inset fields that must stay visible on top of hover rows
+        // (e.g. wifi PSK prompt). Lowest container / near-surface.
+        readonly property color sunken: jsonAdapter.md3.surface_container_lowest
+
+        // Secondary / de-emphasized label and icon color.
+        readonly property color muted: jsonAdapter.md3.on_surface_variant
+
+        // Subtle structural strokes (card edges, menu borders).
+        readonly property color border: jsonAdapter.md3.outline_variant
+
+        // Body text on surface / panels.
+        readonly property color ink: jsonAdapter.md3.on_surface
+
+        // Accent text/icons on surface. Never use *_container / *_fixed here —
+        // those are pastel fills in standard light schemes and wash out.
+        readonly property color accent: jsonAdapter.md3.primary
+
+        // Paired accent chip/button: fill + content on that fill.
+        readonly property color accentFill: jsonAdapter.md3.primary_container
+        readonly property color accentOnFill: jsonAdapter.md3.on_primary_container
+    }
+
     FileView {
         path: Quickshell.env("HOME") + "/.local/state/quickshell/generated/colors.json"
         watchChanges: true

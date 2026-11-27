@@ -25,7 +25,7 @@
 		--GR16: #BFC3C5;
 		--GR17: var(--on_surface);
 		/* Text/Icons */
-		--GR18: var(--primary_container);
+		--GR18: var(--primary);
 		--GR19: var(--surface_bright);
 		/* Text/Icons Hover */
 		--GRSELECTED: var(--primary);

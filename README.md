@@ -3,14 +3,19 @@ Made for Arch, should be agnostic though.
 
 ### Dependencies
 Required:
-`hyprland quickshell hypridle hyprlock hyprsunset awww matugen
+`hyprland quickshell-git hypridle hyprlock hyprsunset awww matugen
 xdg-desktop-portal-hyprland xdg-desktop-portal-gtk stow
 pipewire pipewire-pulse wireplumber networkmanager bluez bluez-utils upower
-imagemagick inotify-tools curl ttf-jetbrains-mono-nerd adw-gtk-theme
-papirus-icon-theme papirus-folders gtk3 dconf gsettings-desktop-schemas qt6-wayland qt6-imageformats`
+imagemagick inotify-tools curl brightnessctl playerctl
+ttf-google-sans ttf-googlesanscode-nerd ttf-jetbrains-mono-nerd
+adw-gtk-theme papirus-icon-theme papirus-folders
+gtk3 dconf gsettings-desktop-schemas qt6-wayland qt6-imageformats qt6-declarative`
 
-Default apps: `floorp-bin kitty nautilus wlogout brightnessctl playerctl`
+Default apps: `floorp-bin kitty nautilus wlogout`
 Cursors: `moga-white-cursors`
+
+Optional / themed by matugen: `neovim btop cava rofi vesktop`
+(also templates/hooks for Steam, Heroic, GTK, Kitty, Discord, OBS, etc. if you use those)
 
 ### Optional
 HDR supported (gamma/nightmode)  
@@ -29,28 +34,36 @@ Make sure to backup your original configs and ~/.local/state/quickshell (if it e
    * Volume
    * Notifications
    * Workspaces
- 
-* Wifi & Bluetooth Menu
+   * Game bar
+   * Agent
+
+* App launcher
+* Control panel
+* Wifi & Bluetooth menus
+* Wallpaper selector (random + timed cycle)
+* Settings window (persistent prefs)
+* Lock screen
+
+* Light / Dark / OLED color schemes
+* Fully dynamic matugen colors (shell + kitty, gtk, nvim, browsers, and more)
+* Semantic color roles so light mode stays readable
+* Firefox site themes via matugenfox + dusky_sites
+
 * Brightness (gamma) control and automatic nightmode
 * (optional) Toggle for WLED, nightmode integration for hyperHDR
-* Idle Inhibitor toggle
-* Gaming mode - disable animations and decorations (Auto on fullscreen + toggle)
-* OLED mode - makes base color black
+* Idle inhibitor toggle
+* Gaming mode - disable animations and decorations (auto on fullscreen + toggle)
 * Volume source picker
+* Media controls / now playing
 * System monitor
-* Wallpaper selector - random + timed
-* Fully dynamic colorschemes
 * Weather applet
-* Battery indicator
+* Battery indicator (laptop + pinned devices)
 * Do-not-disturb toggle
-* System Tray
-* Session Menu
+* System tray
+* Session menu
+* Quick toggles on the pill
 
 ### WIP
-* Lock Screen
 * More dynamic session menu
 * Music visualizer
-* Game bar
-* More components wired to states (persistent across reboots)
-* Settings app
 * More apps included in config

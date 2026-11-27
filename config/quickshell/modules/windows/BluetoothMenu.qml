@@ -76,8 +76,8 @@ Item {
                     id: icon
 
                     source: Bluetooth.statusIcon
-                    backgroundColor: stateHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.primary_container : Colors.md3.surface_variant)
-                    iconColor: stateHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
+                    backgroundColor: stateHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.primary_container : Colors.role.chip)
+                    iconColor: stateHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.enabled ? Colors.md3.on_primary_container : Colors.role.muted)
 
                     Behavior on backgroundColor {
                         ColorAnimation {
@@ -139,8 +139,8 @@ Item {
                     id: searchIcon
 
                     source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/launcher/search.svg"))
-                    backgroundColor: searchHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.primary_container : Colors.md3.surface_variant)
-                    iconColor: searchHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
+                    backgroundColor: searchHover.hovered ? Colors.md3.secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.primary_container : Colors.role.chip)
+                    iconColor: searchHover.hovered ? Colors.md3.on_secondary_container : (Bluetooth.defaultAdapter?.discovering ? Colors.md3.on_primary_container : Colors.role.muted)
 
                     Behavior on backgroundColor {
                         ColorAnimation {
@@ -200,7 +200,7 @@ Item {
 
                 implicitWidth: ListView.view.width
                 implicitHeight: row.implicitHeight + Config.spaceSm * 2
-                color: delegateHover.hovered ? Colors.md3.surface_variant : Colors.md3.surface
+                color: delegateHover.hovered ? Colors.role.hover : Colors.md3.surface
                 radius: Config.radiusBox
 
                 Connections {

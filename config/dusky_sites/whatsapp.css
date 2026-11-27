@@ -8,12 +8,12 @@
         --WDS-surface-emphasized: var(--surface_container_low) !important;
         --WDS-surface-default: var(--surface) !important;
         --WDS-systems-chat-surface-composer: var(--surface_container_high) !important;
-        --WDS-persistent-always-branded: var(--primary_fixed_dim) !important;
-        --WDS-accent-deemphasized: var(--primary_container) !important;
+        --WDS-persistent-always-branded: var(--primary) !important;
+        --WDS-accent-deemphasized: var(--secondary) !important;
         --WDS-systems-bubble-surface-outgoing: var(--surface_container) !important;
         --WDS-systems-bubble-surface-incoming: var(--surface_container_highest) !important;
         --WDS-surface-elevated-default: var(--surface_container_low) !important;
-        --WDS-accent: var(--primary_fixed_dim) !important;
+        --WDS-accent: var(--primary) !important;
         --WDS-surface-elevated-emphasized: var(--surface_container_low) !important;
     }
 }

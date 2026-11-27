@@ -14,7 +14,7 @@ Item {
 
     IconButton {
         id: button
-        backgroundColor: buttonHover.hovered ? Colors.md3.surface_variant : "transparent"
+        backgroundColor: buttonHover.hovered ? Colors.role.hover : "transparent"
         iconColor: buttonHover.hovered ? Colors.md3.primary : Colors.md3.error
         source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/power_button.svg"))
 
@@ -61,8 +61,8 @@ Item {
         id: background
         z: 1
 
-        color: Colors.md3.secondary_container
-        border.color: Colors.md3.on_surface
+        color: Colors.role.raised
+        border.color: Colors.role.border
         implicitHeight: column.height + Config.sessionMenuPadding
         implicitWidth: column.width + Config.sessionMenuPadding
         anchors.top: button.bottom

@@ -3,8 +3,9 @@
     :root {
       --bg-color: var(--surface) !important;
       --main-color: var(--primary) !important;
-      --caret-color: var(--primary_fixed) !important;
-      --sub-color: var(--primary_container) !important;
+      --caret-color: var(--primary) !important;
+      /* ink roles — *_container is a pastel fill in light mode and disappears on surface */
+      --sub-color: var(--on_surface_variant) !important;
       --sub-alt-color: var(--surface_container_low) !important;
-      --text-color: var(--primary) !important;
+      --text-color: var(--on_surface) !important;
 }

@@ -8,7 +8,7 @@ import qs.modules.elements
 PillShape {
     id: root
     interactive: false
-    color: Colors.md3.surface_variant
+    color: Colors.role.raised
 
     signal accepted()
     property alias text: textInput.text

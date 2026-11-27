@@ -17,7 +17,7 @@ Item {
         anchors.centerIn: parent
         width: row.implicitWidth + Config.spaceMd * 2
         height: row.implicitHeight + Config.spaceMd
-        color: hovered ? Colors.md3.surface_variant : "transparent"
+        color: hovered ? Colors.role.hover : "transparent"
         borderColor: "transparent"
 
         onTapped: Quickshell.execDetached(["xdg-open", "https://weather.com"])

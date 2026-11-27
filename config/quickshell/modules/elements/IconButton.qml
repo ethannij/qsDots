@@ -5,7 +5,7 @@ import qs.modules.elements
 
 Item {
     id: root
-    property color backgroundColor: Colors.md3.surface_variant
+    property color backgroundColor: Colors.role.chip
     property color iconColor: Colors.md3.on_surface
     property int size: Config.iconSize
     required property url source

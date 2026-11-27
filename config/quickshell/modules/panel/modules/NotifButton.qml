@@ -26,7 +26,7 @@ Item {
         id: rect
         anchors.fill: parent
         radius: width * 0.3
-        color: hover.hovered ? Colors.md3.surface_variant : "transparent"
+        color: hover.hovered ? Colors.role.hover : "transparent"
 
         HoverHandler {
             id: hover

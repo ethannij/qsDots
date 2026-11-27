@@ -3,7 +3,7 @@
     --gray-750: var(--surface_container_highest) !important;
     --gray-900: var(--surface_container) !important;
     --black: var(--surface) !important;
-    --blue-400: var(--primary_container) !important;
+    --blue-400: var(--primary) !important;
     --default-theme-user-msg-text: var(--surface) !important;
     --message-surface: var(--primary) !important;
     --bg-primary: var(--surface_container) !important;

@@ -6,8 +6,8 @@
         --color-chat-active: var(--primary_container) !important;
         --color-background-selected: var(--surface_container_high) !important;
         --color-text: var(--on_surface_variant) !important;
-        --color-primary: var(--primary_container) !important;
-        --color-primary-shade-rgb: var(--primary_container) !important;
+        --color-primary: var(--primary) !important;
+        --color-primary-shade-rgb: var(--primary) !important;
         --theme-background-color: var(--surface) !important;
         --color-background: var(--surface) !important;
         --color-forum-hover-unread-topic-hover: var(--surface) !important;

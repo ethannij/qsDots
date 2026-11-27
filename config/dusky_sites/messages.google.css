@@ -62,7 +62,7 @@
         --mat-sys-scrim: var(--scrim) !important;
         --mat-sys-shadow: var(--shadow) !important;
         --mat-sys-link: var(--primary) !important;
-        --mat-sys-link-hover: var(--primary_fixed_dim) !important;
+        --mat-sys-link-hover: var(--primary) !important;
         --mat-sys-link-visited: var(--tertiary) !important;
 
         --gm3-sys-color-primary: var(--primary) !important;
@@ -279,7 +279,7 @@
         --avatar-yellow-fill-color-v1: var(--on_primary_fixed) !important;
         --contact-cyan-fg-color: var(--secondary) !important;
         --contact-green-fg-color: var(--tertiary) !important;
-        --contact-orange-fg-color: var(--primary_fixed_dim) !important;
+        --contact-orange-fg-color: var(--primary) !important;
         --contact-pink-fg-color: var(--secondary) !important;
         --contact-purple-fg-color: var(--tertiary) !important;
         --contact-red-fg-color-v1: var(--error) !important;

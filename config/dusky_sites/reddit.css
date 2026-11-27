@@ -17,7 +17,7 @@
 	--color-neutral-background-container-strong-hover: var(--surface_container_highest) !important;
 	--color-secondary-weak: var(--primary) !important;
 	--color-coolgray-900: var(--primary) !important;
-	--color-coolgray-850: var(--secondary_fixed) !important;
+	--color-coolgray-850: var(--secondary) !important;
 	--color-coolgray-50: var(--surface_container_high) !important;
 	--color-secondary-plain-weak: var(--on_surface_variant) !important;
 	--color-secondary: var(--on_surface_variant) !important;

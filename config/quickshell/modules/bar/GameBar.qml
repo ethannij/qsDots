@@ -93,7 +93,7 @@ PillShape {
                     source: modelData.icon
                     size: Config.iconSize
                     iconColor: hover.hovered ? Colors.md3.primary : Colors.md3.on_surface
-                    backgroundColor: hover.hovered ? Colors.md3.surface_variant : "transparent"
+                    backgroundColor: hover.hovered ? Colors.role.hover : "transparent"
 
                     Behavior on backgroundColor {
                         ColorAnimation {
@@ -149,7 +149,7 @@ PillShape {
                         implicitWidth: fpsText.implicitWidth + Config.spaceMd
                         implicitHeight: fpsText.implicitHeight + Config.spaceMd
                         radius: Config.radiusPill
-                        color: listHover.hovered ? Colors.md3.surface_variant : "transparent"
+                        color: listHover.hovered ? Colors.role.hover : "transparent"
 
                         Text {
                             id: fpsText

@@ -68,8 +68,8 @@ Item {
                 IconButton {
                     id: icon
                     source: Networks.statusIcon
-                    backgroundColor: stateHovered.hovered ? Colors.md3.secondary_container : (Networks.wifiEnabled ? Colors.md3.primary_container : Colors.md3.surface_variant)
-                    iconColor: stateHovered.hovered ? Colors.md3.on_secondary_container : (Networks.wifiEnabled ? Colors.md3.on_primary_container : Colors.md3.on_surface_variant)
+                    backgroundColor: stateHovered.hovered ? Colors.md3.secondary_container : (Networks.wifiEnabled ? Colors.md3.primary_container : Colors.role.chip)
+                    iconColor: stateHovered.hovered ? Colors.md3.on_secondary_container : (Networks.wifiEnabled ? Colors.md3.on_primary_container : Colors.role.muted)
 
                     Behavior on backgroundColor {
                         ColorAnimation {
@@ -127,7 +127,7 @@ Item {
                 required property var modelData
                 implicitWidth: ListView.view.width
                 implicitHeight: row.implicitHeight + Config.spaceSm * 2
-                color: delegateHover.hovered ? Colors.md3.surface_variant : Colors.md3.surface
+                color: delegateHover.hovered ? Colors.role.hover : Colors.md3.surface
                 radius: Config.radiusBox
 
                 // These bits are used to determine if psk is needed and if prompt is shown
@@ -203,7 +203,7 @@ Item {
                         PillShape {
                             interactive: false
 
-                            color: Colors.md3.surface_variant
+                            color: Colors.role.sunken
                             opacity: actions.showPsk ? 1 : 0
                             visible: opacity > 0
                             enabled: actions.showPsk

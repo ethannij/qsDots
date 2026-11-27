@@ -50,22 +50,22 @@ theme[cpu_end]="{{colors.error.default.hex}}"
 # Mem/Disk free meter
 theme[free_start]="{{colors.secondary.default.hex}}"
 theme[free_mid]=""
-theme[free_end]="{{colors.secondary_container.default.hex}}"
+theme[free_end]="{{colors.secondary.default.hex}}"
 
 # Mem/Disk cached meter
 theme[cached_start]="{{colors.tertiary.default.hex}}"
 theme[cached_mid]=""
-theme[cached_end]="{{colors.tertiary_container.default.hex}}"
+theme[cached_end]="{{colors.tertiary.default.hex}}"
 
 # Mem/Disk available meter
 theme[available_start]="{{colors.primary.default.hex}}"
 theme[available_mid]=""
-theme[available_end]="{{colors.primary_container.default.hex}}"
+theme[available_end]="{{colors.primary.default.hex}}"
 
 # Mem/Disk used meter
 theme[used_start]="{{colors.error.default.hex}}"
 theme[used_mid]=""
-theme[used_end]="{{colors.error_container.default.hex}}"
+theme[used_end]="{{colors.error.default.hex}}"
 
 # Download graph colors
 theme[download_start]="{{colors.secondary.default.hex}}"

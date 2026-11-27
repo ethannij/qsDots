@@ -69,7 +69,7 @@ Item {
             Rectangle {
                 anchors.fill: parent
                 radius: 12
-                color: Colors.md3.surface_container_highest
+                color: Colors.md3.surface
             }
 
             Text {

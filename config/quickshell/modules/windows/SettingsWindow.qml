@@ -69,8 +69,8 @@ Window {
                     width: parent.width
 
                     radius: height / 2
-                    color: active ? Colors.md3.primary_container : hovered ? Colors.md3.surface_variant : Colors.md3.secondary_container
-                    borderColor: hovered ? Colors.md3.primary : Colors.md3.secondary_container
+                    color: active ? Colors.md3.primary_container : hovered ? Colors.role.hover : Colors.role.chip
+                    borderColor: active || hovered ? Colors.md3.primary : "transparent"
 
                     onTapped: {
                         root.activeTab = title;
@@ -94,7 +94,7 @@ Window {
                         id: settingsItemText
                         text: settingsItem.title
                         font: StylizedFont.title
-                        color: settingsItem.hovered ? Colors.md3.on_surface_variant : Colors.md3.on_secondary_container
+                        color: settingsItem.active ? Colors.md3.on_primary_container : Colors.md3.on_surface
 
                         Behavior on color {
                             ColorAnimation {
@@ -112,7 +112,7 @@ Window {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 width: parent.width - settingsListView.width - Config.spaceMd
-                color: Colors.md3.surface_container
+                color: Colors.role.panel
                 radius: Config.radiusPill
 
                 clip: true

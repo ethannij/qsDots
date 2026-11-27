@@ -16,7 +16,7 @@ Item {
     property int borderWidth: 0
     property color borderColor: "transparent"
     property color labelColor: Colors.md3.secondary
-    property color itemColor: Colors.md3.on_surface_variant
+    property color itemColor: Colors.role.muted
     property color itemHoverColor: Colors.md3.primary
     property int menuPadding: 0
     property font labelFont: StylizedFont.body
@@ -42,7 +42,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         implicitWidth: label.width + Config.spaceSm
         implicitHeight: label.implicitHeight + Config.spaceSm
-        color: Colors.md3.surface_variant
+        color: Colors.role.raised
         radius: root.radius
         border.width: root.borderWidth
         border.color: root.borderColor
@@ -74,7 +74,7 @@ Item {
         anchors.verticalCenter: button.verticalCenter
         implicitWidth: column.implicitWidth + root.menuPadding * 2
         implicitHeight: column.implicitHeight + root.menuPadding * 2
-        color: Colors.md3.surface_variant
+        color: Colors.role.raised
         visible: root.opened
         enabled: visible
         radius: root.menuRadius

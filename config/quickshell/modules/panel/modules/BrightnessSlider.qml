@@ -51,7 +51,7 @@ Item {
         anchors.top: slider.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: Config.spaceMd
-        backgroundColor: mouseIcon.containsMouse ? Colors.md3.surface_variant : "transparent"
+        backgroundColor: mouseIcon.containsMouse ? Colors.role.hover : "transparent"
         iconColor: Colors.md3.on_surface
         source: Hyprsunset.activeTemperatureIconURL
         radius: width

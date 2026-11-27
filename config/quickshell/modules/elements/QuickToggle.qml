@@ -14,7 +14,7 @@ PillShape {
     implicitWidth: icon.implicitWidth + Config.spaceXl
     implicitHeight: icon.implicitHeight + Config.spaceXl
     radius: height / 2
-    color: hovered ? Colors.md3.primary_container : Colors.md3.surface_variant
+    color: root.active ? Colors.md3.primary_container : hovered ? Colors.role.hover : Colors.role.chip
 
     Behavior on color {
         enabled: Config.animMs > 0
@@ -28,7 +28,7 @@ PillShape {
         id: icon
         source: root.source
         size: Config.iconSize
-        color: root.active ? Colors.md3.tertiary : Colors.md3.on_surface_variant
+        color: root.active ? Colors.md3.on_primary_container : Colors.role.muted
 
         Behavior on color {
             enabled: Config.animMs > 0

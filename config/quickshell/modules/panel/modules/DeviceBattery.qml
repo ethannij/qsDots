@@ -34,7 +34,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.implicitWidth + Config.controlPanelStatsSpacing
                     height: parent.implicitHeight + Config.controlPanelStatsSpacing
-                    color: hovered || device.pinned ? Colors.md3.surface_container_low : "transparent"
+                    color: hovered || device.pinned ? Colors.role.hover : "transparent"
                     borderColor: device.pinned ? Colors.md3.primary : "transparent"
 
                     Row {

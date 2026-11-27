@@ -61,7 +61,7 @@ Item {
             IconButton {
                 id: wallpapers
                 source: Wallpapers.icon
-                backgroundColor: wallpapersHover.hovered ? Colors.md3.surface_variant : "transparent"
+                backgroundColor: wallpapersHover.hovered ? Colors.role.hover : "transparent"
                 iconColor: wallpapersHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
                 anchors.left: userText.right
                 anchors.leftMargin: Config.spaceMd
@@ -154,7 +154,7 @@ Item {
                 anchors.left: volumeSlider.right
                 anchors.verticalCenter: brightnessSlider.verticalCenter
                 anchors.margins: Config.spaceMd
-                backgroundColor: volumeSourceHover.hovered ? Colors.md3.surface_variant : "transparent"
+                backgroundColor: volumeSourceHover.hovered ? Colors.role.hover : "transparent"
                 iconColor: volumeSourceHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
                 source: Audio.icon
                 radius: width
@@ -202,7 +202,7 @@ Item {
                 anchors.right: brightnessSlider.left
                 anchors.verticalCenter: brightnessSlider.verticalCenter
                 anchors.margins: Config.spaceMd
-                backgroundColor: mouseIcon.containsMouse ? Colors.md3.surface_variant : "transparent"
+                backgroundColor: mouseIcon.containsMouse ? Colors.role.hover : "transparent"
                 iconColor: mouseIcon.containsMouse ? Colors.md3.primary : Colors.md3.on_surface
                 source: Hyprsunset.activeTemperatureIconURL
                 radius: width
@@ -276,7 +276,7 @@ Item {
             Layout.preferredHeight: 168
             Layout.maximumHeight: 168
             radius: 12
-            color: Colors.md3.surface_container_highest
+            color: Colors.role.raised
             property real playerVisible: Media.active ? 1 : 0
             opacity: playerVisible
             visible: playerVisible > 0
@@ -341,7 +341,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/ui/menu.svg"))
                     iconColor: trayBtnHover.hovered || PillController.trayOpen ? Colors.md3.primary : Colors.md3.on_surface
-                    backgroundColor: trayBtnHover.hovered || PillController.trayOpen ? Colors.md3.surface_variant : "transparent"
+                    backgroundColor: trayBtnHover.hovered || PillController.trayOpen ? Colors.role.hover : "transparent"
                     size: Config.iconSize * 0.75
 
                     HoverHandler {
@@ -548,7 +548,7 @@ Item {
             id: volumeSourceMenu
             width: 232
             height: sinkColumn.implicitHeight + 8
-            color: Colors.md3.surface_container_highest
+            color: Colors.role.raised
             radius: 12
             clip: true
             x: volumeSlider.mapToItem(volumeSourceLayer, 0, 0).x

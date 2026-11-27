@@ -11,10 +11,10 @@
         --neutral-76: var(--surface_container) !important;
         --neutral-73: var(--surface_container_high) !important;
         
-        /* Accent Colors */
-        --blurple-65: var(--primary_container) !important;
-        --blurple-60: var(--secondary_container) !important;
-        --blurple-50: var(--primary_container) !important;
+        /* Accent Colors — use ink (primary), not pastel *_container fills */
+        --blurple-65: var(--primary) !important;
+        --blurple-60: var(--secondary) !important;
+        --blurple-50: var(--primary) !important;
         --blurple-36: var(--primary) !important;
         --blurple-14: var(--primary) !important;
         --blue-new-37: var(--primary) !important;

@@ -26,8 +26,8 @@ Item {
         id: tip
         interactive: false
         anchors.fill: parent
-        color: Colors.md3.surface_container_low
-        borderColor: Colors.md3.surface_container_low
+        color: Colors.role.raised
+        borderColor: Colors.role.raised
         radius: Config.radiusBox
         padH: Config.hoverTipPadH
         padV: Config.hoverTipPadV

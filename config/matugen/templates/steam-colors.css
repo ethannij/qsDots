@@ -31,21 +31,21 @@
     --adw-view-bg: {{ colors.surface.default.hex }};
     --adw-view-fg: {{ colors.on_surface.default.hex }};
 
-    --adw-card-bg: {{ colors.surface_container_high.default.hex }};
+    --adw-card-bg: {{ colors.surface_container_high.default.hex }}; /* role_chip */
     --adw-card-fg: {{ colors.on_surface.default.hex }};
 
-    --adw-sidebar-bg: {{ colors.surface_container.default.hex }};
+    --adw-sidebar-bg: {{ colors.surface_container.default.hex }}; /* role_panel */
     --adw-sidebar-fg: {{ colors.on_surface.default.hex }};
     --adw-sidebar-backdrop: {{ colors.surface_container_low.default.hex }};
 
     --adw-secondary-sidebar-bg: {{ colors.surface_container_low.default.hex }};
     --adw-secondary-sidebar-fg: {{ colors.on_surface.default.hex }};
-    --adw-secondary-sidebar-backdrop: {{ colors.surface_container_lowest.default.hex }};
+    --adw-secondary-sidebar-backdrop: {{ colors.surface_container_lowest.default.hex }}; /* role_sunken */
 
-    --adw-dialog-bg: {{ colors.surface_container_highest.default.hex }};
+    --adw-dialog-bg: {{ colors.surface_container_highest.default.hex }}; /* role_raised */
     --adw-dialog-fg: {{ colors.on_surface.default.hex }};
 
-    --adw-popover-bg: {{ colors.surface_container_high.default.hex }};
+    --adw-popover-bg: {{ colors.surface_container_highest.default.hex }}; /* role_raised */
     --adw-popover-fg: {{ colors.on_surface.default.hex }};
 
     --adw-thumbnail-bg: {{ colors.surface_container_highest.default.hex }};

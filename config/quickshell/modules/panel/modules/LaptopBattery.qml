@@ -21,7 +21,7 @@ Item {
         anchors.centerIn: parent
         width: parent.implicitWidth + Config.controlPanelStatsSpacing
         height: parent.implicitHeight + Config.controlPanelStatsSpacing 
-        color: hovered ? Colors.md3.surface_container_low : root.pinned ? Colors.md3.surface_container_low : "transparent"
+        color: hovered || root.pinned ? Colors.role.hover : "transparent"
         borderColor: root.pinned ? Colors.md3.primary : "transparent"
     
     Row {

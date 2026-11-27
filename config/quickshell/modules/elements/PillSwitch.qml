@@ -19,7 +19,7 @@ Switch {
         id: backgroundChecked
         width: parent.width
         height: parent.height
-        color: parent.checked ? Colors.md3.primary :Colors.md3.surface_variant
+        color: parent.checked ? Colors.md3.primary : Colors.role.track
         radius: Config.radiusPill
         Behavior on color {
             ColorAnimation {
@@ -33,8 +33,15 @@ Switch {
         width: parent.height
         height: parent.height
         radius: parent.height
-        color: Colors.md3.on_surface
-        x: parent.checked ?parent.width - width : 0
+        color: parent.checked ? Colors.md3.on_primary : Colors.md3.on_surface_variant
+        x: parent.checked ? parent.width - width : 0
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Config.animMs
+                easing.type: Easing[Config.animEasingOut]
+            }
+        }
 
         Behavior on x {
             NumberAnimation {

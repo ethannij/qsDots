@@ -60,7 +60,7 @@ PillShape {
                 Layout.preferredWidth: (isActive || hovered) ? expandedW : collapsedW
                 Layout.preferredHeight: wsFont.height
 
-                color: isActive ? Colors.md3.primary_container : hovered ? Colors.md3.secondary_container : Colors.md3.surface_variant
+                color: isActive ? Colors.md3.primary_container : hovered ? Colors.md3.secondary_container : Colors.role.chip
 
                 Behavior on Layout.preferredWidth {
                     enabled: workspaces.animateWidths

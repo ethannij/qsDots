@@ -55,10 +55,12 @@ hi Identifier guibg=NONE guifg={{ colors.tertiary.default.hex }}
 hi Constant guibg=NONE guifg={{ colors.tertiary.default.hex }}
 hi Type guibg=NONE guifg={{ colors.secondary.default.hex }}
 hi String guibg=NONE guifg={{ colors.primary.default.hex }}
-hi Special guibg=NONE guifg={{ colors.tertiary_container.default.hex }}
-hi PreProc guibg=NONE guifg={{ colors.tertiary_container.default.hex }}
-hi Function guibg=NONE guifg={{ colors.primary_container.default.hex }}
-hi Statement guibg=NONE guifg={{ colors.secondary_container.default.hex }}
+" Use ink roles (primary/secondary/tertiary), not *_container fills — containers
+" are pastel in standard light schemes and disappear on surface backgrounds.
+hi Special guibg=NONE guifg={{ colors.tertiary.default.hex }}
+hi PreProc guibg=NONE guifg={{ colors.tertiary.default.hex }}
+hi Function guibg=NONE guifg={{ colors.primary.default.hex }}
+hi Statement guibg=NONE guifg={{ colors.secondary.default.hex }}
 
 hi Error guibg={{ colors.error_container.default.hex }} guifg={{ colors.on_error_container.default.hex }}
 hi ErrorMsg guibg={{ colors.error_container.default.hex }} guifg={{ colors.on_error_container.default.hex }}

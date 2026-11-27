@@ -13,10 +13,10 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         implicitHeight: column.implicitHeight + Config.spaceMd * 2
-        color: Colors.md3.surface_container
+        color: Colors.role.panel
         radius: Config.radiusBox
         border.width: Config.borderWidth
-        border.color: Colors.md3.outline_variant
+        border.color: Colors.role.border
 
         Column {
     id: column
@@ -86,13 +86,13 @@ Item {
                 implicitWidth: actionLabel.implicitWidth + Config.spaceMd
                 implicitHeight: actionLabel.implicitHeight + Config.spaceSm
                 radius: Config.radiusBox
-                color: actionMouse.containsMouse ? Colors.md3.primary_container : Colors.md3.surface_container_high
+                color: actionMouse.containsMouse ? Colors.md3.primary_container : Colors.role.hover
                 Text {
                     id: actionLabel
                     anchors.centerIn: parent
                     text: actionBtn.modelData.text
                     font: StylizedFont.body
-                    color: Colors.md3.on_surface
+                    color: actionMouse.containsMouse ? Colors.md3.on_primary_container : Colors.md3.on_surface
                 }
                 MouseArea {
                     id: actionMouse

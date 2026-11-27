@@ -31,7 +31,7 @@ html:not(.style-scope) {
     --yt-spec-brand-background-solid: {{ colors.primary.default.hex }} !important;
     --yt-spec-icon-active-other: {{ colors.primary.default.hex }} !important;
     --yt-spec-themed-blue: {{ colors.primary.default.hex }} !important;
-    --yt-spec-badge-chip-background: {{ colors.surface_container_high.default.hex }} !important;
+    --yt-spec-badge-chip-background: {{ colors.surface_container_high.default.hex }} !important; /* role_chip */
 
     --ytmusic-static-brand-red: {{ colors.on_surface.default.hex }} !important;
     --ytmusic-setting-item-toggle-active: {{ colors.primary.default.hex }} !important;

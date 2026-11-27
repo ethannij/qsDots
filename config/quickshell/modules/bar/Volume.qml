@@ -44,7 +44,7 @@ Item {
                 stepSize: Config.volumeStep
                 onMoved: Audio.setVolume(value)
                 sliderSize: text.height / 2
-                backgroundColor: Colors.md3.surface_variant
+                backgroundColor: Colors.role.track
                 borderColor: Colors.md3.shadow
                 fillColor: root.hovered ? Colors.md3.primary : Colors.md3.tertiary
                 iconColor: root.hovered ? Colors.md3.on_primary : Colors.md3.on_tertiary

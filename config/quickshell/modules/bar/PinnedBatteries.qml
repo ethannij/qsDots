@@ -57,7 +57,7 @@ Item {
         width: 2
         radius: height / 2
         anchors.verticalCenter: parent.verticalCenter
-        color: Colors.md3.surface_variant
+        color: Colors.role.chip
     }
 
 
