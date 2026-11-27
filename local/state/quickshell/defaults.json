@@ -13,8 +13,14 @@
     "pinnedBatteries": [],
     "pinBatteryOnAlert": true,
     "batteryLowPercent": 25,
+    "hiddenBatteryPercents": [],
+    "pinnedSysUsage": [],
+    "sysUsageDetail": [],
     "showVolumeFace": true,
     "showWorkspaceFace": true,
     "showDoNotDisturb": true,
+    "showWifiStatus": true,
+    "showBluetoothStatus": true,
+    "showGamemodeStatus": true,
     "liveMediaVisualizer": true
 }

@@ -172,7 +172,7 @@ Singleton {
     }
 
     function deviceLabel(device) {
-        if (device.isLaptopBattery)
+        if (device?.isLaptopBattery)
             return "Laptop"
         if (device.model)
             return device.model

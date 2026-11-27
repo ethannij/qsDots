@@ -30,14 +30,39 @@ Singleton {
     property alias pinnedBatteries: adapter.pinnedBatteries
     property alias pinBatteryOnAlert: adapter.pinBatteryOnAlert
     property alias batteryLowPercent: adapter.batteryLowPercent
+    property alias hiddenBatteryPercents: adapter.hiddenBatteryPercents
+    property alias pinnedSysUsage: adapter.pinnedSysUsage
+    property alias sysUsageDetail: adapter.sysUsageDetail
     property alias showVolumeFace: adapter.showVolumeFace
     property alias showWorkspaceFace: adapter.showWorkspaceFace
     property alias showDoNotDisturb: adapter.showDoNotDisturb
+    property alias showWifiStatus: adapter.showWifiStatus
+    property alias showBluetoothStatus: adapter.showBluetoothStatus
+    property alias showGamemodeStatus: adapter.showGamemodeStatus
     property alias liveMediaVisualizer: adapter.liveMediaVisualizer
 
     function togglePinned(id) {
         const current = pinnedBatteries;
         pinnedBatteries = current.indexOf(id) === -1 ? current.concat([id]) : current.filter(x => x !== id);
+    }
+
+    function toggleBatteryPercent(id) {
+        const current = hiddenBatteryPercents;
+        hiddenBatteryPercents = current.indexOf(id) === -1 ? current.concat([id]) : current.filter(x => x !== id);
+    }
+
+    function batteryPercentHidden(id) {
+        return hiddenBatteryPercents.indexOf(id) !== -1;
+    }
+
+    function togglePinnedSysUsage(id) {
+        const current = pinnedSysUsage;
+        pinnedSysUsage = current.indexOf(id) === -1 ? current.concat([id]) : current.filter(x => x !== id);
+    }
+
+    function toggleSysUsageDetail(id) {
+        const current = sysUsageDetail;
+        sysUsageDetail = current.indexOf(id) === -1 ? current.concat([id]) : current.filter(x => x !== id);
     }
 
     function markReady() {
@@ -113,9 +138,15 @@ Singleton {
             property list<string> pinnedBatteries: []
             property bool pinBatteryOnAlert: true
             property int batteryLowPercent: 25
+            property list<string> hiddenBatteryPercents: []
+            property list<string> pinnedSysUsage: []
+            property list<string> sysUsageDetail: []
             property bool showVolumeFace: true
             property bool showWorkspaceFace: true
             property bool showDoNotDisturb: true
+            property bool showWifiStatus: true
+            property bool showBluetoothStatus: true
+            property bool showGamemodeStatus: true
             property bool liveMediaVisualizer: true
         }
     }

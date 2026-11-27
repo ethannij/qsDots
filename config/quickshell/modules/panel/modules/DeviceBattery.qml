@@ -22,8 +22,8 @@ Item {
                 id: device
                 required property var modelData
 
-                implicitWidth: content.implicitWidth
-                implicitHeight: content.implicitHeight
+                implicitWidth: content.implicitWidth + Config.controlPanelStatsSpacing
+                implicitHeight: content.implicitHeight + Config.controlPanelStatsSpacing
                 z: pill.hovered ? 1 : 0
 
                 readonly property bool pinned: States.pinnedBatteries.indexOf(modelData.nativePath) !== -1
@@ -32,8 +32,8 @@ Item {
                     id: pill
                     interactive: true
                     anchors.centerIn: parent
-                    width: parent.implicitWidth + Config.controlPanelStatsSpacing
-                    height: parent.implicitHeight + Config.controlPanelStatsSpacing
+                    width: parent.implicitWidth
+                    height: parent.implicitHeight
                     color: hovered || device.pinned ? Colors.role.hover : "transparent"
                     borderColor: device.pinned ? Colors.md3.primary : "transparent"
 

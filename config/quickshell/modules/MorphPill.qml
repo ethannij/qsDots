@@ -163,8 +163,16 @@ Item {
                 morphPill.travelOverlay = "panel";
                 if (morphPill.livePanelH > 0)
                     morphPill.travelH = morphPill.livePanelH;
-            } else if (PillController.overlay !== "none") {
-                morphPill.travelOverlay = PillController.overlay;
+            } else {
+                // Pins (and other rest chrome) can change while an overlay is open.
+                // restW/H are frozen during morph, so retarget them as we start
+                // closing — otherwise the shell lands on the old size and jumps.
+                if (PillController.overlay === "none" && morphPill.morph > 0) {
+                    morphPill.restW = morphPill.liveRestW;
+                    morphPill.restH = morphPill.liveRestH;
+                }
+                if (PillController.overlay !== "none")
+                    morphPill.travelOverlay = PillController.overlay;
             }
         }
     }
@@ -290,7 +298,9 @@ Item {
         opacity: morphPill.restOpacity
         visible: true
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: Config.spaceSm
+        // Keep 0 so the battery divider→clock gap matches clock→status divider
+        // (both are just Clock's padH). Explicit spacers handle other gaps.
+        spacing: 0
         layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
 
         Behavior on opacity {
@@ -307,38 +317,77 @@ Item {
             return (shellH - height) / 2;
         }
 
-    Item {
-    id: batterySlot
-    width: pinnedBatteries.shown ? pinnedBatteries.implicitWidth : 0
-    height: pinnedBatteries.implicitHeight
-    anchors.verticalCenter: parent.verticalCenter
-    clip: width < pinnedBatteries.implicitWidth
-    visible: width > 0 || opacity > 0
-    opacity: width > 0 ? 1 : 0
+        Item {
+            id: sysUsageSlot
+            width: pinnedSysUsage.shown ? pinnedSysUsage.implicitWidth : 0
+            height: dynamicContent.height
+            clip: width < pinnedSysUsage.implicitWidth
+            visible: width > 0 || opacity > 0
+            opacity: width > 0 ? 1 : 0
 
-    Behavior on width {
-        enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
-        NumberAnimation {
-            duration: Config.animMsClose
-            easing.type: Easing[Config.animEasingIn]
+            Behavior on width {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMsClose
+                    easing.type: Easing[Config.animEasingIn]
+                }
+            }
+
+            Behavior on opacity {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMsClose
+                    easing.type: Easing[Config.animEasingIn]
+                }
+            }
+
+            PinnedSysUsage {
+                id: pinnedSysUsage
+                anchors.verticalCenter: parent.verticalCenter
+                readonly property bool shown: SystemStats.shownStats.length > 0
+                visible: shown || opacity > 0
+                opacity: shown ? 1 : 0
+            }
         }
-    }
 
-    Behavior on opacity {
-        enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
-        NumberAnimation {
-            duration: Config.animMsClose
-            easing.type: Easing[Config.animEasingIn]
+        Item {
+            // Gap between sys-usage divider and battery chips (same as status divider→icons).
+            width: pinnedSysUsage.shown && pinnedBatteries.shown ? Config.spaceLg : 0
+            height: 1
         }
-    }
 
-    PinnedBatteries {
-        id: pinnedBatteries
-        readonly property bool shown: Power.shownDevices.length > 0
-        visible: shown || opacity > 0
-        opacity: shown ? 1 : 0
-    }
-}
+        Item {
+            id: batterySlot
+            width: pinnedBatteries.shown ? pinnedBatteries.implicitWidth : 0
+            height: dynamicContent.height
+            clip: width < pinnedBatteries.implicitWidth
+            visible: width > 0 || opacity > 0
+            opacity: width > 0 ? 1 : 0
+
+            Behavior on width {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMsClose
+                    easing.type: Easing[Config.animEasingIn]
+                }
+            }
+
+            Behavior on opacity {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMsClose
+                    easing.type: Easing[Config.animEasingIn]
+                }
+            }
+
+            PinnedBatteries {
+                id: pinnedBatteries
+                anchors.verticalCenter: parent.verticalCenter
+                readonly property bool shown: Power.shownDevices.length > 0
+                visible: shown || opacity > 0
+                opacity: shown ? 1 : 0
+            }
+        }
 
         Item {
             id: mediaSlot
@@ -348,7 +397,7 @@ Item {
             // to the time as the notification count does on the other side.
             readonly property real clockGap: Config.spaceSm + mediaChip.padH
             width: mediaChip.shown ? Math.max(0, mediaChip.implicitWidth - clockGap) : 0
-            height: mediaChip.implicitHeight
+            height: dynamicContent.height
             clip: width < mediaChip.implicitWidth - clockGap
             visible: shown || opacity > 0
             opacity: shown ? 1 : 0
@@ -369,15 +418,14 @@ Item {
                 }
             }
 
-
             MediaChip {
                 id: mediaChip
+                anchors.verticalCenter: parent.verticalCenter
                 readonly property bool shown: Media.active && !Media.isIdle && (!morphPill.gamebarOnly && !morphPill.agentOnly) && !PillController.pillLock
                 visible: shown || opacity > 0
                 opacity: shown ? 1 : 0
                 chrome: false
                 padH: Config.pillPadH / 2
-                y: Config.pillPadV - 2
                 Behavior on opacity {
                     NumberAnimation {
                         duration: mediaChip.shown ? Config.animMs : Config.animMsClose
@@ -390,13 +438,11 @@ Item {
         Row {
             id: dynamicContent
             spacing: 0
-            anchors.verticalCenter: parent.verticalCenter
 
             Item {
                 id: clockSlot
                 width: !morphPill.gamebarOnly && !morphPill.agentOnly ? clock.implicitWidth : 0
                 height: clock.implicitHeight
-                anchors.verticalCenter: parent.verticalCenter
             }
 
             Item {
@@ -443,10 +489,10 @@ Item {
             }
 
             Item {
-                id: notificationChipSlot
-                property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
-                width: notificationChip.shown ? notificationChip.implicitWidth + Config.spaceSm : 0
-                height: notificationChip.implicitHeight
+                id: statusSlot
+                property bool shown: statusIndicators.anyShown && !gamebarOnly && !agentOnly && !PillController.pillLock
+                width: shown ? statusIndicators.implicitWidth + Config.spaceSm : 0
+                height: statusIndicators.implicitHeight
                 anchors.verticalCenter: parent.verticalCenter
                 clip: true
                 visible: shown || opacity > 0
@@ -467,39 +513,9 @@ Item {
                     }
                 }
 
-                NotificationChip {
-                    id: notificationChip
-                    property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+                StatusIndicators {
+                    id: statusIndicators
                     anchors.verticalCenter: parent.verticalCenter
-                    color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: Config.animMs
-                            easing.type: Easing[Config.animEasingSmooth]
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
-                        }
-                    }
-                    TapHandler {
-                        id: notificationChipTap
-                        onTapped: PillController.page = "notifications"
-                    }
-
-                    TapHandler {
-                        id: notificationChipTapAlternate
-                        onTapped: Notifications.clearAll()
-                        acceptedButtons: Qt.RightButton
-                    }
-
-                    HoverHandler {
-                        id: notificationChipHover
-                    }
                 }
             }
 
@@ -581,6 +597,14 @@ Item {
             }
         }
 
+        Item {
+            width: {
+                const trailing = idle.shown || notificationChipSlot.shown;
+                return trailing ? Config.spaceSm : 0;
+            }
+            height: 1
+        }
+
         Idle {
             id: idle
             property bool shown: IdleInhibitor.inhibitIdle && !morphPill.gamebarOnly && !quickToggles.expanded && !PillController.pillLock
@@ -589,6 +613,67 @@ Item {
             clip: true
             visible: shown || opacity > 0
             opacity: shown ? 1 : 0
+        }
+
+        Item {
+            id: notificationChipSlot
+            property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+            width: notificationChip.shown ? notificationChip.implicitWidth + Config.spaceSm : 0
+            height: notificationChip.implicitHeight
+            anchors.verticalCenter: parent.verticalCenter
+            clip: true
+            visible: shown || opacity > 0
+            opacity: shown ? 1 : 0
+
+            Behavior on width {
+                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing[Config.animEasingOut]
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Config.animMs
+                    easing.type: Easing[Config.animEasingOut]
+                }
+            }
+
+            NotificationChip {
+                id: notificationChip
+                property bool shown: (Notifications.unreadCount > 0) && !Notifications.doNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+                anchors.verticalCenter: parent.verticalCenter
+                color: notificationChipHover.hovered ? Colors.md3.primary : (Notifications.unreadCount > 5 ? Colors.md3.error : Colors.md3.tertiary)
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingSmooth]
+                    }
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingOut]
+                    }
+                }
+                TapHandler {
+                    id: notificationChipTap
+                    onTapped: PillController.page = "notifications"
+                }
+
+                TapHandler {
+                    id: notificationChipTapAlternate
+                    onTapped: Notifications.clearAll()
+                    acceptedButtons: Qt.RightButton
+                }
+
+                HoverHandler {
+                    id: notificationChipHover
+                }
+            }
         }
 
         Item {

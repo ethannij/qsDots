@@ -8,45 +8,45 @@ import qs.theme
 Item {
     id: root
 
-    property var laptopBattery: Power.laptopBattery // Battery device for laptop
+    property var laptopBattery: Power.laptopBattery
 
-    implicitWidth: icon.implicitWidth + text.implicitWidth
-    implicitHeight: Math.max(icon.implicitHeight, text.implicitHeight)
+    // Match SysUsage: layout size includes pill chrome so the row stays level.
+    implicitWidth: content.implicitWidth + Config.controlPanelStatsSpacing
+    implicitHeight: content.implicitHeight + Config.controlPanelStatsSpacing
 
-    readonly property bool pinned: States.pinnedBatteries.indexOf(laptopBattery.nativePath) !== -1
+    readonly property bool pinned: States.pinnedBatteries?.indexOf(laptopBattery?.nativePath) !== -1
 
     PillShape {
         id: pill
         interactive: true
         anchors.centerIn: parent
-        width: parent.implicitWidth + Config.controlPanelStatsSpacing
-        height: parent.implicitHeight + Config.controlPanelStatsSpacing 
+        width: parent.implicitWidth
+        height: parent.implicitHeight
         color: hovered || root.pinned ? Colors.role.hover : "transparent"
         borderColor: root.pinned ? Colors.md3.primary : "transparent"
-    
-    Row {
 
-        ColorizedIcon {
-            id: icon
+        Row {
+            id: content
 
-            source: Power.batteryIcon(laptopBattery)
-            color: Power.batteryColor(laptopBattery)
+            ColorizedIcon {
+                id: icon
+                source: Power.batteryIcon(root.laptopBattery)
+                color: Power.batteryColor(root.laptopBattery)
+            }
+
+            Text {
+                id: text
+                text: Math.round(root.laptopBattery?.percentage * 100) + "%"
+                font: StylizedFont.body
+                color: Power.batteryColor(root.laptopBattery)
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
 
-        Text {
-            id: text
-            text: Math.round(laptopBattery?.percentage * 100) + "%"
-            font: StylizedFont.body
-            color: Power.batteryColor(laptopBattery)
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-    }
-    onTapped: States.togglePinned(root.laptopBattery.nativePath)
+        onTapped: States.togglePinned(root.laptopBattery.nativePath)
     }
 
     HoverTip {
-        id: hoverTip
         hoverText: Power.deviceLabel(root.laptopBattery)
         shown: pill.hovered
         anchors.bottom: pill.top
@@ -54,5 +54,4 @@ Item {
         anchors.bottomMargin: Config.spaceSm
         z: 10
     }
-
 }

@@ -268,20 +268,30 @@ Item {
             Layout.alignment: Qt.AlignTop
             spacing: Config.spaceSm
 
-            Row {
+            RowLayout {
                 Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: Config.spaceMd
                 spacing: Config.controlPanelStatsSpacing
 
-                SysUsage {}
+                SysUsage {
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
                 Rectangle {
-                    implicitWidth: 1
-                    implicitHeight: parent.height
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: Math.max(1, parent.height - Config.spaceSm)
+                    Layout.alignment: Qt.AlignVCenter
                     color: Colors.md3.on_surface_variant
                 }
+
                 LaptopBattery {
+                    Layout.alignment: Qt.AlignVCenter
                     visible: Power.laptopBattery !== undefined
                 }
-                DeviceBattery {}
+
+                DeviceBattery {
+                    Layout.alignment: Qt.AlignVCenter
+                }
             }
 
             Item {

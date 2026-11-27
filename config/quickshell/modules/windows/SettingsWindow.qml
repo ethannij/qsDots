@@ -48,33 +48,50 @@ Window {
 
         clip: true
 
-        Row {
+        ListView {
+            id: settingsListView
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: Config.spaceMd
             anchors.topMargin: Config.spaceXl
+            anchors.bottomMargin: Config.spaceMd
+            width: 200
+            model: settingsModel
             spacing: Config.spaceMd
-            anchors.margins: Config.spaceMd
-            anchors.fill: parent
+            delegate: PillShape {
+                id: settingsItem
+                required property string title
+                property bool active: root.activeTab === title
+                width: ListView.view.width
 
-            ListView {
-                id: settingsListView
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 200
-                model: settingsModel
-                spacing: Config.spaceMd
-                delegate: PillShape {
-                    id: settingsItem
-                    required property string title
-                    property bool active: root.activeTab === title
-                    width: parent.width
+                radius: height / 2
+                color: active ? Colors.md3.primary_container : hovered ? Colors.role.hover : Colors.role.chip
+                borderColor: active || hovered ? Colors.md3.primary : "transparent"
 
-                    radius: height / 2
-                    color: active ? Colors.md3.primary_container : hovered ? Colors.role.hover : Colors.role.chip
-                    borderColor: active || hovered ? Colors.md3.primary : "transparent"
+                onTapped: {
+                    root.activeTab = title;
+                }
 
-                    onTapped: {
-                        root.activeTab = title;
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingSmooth]
                     }
+                }
+
+                Behavior on borderColor {
+                    ColorAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingSmooth]
+                    }
+                }
+
+                Text {
+                    id: settingsItemText
+                    text: settingsItem.title
+                    font: StylizedFont.title
+                    color: settingsItem.active ? Colors.md3.on_primary_container : Colors.md3.on_surface
 
                     Behavior on color {
                         ColorAnimation {
@@ -82,40 +99,24 @@ Window {
                             easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
-
-                    Behavior on borderColor {
-                        ColorAnimation {
-                            duration: Config.animMs
-                            easing.type: Easing[Config.animEasingSmooth]
-                        }
-                    }
-
-                    Text {
-                        id: settingsItemText
-                        text: settingsItem.title
-                        font: StylizedFont.title
-                        color: settingsItem.active ? Colors.md3.on_primary_container : Colors.md3.on_surface
-
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Config.animMs
-                                easing.type: Easing[Config.animEasingSmooth]
-                            }
-                        }
-                    }
                 }
             }
+        }
 
-            Rectangle {
-                id: contentRect
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                width: parent.width - settingsListView.width - Config.spaceMd
-                color: Colors.role.panel
-                radius: Config.radiusPill
+        Rectangle {
+            id: contentRect
+            anchors.left: settingsListView.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: Config.spaceMd
+            anchors.rightMargin: Config.spaceMd
+            anchors.topMargin: Config.spaceXl
+            anchors.bottomMargin: Config.spaceMd
+            color: Colors.role.panel
+            radius: Config.radiusPill
 
-                clip: true
+            clip: true
 
                 Item {
                     id: generalPage
@@ -502,6 +503,51 @@ Window {
                                     spacing: Config.spaceMd
 
                                     Text {
+                                        text: "Show wifi status"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.showWifiStatus
+                                        onCheckedChanged: States.showWifiStatus = checked
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show bluetooth when enabled"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.showBluetoothStatus
+                                        onCheckedChanged: States.showBluetoothStatus = checked
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show gamemode when enabled"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.showGamemodeStatus
+                                        onCheckedChanged: States.showGamemodeStatus = checked
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
                                         text: "Live media visualizer (requires cava)"
                                         font: StylizedFont.bold
                                         color: Colors.md3.on_surface
@@ -529,6 +575,5 @@ Window {
                     }
                 }
             }
-        }
     }
 }

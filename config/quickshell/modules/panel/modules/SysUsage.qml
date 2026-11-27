@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.config
 import qs.modules.elements
@@ -9,67 +8,71 @@ import qs.theme
 Item {
     id: root
 
-    readonly property var stats: [{
-        "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/system/cpu.svg")),
-        "color": Colors.md3.primary,
-        "key": "cpuUsage"
-    }, {
-        "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/system/memory.svg")),
-        "color": Colors.md3.secondary,
-        "key": "memUsage"
-    }, {
-        "icon": Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/system/gpu.svg")),
-        "color": Colors.md3.tertiary,
-        "key": "gpuUsage"
-    }]
-
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
 
-    PillShape {
-        id: pill
+    Row {
+        id: row
+        spacing: Config.controlPanelStatsSpacing
 
-        interactive: false
+        Repeater {
+            model: SystemStats.stats
 
-        anchors.centerIn: parent
-        width: row.implicitWidth + Config.controlPanelStatsSpacing
-        height: row.implicitHeight + Config.controlPanelStatsSpacing 
-        color: "transparent"
-        borderColor: "transparent"
+            Item {
+                id: stat
+                required property var modelData
 
-        Row {
-            id: row
+                // Include pill chrome so the pin outline isn't clipped by the panel edge.
+                implicitWidth: content.implicitWidth + Config.controlPanelStatsSpacing
+                implicitHeight: content.implicitHeight + Config.controlPanelStatsSpacing
+                z: pill.hovered ? 1 : 0
 
-            spacing: Config.controlPanelStatsSpacing
+                readonly property bool pinned: States.pinnedSysUsage.indexOf(modelData.id) !== -1
+                readonly property color accent: SystemStats.accentColor(modelData.colorKey)
 
-            Repeater {
-                model: root.stats
+                PillShape {
+                    id: pill
+                    interactive: true
+                    anchors.centerIn: parent
+                    width: parent.implicitWidth
+                    height: parent.implicitHeight
+                    color: hovered || stat.pinned ? Colors.role.hover : "transparent"
+                    borderColor: stat.pinned ? Colors.md3.primary : "transparent"
 
-                Row {
-                    required property var modelData
+                    Row {
+                        id: content
 
-                    ColorizedIcon {
-                        id: icon
+                        ColorizedIcon {
+                            source: stat.modelData.icon
+                            color: stat.accent
+                        }
 
-                        source: parent.modelData.icon
-                        color: parent.modelData.color
+                        Text {
+                            text: {
+                                void SystemStats.cpuText;
+                                void SystemStats.memText;
+                                void SystemStats.gpuText;
+                                return SystemStats.displayText(stat.modelData.id);
+                            }
+                            font: StylizedFont.body
+                            color: stat.accent
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
 
-                    Text {
-                        id: text
-
-                        text: SystemStats[parent.modelData.key] + "%"
-                        font: StylizedFont.body
-                        color: parent.modelData.color
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
+                    onTapped: States.togglePinnedSysUsage(stat.modelData.id)
+                    onTappedAlternate: States.toggleSysUsageDetail(stat.modelData.id)
                 }
 
+                HoverTip {
+                    hoverText: SystemStats.tipText(stat.modelData.id)
+                    shown: pill.hovered
+                    anchors.bottom: pill.top
+                    anchors.horizontalCenter: pill.horizontalCenter
+                    anchors.bottomMargin: Config.spaceSm
+                    z: 10
+                }
             }
-
         }
-
     }
-
 }

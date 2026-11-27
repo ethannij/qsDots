@@ -14,23 +14,37 @@ Item {
     Row {
         id: row
         spacing: Config.spaceLg
-        
+
         Repeater {
             model: Power.shownDevices
 
-            Row {
+            Item {
+                id: chip
                 required property var modelData
-                
-                ColorizedIcon {
-                    source: modelData.isLaptopBattery ? Power.batteryIcon(modelData) : modelData.charging ? Power.chargeIcon + Power.deviceIcon(modelData) : Power.deviceIcon(modelData)
-                    color: hover.hovered ? Colors.md3.primary : Power.batteryColor(modelData)
-                }
 
-                Text {
-                    text: Math.round(modelData.percentage * 100) + "%"
-                    font: StylizedFont.body
-                    color: hover.hovered ? Colors.md3.primary : Power.batteryColor(modelData)
-                    anchors.verticalCenter: parent.verticalCenter
+                width: content.implicitWidth
+                height: content.implicitHeight
+
+                readonly property bool percentHidden: States.hiddenBatteryPercents.indexOf(modelData.nativePath) !== -1
+
+                Row {
+                    id: content
+                    spacing: 0
+
+                    ColorizedIcon {
+                        source: chip.modelData.isLaptopBattery ? Power.batteryIcon(chip.modelData) : Power.deviceIcon(chip.modelData)
+                        size: Config.barIconSize
+                        color: hover.hovered ? Colors.md3.primary : Power.batteryColor(chip.modelData)
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        visible: !chip.percentHidden
+                        text: Math.round(chip.modelData.percentage * 100) + "%"
+                        font: StylizedFont.body
+                        color: hover.hovered ? Colors.md3.primary : Power.batteryColor(chip.modelData)
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
 
                 HoverHandler {
@@ -38,30 +52,25 @@ Item {
                 }
 
                 TapHandler {
-                    id: tap
+                    acceptedButtons: Qt.LeftButton
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: PillController.togglePanel()
+                }
+
+                TapHandler {
                     acceptedButtons: Qt.RightButton
-                   onTapped: {
-                    const id = modelData.nativePath
-                    if (States.pinnedBatteries.indexOf(id) !== -1)
-                        States.togglePinned(id);
-                   } 
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
+                    onTapped: States.toggleBatteryPercent(chip.modelData.nativePath)
                 }
             }
-
         }
 
         Rectangle {
-        id: divider
-
-        height: Config.barHeight / 1.5
-        width: 2
-        radius: height / 2
-        anchors.verticalCenter: parent.verticalCenter
-        color: Colors.role.chip
+            height: Math.max(Config.barIconSize, parent.height * 0.75)
+            width: 2
+            radius: height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            color: Colors.role.chip
+        }
     }
-
-
-    }
-
-    
 }
