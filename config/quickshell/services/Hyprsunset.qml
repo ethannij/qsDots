@@ -127,9 +127,9 @@ Singleton {
             States.temperatureState = temperatureState;
         if (root.temperatureState === "off")
             disableTemperature();
-        if (root.temperatureState === "on")
+        else if (root.temperatureState === "on")
             enableTemperature();
-        if (root.temperatureState === "auto")
+        else if (root.temperatureState === "auto")
             evaluateTemperature();
     }
 
@@ -138,15 +138,30 @@ Singleton {
             States.gamma = gamma;
     }
 
+    // Push saved gamma + nightmode into hyprsunset, retrying until the daemon is actually up (autostart races qs on login).
+    function pushToHyprsunset() {
+        startHyprsunset();
+        const g = root.gamma;
+        const k = root.activeTemperature;
+        Quickshell.execDetached(["bash", "-c",
+            `for i in $(seq 1 25); do ` +
+            `hyprctl hyprsunset gamma ${g} >/dev/null 2>&1 && ` +
+            `hyprctl hyprsunset temperature ${k} >/dev/null 2>&1 && exit 0; ` +
+            `sleep 0.2; done`
+        ]);
+        WLED.setTemperature(k);
+    }
+
     function restorePrefs() {
         if (prefsReady || !States.ready)
             return;
         const savedGamma = States.gamma;
         const savedTemperature = States.temperatureState;
         prefsReady = true;
-        temperatureState = savedTemperature;
-        setGamma(savedGamma);
-        evaluateTemperature();
+        root.gamma = Math.max(root.gammaLowerLimit, Math.min(root.gammaUpperLimit, savedGamma));
+        root.temperatureState = savedTemperature;
+        // temperatureState handler applies kelvin intent; then push both.
+        pushToHyprsunset();
     }
 
     onHourChanged: {
@@ -155,7 +170,9 @@ Singleton {
 
     function applyTemperature(kelvin) {
         startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${kelvin}`]);
+        Quickshell.execDetached(["bash", "-c",
+            `for i in $(seq 1 25); do hyprctl hyprsunset temperature ${kelvin} >/dev/null 2>&1 && exit 0; sleep 0.2; done`
+        ]);
         WLED.setTemperature(kelvin);
     }
 
@@ -164,7 +181,9 @@ Singleton {
         root.gammaChangeAttempt();
 
         root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset gamma ${root.gamma}`]);
+        Quickshell.execDetached(["bash", "-c",
+            `for i in $(seq 1 25); do hyprctl hyprsunset gamma ${root.gamma} >/dev/null 2>&1 && exit 0; sleep 0.2; done`
+        ]);
     }
     function gammaUp() {
         root.setGamma(root.gamma + root.gammaStep);

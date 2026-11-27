@@ -44,7 +44,10 @@ Singleton {
             return;
         if (!fromCycle)
             stopCycle();
-        matugen.command = matugenCommand(originalPath(name), colorScheme);
+        // Default to the user's current scheme so random/timed/ipc never
+        // silently fall back to matugen's dark defaults.
+        const scheme = colorScheme || ColorScheme.colorScheme;
+        matugen.command = matugenCommand(originalPath(name), scheme);
         matugen.running = false;
         matugen.running = true;
     }
@@ -55,7 +58,7 @@ Singleton {
         const pick = (pool.length ? pool : files);
         if (!pick.length)
             return;
-        apply(pick[Math.floor(Math.random() * pick.length)], !!fromCycle);
+        apply(pick[Math.floor(Math.random() * pick.length)], !!fromCycle, ColorScheme.colorScheme);
     }
 
     // Determine matugen command based on color scheme
@@ -65,6 +68,8 @@ Singleton {
             cmd.push("--import-json", Quickshell.env("HOME") + "/.config/matugen/oled.json");
         else if (colorScheme === "light")
             cmd.push("--mode", "light", "--type", "scheme-tonal-spot", "--contrast", "0");
+        else
+            cmd.push("--mode", "dark");
         cmd.push("image", imagePath);
         return cmd;
     }

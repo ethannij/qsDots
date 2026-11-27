@@ -16,6 +16,13 @@ PillShape {
             root.expanded = false;
     }
 
+    // Cava only when the live visualizer is on and the chip is actually playing.
+    Binding {
+        target: Cava
+        property: "wanted"
+        value: States.liveMediaVisualizer && root.visible && root.opacity > 0 && Media.isPlaying
+    }
+
     Column {
         spacing: root.expanded ? Config.spaceXs : 0
 
@@ -32,51 +39,64 @@ PillShape {
 
             Item {
                 id: wave
-                width: 40
+                width: 44
                 height: Config.barIconSize
                 implicitWidth: width
                 implicitHeight: height
 
-                readonly property int barWidth: 2
+                // 2px circles read as squares on most displays; 3px + AA looks round.
+                readonly property int barWidth: 3
                 readonly property int barCount: 11
                 readonly property real barSpacing: (width - barCount * barWidth) / (barCount - 1)
                 property int step: 0
 
-                Timer {
-                    interval: 120
-                    running: Media.isPlaying && root.visible && root.opacity > 0
-                    repeat: true
-                    onTriggered: wave.step = (wave.step + 1) % 8
+                Binding {
+                    target: Cava
+                    property: "bars"
+                    value: wave.barCount
                 }
 
-                Connections {
-                    target: Media
-                    function onIsPlayingChanged() {
-                        if (!Media.isPlaying && wave.levels)
-                            wave.levels = wave.rests ?? [];
-                    }
+                // Old canned bounce when live cava is disabled.
+                Timer {
+                    interval: 120
+                    running: !States.liveMediaVisualizer && Media.isPlaying && root.visible && root.opacity > 0
+                    repeat: true
+                    onTriggered: wave.step = (wave.step + 1) % 8
                 }
 
                 Repeater {
                     model: wave.barCount
 
                     Rectangle {
+                        id: bar
                         required property int index
                         width: wave.barWidth
-                        height: wave.height
-                        radius: width / 2
+                        // Paused: height == width -> circle. Playing: grow toward full height.
+                        height: wave.barWidth + bar.level * (wave.height - wave.barWidth)
+                        radius: height / 2
                         x: index * (wave.barWidth + wave.barSpacing)
-                        color: titleHover.hovered ? Colors.md3.primary : Colors.md3.secondary
+                        y: (wave.height - height) / 2
+                        color: titleHover.hovered ? Colors.role.accent : Colors.md3.secondary
+                        antialiasing: true
+                        smooth: true
 
-                        transform: Scale {
-                            origin.x: width / 2
-                            origin.y: height / 2
-                            yScale: {
-                                const rest = 0.35 + (index % 3) * 0.15;
-                                if (!Media.isPlaying)
-                                    return rest;
-                                const n = (wave.step + index) % 8;
-                                return rest + (n < 4 ? n : 8 - n) * 0.12;
+                        // 0 = dot. 1 = full bar.
+                        property real level: {
+                            if (!Media.isPlaying)
+                                return 0;
+                            if (States.liveMediaVisualizer) {
+                                const v = Cava.levels[index];
+                                return (v === undefined || v === null) ? 0 : v;
+                            }
+                            const n = (wave.step + index) % 8;
+                            const bounce = (n < 4 ? n : 8 - n) / 4;
+                            return 0.35 + bounce * 0.65;
+                        }
+
+                        Behavior on level {
+                            NumberAnimation {
+                                duration: States.liveMediaVisualizer ? 80 : 100
+                                easing.type: Easing.OutCubic
                             }
                         }
                     }
@@ -92,13 +112,6 @@ PillShape {
                     onTapped: PillController.togglePanel()
                 }
             }
-
-            /*Connections {
-                target: Media
-                function onProgressChanged() {
-                    root.glide = Math.abs(Media.progress - root.shown) < 0.08;
-                }
-            }*/
         }
     }
 }

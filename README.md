@@ -6,7 +6,7 @@ Required:
 `hyprland quickshell-git hypridle hyprlock hyprsunset awww matugen
 xdg-desktop-portal-hyprland xdg-desktop-portal-gtk stow
 pipewire pipewire-pulse wireplumber networkmanager bluez bluez-utils upower
-imagemagick inotify-tools curl brightnessctl playerctl
+imagemagick inotify-tools curl brightnessctl playerctl cava
 ttf-google-sans ttf-googlesanscode-nerd ttf-jetbrains-mono-nerd
 adw-gtk-theme papirus-icon-theme papirus-folders
 gtk3 dconf gsettings-desktop-schemas qt6-wayland qt6-imageformats qt6-declarative`
@@ -14,8 +14,7 @@ gtk3 dconf gsettings-desktop-schemas qt6-wayland qt6-imageformats qt6-declarativ
 Default apps: `floorp-bin kitty nautilus wlogout`
 Cursors: `moga-white-cursors`
 
-Optional / themed by matugen: `neovim btop cava rofi vesktop`
-(also templates/hooks for Steam, Heroic, GTK, Kitty, Discord, OBS, etc. if you use those)
+Optional / themed by matugen: `neovim btop rofi vesktop Steam Heroic GTK Kitty Discord OBS etc`
 
 ### Optional
 HDR supported (gamma/nightmode)  
@@ -55,6 +54,7 @@ Make sure to backup your original configs and ~/.local/state/quickshell (if it e
 * Gaming mode - disable animations and decorations (auto on fullscreen + toggle)
 * Volume source picker
 * Media controls / now playing
+* Media chip visualizer (cava or lightweight bounce, circular dots when paused)
 * System monitor
 * Weather applet
 * Battery indicator (laptop + pinned devices)
@@ -65,5 +65,5 @@ Make sure to backup your original configs and ~/.local/state/quickshell (if it e
 
 ### WIP
 * More dynamic session menu
-* Music visualizer
 * More apps included in config
+* Notch style + island

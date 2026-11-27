@@ -497,6 +497,21 @@ Window {
                                         }
                                     }
                                 }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Live media visualizer (requires cava)"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.liveMediaVisualizer
+                                        onCheckedChanged: States.liveMediaVisualizer = checked
+                                    }
+                                }
                             }
                         }
                     }

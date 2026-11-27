@@ -8,8 +8,12 @@ Singleton {
     id: root
 
     readonly property string path: Quickshell.env("HOME") + "/.local/state/quickshell/states.json"
+    readonly property string defaultsPath: Quickshell.env("HOME") + "/.local/state/quickshell/defaults.json"
 
     property bool ready: false
+    // Block adapter writes until the file has been read once. Otherwise a
+    // reload/init can flush JsonAdapter defaults over the user's real prefs.
+    property bool allowWrites: false
 
     property alias twentyFourHourClock: adapter.twentyFourHourClock
     property alias workspaceCount: adapter.workspaceCount
@@ -29,6 +33,7 @@ Singleton {
     property alias showVolumeFace: adapter.showVolumeFace
     property alias showWorkspaceFace: adapter.showWorkspaceFace
     property alias showDoNotDisturb: adapter.showDoNotDisturb
+    property alias liveMediaVisualizer: adapter.liveMediaVisualizer
 
     function togglePinned(id) {
         const current = pinnedBatteries;
@@ -39,26 +44,66 @@ Singleton {
         if (ready || !file.loaded)
             return;
         ready = true;
+        // Defer writes one tick so the loaded JSON is fully applied first.
+        Qt.callLater(() => {
+            root.allowWrites = true;
+        });
+    }
+
+    // Copy defaults.json -> states.json (or write {} if defaults missing), then reload.
+    function seedFromDefaults() {
+        seed.running = false;
+        seed.running = true;
+    }
+
+    Process {
+        id: seed
+        running: false
+        command: ["sh", "-c",
+            "defaults=\"" + root.defaultsPath + "\"; " +
+            "states=\"" + root.path + "\"; " +
+            "mkdir -p \"$(dirname \"$states\")\"; " +
+            "if [ -f \"$defaults\" ]; then cp -f \"$defaults\" \"$states\"; " +
+            "else printf '{}\\n' > \"$states\"; fi"
+        ]
+        onExited: file.reload()
     }
 
     FileView {
         id: file
         path: root.path
         watchChanges: true
-        onFileChanged: reload()
-        onLoadedChanged: root.markReady()
-        onAdapterUpdated: if (loaded)
-            writeAdapter()
-        onLoadFailed: writeAdapter()
+        onFileChanged: {
+            // External edits only. Don't persist defaults mid-reload.
+            root.allowWrites = false;
+            reload();
+        }
+        onLoadedChanged: {
+            if (!loaded)
+                return;
+            if (!root.ready)
+                root.markReady();
+            else
+                Qt.callLater(() => {
+                    root.allowWrites = true;
+                });
+        }
+        onAdapterUpdated: {
+            if (loaded && root.allowWrites)
+                writeAdapter();
+        }
+        onLoadFailed: root.seedFromDefaults()
         Component.onCompleted: root.markReady()
 
+        // Keep these in sync with local/state/quickshell/defaults.json.
+        // Used only as an in-memory fallback before seed/load finishes.
         JsonAdapter {
             id: adapter
             property bool twentyFourHourClock: false
             property int workspaceCount: 5
             property int wallpaperCycleSeconds: 0
             property string wallpaperDirectory: "/home/ethannij/Pictures/wallpapers"
-            property string colorScheme: "light"
+            property string colorScheme: "dark"
             property bool gamemode: false
             property bool doNotDisturb: false
             property bool inhibitIdle: false
@@ -71,6 +116,7 @@ Singleton {
             property bool showVolumeFace: true
             property bool showWorkspaceFace: true
             property bool showDoNotDisturb: true
+            property bool liveMediaVisualizer: true
         }
     }
 }

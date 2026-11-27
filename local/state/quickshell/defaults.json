@@ -1,11 +1,20 @@
 {
-    "doNotDisturb": false,
-    "gamemode": false,
-    "gamma": 100,
-    "inhibitIdle": false,
-    "notificationListHeldClosed": false,
-    "oled": false,
-    "temperatureState": "off",
     "twentyFourHourClock": false,
-    "wallpaperCycleSeconds": 0
+    "workspaceCount": 5,
+    "wallpaperCycleSeconds": 0,
+    "wallpaperDirectory": "/home/ethannij/Pictures/wallpapers",
+    "colorScheme": "dark",
+    "gamemode": false,
+    "doNotDisturb": false,
+    "inhibitIdle": false,
+    "temperatureState": "auto",
+    "gamma": 100,
+    "notificationListHeldClosed": false,
+    "pinnedBatteries": [],
+    "pinBatteryOnAlert": true,
+    "batteryLowPercent": 25,
+    "showVolumeFace": true,
+    "showWorkspaceFace": true,
+    "showDoNotDisturb": true,
+    "liveMediaVisualizer": true
 }
