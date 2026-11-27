@@ -142,7 +142,7 @@ Item {
                             enabled: Config.animMs > 0
                             ColorAnimation {
                                 duration: Config.animMs
-                                easing.type: Easing[Config.animEasingOut]
+                                easing.type: Easing[Config.animEasingSmooth]
                             }
                         }
 

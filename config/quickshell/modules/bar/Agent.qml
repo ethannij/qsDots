@@ -220,7 +220,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
+                        easing.type: Easing[Config.animEasingSmooth]
                     }
                 }
             }
@@ -286,7 +286,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
+                        easing.type: Easing[Config.animEasingSmooth]
                     }
                 }
             }
@@ -313,7 +313,7 @@ PillShape {
                 Behavior on color {
                     ColorAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
+                        easing.type: Easing[Config.animEasingSmooth]
                     }
                 }
             }

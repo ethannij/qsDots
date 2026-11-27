@@ -6,16 +6,18 @@ import qs.theme
 Item {
     id: root
 
-    readonly property int maxHeight: 280
-    implicitHeight: list.count === 0 ? emptyLabel.implicitHeight + Config.spaceLg : Math.min(list.contentHeight, maxHeight)
+    readonly property int maxHeight: 360
+    readonly property int emptyHeight: emptyLabel.implicitHeight + Config.spaceLg * 2
+    implicitHeight: list.count === 0 ? emptyHeight : Math.min(list.contentHeight, maxHeight)
 
     ListView {
         id: list
         anchors.fill: parent
         model: Notifications.list
         clip: true
-        spacing: Config.spaceMd
+        spacing: Config.spaceSm
         boundsBehavior: Flickable.StopAtBounds
+        reuseItems: true
 
         delegate: NotificationCard {
             required property var modelData
@@ -31,6 +33,6 @@ Item {
         visible: list.count === 0
         text: "No notifications"
         font: StylizedFont.body
-        color: Colors.md3.on_surface_variant
+        color: Colors.role.muted
     }
 }

@@ -19,6 +19,22 @@ Item {
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
 
+    Behavior on backgroundColor {
+        enabled: Config.animMs > 0
+        ColorAnimation {
+            duration: Config.animMs
+            easing.type: Easing[Config.animEasingSmooth]
+        }
+    }
+
+    Behavior on iconColor {
+        enabled: Config.animMs > 0
+        ColorAnimation {
+            duration: Config.animMs
+            easing.type: Easing[Config.animEasingSmooth]
+        }
+    }
+
     Rectangle {
         id: background
         anchors.centerIn: parent
@@ -34,6 +50,5 @@ Item {
             size: root.size
             color: root.iconColor
         }
-
     }
 }

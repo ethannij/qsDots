@@ -20,7 +20,7 @@ PillShape {
         enabled: Config.animMs > 0
         ColorAnimation {
             duration: Config.animMs
-            easing.type: Easing[Config.animEasing]
+            easing.type: Easing[Config.animEasingSmooth]
         }
     }
 
@@ -34,7 +34,7 @@ PillShape {
             enabled: Config.animMs > 0
             ColorAnimation {
                 duration: Config.animMs
-                easing.type: Easing[Config.animEasing]
+                easing.type: Easing[Config.animEasingSmooth]
             }
         }
     }

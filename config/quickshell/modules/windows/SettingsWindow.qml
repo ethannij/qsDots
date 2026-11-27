@@ -79,14 +79,14 @@ Window {
                     Behavior on color {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
 
                     Behavior on borderColor {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
 
@@ -99,7 +99,7 @@ Window {
                         Behavior on color {
                             ColorAnimation {
                                 duration: Config.animMs
-                                easing.type: Easing[Config.animEasingOut]
+                                easing.type: Easing[Config.animEasingSmooth]
                             }
                         }
                     }

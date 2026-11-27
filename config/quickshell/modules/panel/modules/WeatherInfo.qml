@@ -26,7 +26,7 @@ Item {
           enabled: Config.animMs > 0
           ColorAnimation {
             duration: Config.animMs
-            easing.type: Easing[Config.animEasingInOut]
+            easing.type: Easing[Config.animEasingSmooth]
           }
         }
         

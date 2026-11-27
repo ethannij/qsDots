@@ -362,6 +362,7 @@ Item {
                             Behavior on color {
                                 ColorAnimation {
                                     duration: 140
+                                    easing.type: Easing[Config.animEasingSmooth]
                                 }
                             }
                         }

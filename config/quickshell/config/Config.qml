@@ -11,6 +11,11 @@ Singleton {
     readonly property string animEasingOut: "OutBack"
     readonly property string animEasingIn: "InBack"
     readonly property string animEasing: "InOutBack"
+    // Cubics for color / height / other non-overshoot motion. Prefer these for
+    // ColorAnimation — Back easings interpolate through invalid RGB values.
+    readonly property string animEasingSmooth: "InOutCubic"
+    readonly property string animEasingSmoothIn: "InCubic"
+    readonly property string animEasingSmoothOut: "OutCubic"
 
     // Spacing scale
     readonly property int spaceXs: 2

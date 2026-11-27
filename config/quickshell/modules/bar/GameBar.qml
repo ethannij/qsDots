@@ -98,14 +98,14 @@ PillShape {
                     Behavior on backgroundColor {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
 
                     Behavior on iconColor {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
 
@@ -161,7 +161,7 @@ PillShape {
                             Behavior on color {
                                 ColorAnimation {
                                     duration: Config.animMs
-                                    easing.type: Easing[Config.animEasingOut]
+                                    easing.type: Easing[Config.animEasingSmooth]
                                 }
                             }
                             
@@ -181,7 +181,7 @@ PillShape {
                         Behavior on color {
                             ColorAnimation {
                                 duration: Config.animMs
-                                easing.type: Easing[Config.animEasingOut]
+                                easing.type: Easing[Config.animEasingSmooth]
                             }
                         }
                     }

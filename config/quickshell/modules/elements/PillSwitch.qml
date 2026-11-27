@@ -24,7 +24,7 @@ Switch {
         Behavior on color {
             ColorAnimation {
                 duration: Config.animMs
-                easing.type: Easing[Config.animEasingOut]
+                easing.type: Easing[Config.animEasingSmooth]
             }
         }
     }
@@ -39,7 +39,7 @@ Switch {
         Behavior on color {
             ColorAnimation {
                 duration: Config.animMs
-                easing.type: Easing[Config.animEasingOut]
+                easing.type: Easing[Config.animEasingSmooth]
             }
         }
 

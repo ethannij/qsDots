@@ -45,18 +45,18 @@ Item {
         enabled: morphPill.ready && Config.animMs > 0
         NumberAnimation {
             duration: PillController.overlay !== "none" ? Config.animMs : Config.animMsClose
-            easing.type: PillController.overlay !== "none" ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+            easing.type: PillController.overlay !== "none" ? Easing[Config.animEasingSmoothOut] : Easing[Config.animEasingSmoothIn]
         }
     }
 
     property real hoverGrow: !morphPill.pillLock ? (hover.hovered && morph === 0 ? 8 : 0) : 0
 
     Behavior on hoverGrow {
-        enabled: morphPill.ready && Config.animMs > 0
+        // Only while resting — disable during morph so open doesn't wait on hover shrink.
+        enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
         NumberAnimation {
             duration: Config.animMs
-            //easing.type: Config.animEasingOut.type
-            easing.type: Easing[Config.animEasingOut]
+            easing.type: Easing[Config.animEasingSmoothOut]
         }
     }
 
@@ -132,7 +132,7 @@ Item {
     onLivePanelHChanged: if (PillController.overlay === "panel" && livePanelH > 0)
         travelH = livePanelH
 
-    readonly property real grow: panelTravel ? Math.max(morph - 0.22, 0) / 0.78 : morph
+    readonly property real grow: morph
 
     width: restW + hoverGrow * (1 - morph) + (Config.controlPanelW - restW) * grow
     height: restH + hoverGrow * (1 - morph) + (openH - restH) * grow
@@ -142,8 +142,8 @@ Item {
     clip: false
 
     readonly property real clockShift: width > 0 && clock.width > 0 ? clock.mapToItem(morphPill, clock.width / 2, 0).x - width / 2 : 0
-    readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.35 ? 0 : 1 - morph / 0.35
-    readonly property real panelOpacity: morph <= 0.4 ? 0 : Math.min((morph - 0.4) / 0.6, 1)
+    readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.18 ? 0 : 1 - morph / 0.18
+    readonly property real panelOpacity: Math.min(morph / 0.45, 1)
 
     Component.onCompleted: {
         snapHostOpacity();
@@ -269,7 +269,7 @@ Item {
             enabled: !Gamemode.active && !morphPill.agentOnly && !morphPill.gamebarOnly
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: Easing[Config.animEasing]
+                easing.type: Easing[Config.animEasingSmooth]
             }
         }
 
@@ -287,17 +287,18 @@ Item {
     Row {
         id: restContent
         enabled: PillController.overlay === "none"
-        opacity: morphPill.panelTravel ? 0 : morphPill.restOpacity
+        opacity: morphPill.restOpacity
         visible: true
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: Config.spaceSm
         layer.enabled: restContent.opacity > 0 && restContent.opacity < 1
 
         Behavior on opacity {
-            enabled: morphPill.fadeContent && Config.animMs > 0
+            // Only the post-close restore fade. During morph, opacity tracks morph directly.
+            enabled: morphPill.fadeContent && morphPill.morph === 0 && Config.animMs > 0
             NumberAnimation {
                 duration: Config.animMs
-                easing.type: morphPill.panelTravel ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
+                easing.type: Easing[Config.animEasingSmoothOut]
             }
         }
 
@@ -435,7 +436,7 @@ Item {
                     Behavior on color {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
                 }
@@ -475,7 +476,7 @@ Item {
                     Behavior on color {
                         ColorAnimation {
                             duration: Config.animMs
-                            easing.type: Easing[Config.animEasingOut]
+                            easing.type: Easing[Config.animEasingSmooth]
                         }
                     }
 

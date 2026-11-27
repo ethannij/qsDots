@@ -159,22 +159,6 @@ Item {
                 source: Audio.icon
                 radius: width
 
-                Behavior on iconColor {
-                    enabled: Config.animMs > 0
-                    ColorAnimation {
-                        duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
-                    }
-                }
-
-                Behavior on backgroundColor {
-                    enabled: Config.animMs > 0
-                    ColorAnimation {
-                        duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
-                    }
-                }
-
                 HoverHandler {
                     id: volumeSourceHover
                     cursorShape: Qt.PointingHandCursor
@@ -206,22 +190,6 @@ Item {
                 iconColor: mouseIcon.containsMouse ? Colors.md3.primary : Colors.md3.on_surface
                 source: Hyprsunset.activeTemperatureIconURL
                 radius: width
-
-                Behavior on iconColor {
-                    enabled: Config.animMs > 0
-                    ColorAnimation {
-                        duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
-                    }
-                }
-
-                Behavior on backgroundColor {
-                    enabled: Config.animMs > 0
-                    ColorAnimation {
-                        duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
-                    }
-                }
 
                 MouseArea {
                     id: mouseIcon
@@ -370,8 +338,12 @@ Item {
                 notificationsOpen = Notifications.count > 0 && !holdClosed;
                 listStateReady = true;
             }
-            readonly property real headerHeight: Math.max(notifLabel.implicitHeight, notifActions.implicitHeight)
-            readonly property real sectionHeight: headerHeight + Config.spaceSm + notificationList.implicitHeight
+
+            readonly property real headerHeight: notifHeader.height
+            readonly property real listGap: Config.spaceSm
+            readonly property real wellPad: Config.spaceSm
+            readonly property real openListHeight: notificationList.implicitHeight + wellPad * 2
+            readonly property real sectionHeight: headerHeight + listGap + openListHeight
             property real shownHeight: notificationsOpen ? sectionHeight : headerHeight
 
             function syncOpen() {
@@ -386,11 +358,19 @@ Item {
                     notificationsOpen = true;
             }
 
+            function toggleOpen() {
+                if (Notifications.count === 0)
+                    return;
+                notificationsOpen = !notificationsOpen;
+                holdClosed = !notificationsOpen;
+            }
+
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             Layout.preferredHeight: shownHeight
             Layout.maximumHeight: shownHeight
-            implicitHeight: sectionHeight
+            Layout.minimumHeight: shownHeight
+            implicitHeight: shownHeight
             clip: true
 
             Connections {
@@ -412,116 +392,141 @@ Item {
             onHoldClosedChanged: if (listStateReady)
                 States.notificationListHeldClosed = holdClosed
 
+            // InOutBack overshoots and makes MorphPill travelH jump; keep this linear-ish.
             Behavior on shownHeight {
                 enabled: Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMs
-                    easing.type: Easing[Config.animEasing]
+                    easing.type: Easing[Config.animEasingSmooth]
                 }
             }
 
-            Text {
-                id: notifLabel
+            Item {
+                id: notifHeader
                 anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.top: parent.top
-                text: "Notifications"
-                font: StylizedFont.tooltip
-                color: Colors.md3.on_surface_variant
-            }
-
-            Text {
-                id: notifCount
-                anchors.left: notifLabel.right
-                anchors.leftMargin: Config.spaceSm
-                anchors.verticalCenter: notifLabel.verticalCenter
-                visible: !notificationContainer.notificationsOpen
-                text: Notifications.count
-                font: StylizedFont.tooltip
-                color: Colors.md3.tertiary
-            }
-
-            Row {
-                id: notifActions
-                anchors.right: parent.right
-                anchors.verticalCenter: notifLabel.verticalCenter
-                spacing: Config.spaceMd
+                height: Math.max(notifLabel.implicitHeight, notifActions.implicitHeight)
 
                 Text {
-                    id: dndButton
-                    text: "zzz"
+                    id: notifLabel
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Notifications"
                     font: StylizedFont.tooltip
-                    color: Notifications.doNotDisturb || dndHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
-
-                    HoverHandler {
-                        id: dndHover
-                        cursorShape: Qt.PointingHandCursor
-                    }
-
-                    TapHandler {
-                        onTapped: Notifications.toggleDoNotDisturb()
-                    }
+                    color: Colors.role.muted
                 }
 
                 Text {
-                    id: clearNotifs
-                    visible: Notifications.count > 0
-                    text: "Clear"
+                    id: notifCount
+                    anchors.left: notifLabel.right
+                    anchors.leftMargin: Config.spaceSm
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: Notifications.count > 0 && !notificationContainer.notificationsOpen
+                    text: Notifications.count
                     font: StylizedFont.tooltip
-                    color: clearNotifsHover.hovered ? Colors.md3.primary : Colors.md3.on_surface_variant
+                    color: Colors.md3.tertiary
+                }
 
-                    HoverHandler {
-                        id: clearNotifsHover
-                        cursorShape: Qt.PointingHandCursor
+                Row {
+                    id: notifActions
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: Config.spaceSm
+
+                    Text {
+                        id: clearNotifs
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: Notifications.count > 0
+                        text: "Clear"
+                        font: StylizedFont.tooltip
+                        color: clearNotifsHover.hovered ? Colors.role.accent : Colors.role.muted
+
+                        HoverHandler {
+                            id: clearNotifsHover
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
+                        TapHandler {
+                            onTapped: Notifications.clearAll()
+                        }
                     }
 
-                    TapHandler {
-                        onTapped: Notifications.clearAll()
+                    IconButton {
+                        id: dndButton
+                        anchors.verticalCenter: parent.verticalCenter
+                        size: Config.barIconSize
+                        source: Qt.resolvedUrl(Quickshell.shellPath(Notifications.doNotDisturb ? "modules/img/widgets/notifications/notification_paused.svg" : "modules/img/widgets/notifications/notification.svg"))
+                        iconColor: Notifications.doNotDisturb || dndHover.hovered ? Colors.role.accent : Colors.role.muted
+                        backgroundColor: dndHover.hovered || Notifications.doNotDisturb ? Colors.role.hover : "transparent"
+
+                        HoverHandler {
+                            id: dndHover
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
+                        TapHandler {
+                            onTapped: Notifications.toggleDoNotDisturb()
+                        }
+                    }
+
+                    IconButton {
+                        id: notificationToggleIcon
+                        anchors.verticalCenter: parent.verticalCenter
+                        size: Config.barIconSize * 0.75
+                        source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bar/arrow_down.svg"))
+                        iconColor: notificationToggleIconHover.hovered ? Colors.role.accent : Colors.role.muted
+                        backgroundColor: notificationToggleIconHover.hovered ? Colors.role.hover : "transparent"
+                        radius: width
+                        rotation: notificationContainer.notificationsOpen ? 180 : 0
+                        opacity: Notifications.count > 0 ? 1 : 0.35
+
+                        Behavior on rotation {
+                            enabled: Config.animMs > 0
+                            NumberAnimation {
+                                duration: Config.animMs
+                                easing.type: Easing[Config.animEasingSmooth]
+                            }
+                        }
+
+                        HoverHandler {
+                            id: notificationToggleIconHover
+                            cursorShape: Qt.PointingHandCursor
+                            enabled: Notifications.count > 0
+                        }
+
+                        TapHandler {
+                            enabled: Notifications.count > 0
+                            gesturePolicy: TapHandler.ReleaseWithinBounds
+                            onTapped: notificationContainer.toggleOpen()
+                        }
                     }
                 }
             }
 
-            NotificationList {
-                id: notificationList
-                anchors.top: notifLabel.bottom
-                anchors.topMargin: Config.spaceSm
+            Rectangle {
+                id: notificationWell
+                anchors.top: notifHeader.bottom
+                anchors.topMargin: notificationContainer.listGap
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: implicitHeight
-            }
-        }
-        Item {
-            id: notificationToggle
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-            Layout.preferredHeight: notificationToggleIcon.implicitHeight / 2
+                height: notificationContainer.openListHeight
+                radius: 12
+                color: Colors.role.raised
+                opacity: notificationContainer.notificationsOpen ? 1 : 0
 
-            IconButton {
-                id: notificationToggleIcon
-                anchors.centerIn: parent
-                source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/bar/arrow_down.svg"))
-                iconColor: notificationToggleIconHover.hovered ? Colors.md3.primary : Colors.md3.on_surface
-                backgroundColor: "transparent"
-                radius: width
-                rotation: notificationContainer.notificationsOpen ? 180 : 0
-
-                Behavior on rotation {
+                Behavior on opacity {
                     enabled: Config.animMs > 0
                     NumberAnimation {
                         duration: Config.animMs
-                        easing.type: Easing[Config.animEasing]
+                        easing.type: Easing[Config.animEasingSmooth]
                     }
                 }
 
-                HoverHandler {
-                    id: notificationToggleIconHover
-                    cursorShape: Qt.PointingHandCursor
-                }
-                TapHandler {
-                    gesturePolicy: TapHandler.ReleaseWithinBounds
-                    onTapped: {
-                        notificationContainer.notificationsOpen = !notificationContainer.notificationsOpen;
-                        notificationContainer.holdClosed = !notificationContainer.notificationsOpen;
-                    }
+                NotificationList {
+                    id: notificationList
+                    anchors.fill: parent
+                    anchors.margins: notificationContainer.wellPad
                 }
             }
         }
