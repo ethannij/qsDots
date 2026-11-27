@@ -23,6 +23,8 @@ Item {
     }
 
     function show() {
+        if (!States.showWorkspaceFace)
+            return;
         PillController.showFace("workspaces");
     }
 }

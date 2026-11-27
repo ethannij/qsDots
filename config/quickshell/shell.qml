@@ -41,11 +41,20 @@ ShellRoot {
             anchors.fill: parent
             color: Colors.md3.surface
 
-            Text {
-                text: States.colorScheme
-                font: StylizedFont.title
-                color: Colors.md3.on_surface
-                anchors.centerIn: parent
+            property list<var> shownDevices: [Power.devices_unfiltered]
+
+             Column {
+                    spacing: Config.spaceSm
+                 Repeater {
+                model: rect.shownDevices
+               
+                    Text {
+                        text: modelData.percentage
+                        //text: modelData?.charging ? "Charging" : modelData?.percentage + "%"
+                        font: StylizedFont.title
+                        color: Colors.md3.on_surface
+                    }
+                }
             }
         }
     }

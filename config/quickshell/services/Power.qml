@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.UPower
+import qs.services
 import qs.theme
 pragma Singleton
 
@@ -12,6 +13,73 @@ Singleton {
     readonly property var laptopBattery: devices_unfiltered.find(d => d.isLaptopBattery === true) // Specify laptop battery specifically for module, will ALWAYS be first in list
     // Icon to add if non-generic device is charging
     property url chargeIcon: Qt.resolvedUrl(Quickshell.shellPath("modules/img/widgets/battery/charging/charging.svg"))
+
+    // True once a device has already been auto-pinned for this charging or low episode.
+    property var latchedAlerts: ({})
+
+    readonly property var deviceAlerts: {
+        const alerts = {};
+        const all = [];
+        if (laptopBattery)
+            all.push(laptopBattery);
+        for (const device of devices)
+            all.push(device);
+        for (const device of all) {
+            if (!device?.nativePath)
+                continue;
+            const level = Math.round(device.percentage * 100);
+            alerts[device.nativePath] = device.state === UPowerDeviceState.Charging || level < States.batteryLowPercent;
+        }
+        return alerts;
+    }
+
+    onDeviceAlertsChanged: applyAutoPin()
+
+    Connections {
+        target: States
+        function onReadyChanged() {
+            if (States.ready)
+                root.applyAutoPin();
+        }
+        function onPinBatteryOnAlertChanged() {
+            root.applyAutoPin();
+        }
+        function onBatteryLowPercentChanged() {
+            root.applyAutoPin();
+        }
+    }
+
+    function applyAutoPin() {
+        if (!States.ready)
+            return;
+        if (!States.pinBatteryOnAlert) {
+            latchedAlerts = {};
+            return;
+        }
+        const alerts = deviceAlerts;
+        const previous = latchedAlerts;
+        let next = States.pinnedBatteries;
+        let changed = false;
+        for (const id of Object.keys(alerts)) {
+            if (alerts[id] && !previous[id] && next.indexOf(id) === -1) {
+                next = next.concat([id]);
+                changed = true;
+            }
+        }
+        latchedAlerts = alerts;
+        if (changed)
+            States.pinnedBatteries = next;
+    }
+
+    readonly property var shownDevices: {
+        const all = [];
+        if (laptopBattery)
+            all.push(laptopBattery);
+        for (const device of devices)
+            all.push(device);
+
+        return all.filter(device => States.pinnedBatteries.indexOf(device.nativePath) !== -1);
+    }
 
     // Determine icon for device
     function deviceIcon(devices) {
@@ -101,5 +169,13 @@ Singleton {
             return Colors.md3.tertiary;
 
         return Colors.md3.on_surface_variant;
+    }
+
+    function deviceLabel(device) {
+        if (device.isLaptopBattery)
+            return "Laptop"
+        if (device.model)
+            return device.model
+        return UPowerDeviceType.toString(device.type)
     }
 }

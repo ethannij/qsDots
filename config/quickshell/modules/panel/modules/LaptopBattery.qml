@@ -13,13 +13,16 @@ Item {
     implicitWidth: icon.implicitWidth + text.implicitWidth
     implicitHeight: Math.max(icon.implicitHeight, text.implicitHeight)
 
+    readonly property bool pinned: States.pinnedBatteries.indexOf(laptopBattery.nativePath) !== -1
+
     PillShape {
         id: pill
-        interactive: false
+        interactive: true
         anchors.centerIn: parent
         width: parent.implicitWidth + Config.controlPanelStatsSpacing
         height: parent.implicitHeight + Config.controlPanelStatsSpacing 
-        color: Colors.md3.surface_container_low
+        color: hovered ? Colors.md3.surface_container_low : root.pinned ? Colors.md3.surface_container_low : "transparent"
+        borderColor: root.pinned ? Colors.md3.primary : "transparent"
     
     Row {
 
@@ -32,7 +35,6 @@ Item {
 
         Text {
             id: text
-
             text: Math.round(laptopBattery?.percentage * 100) + "%"
             font: StylizedFont.body
             color: Power.batteryColor(laptopBattery)
@@ -40,6 +42,17 @@ Item {
         }
 
     }
+    onTapped: States.togglePinned(root.laptopBattery.nativePath)
+    }
+
+    HoverTip {
+        id: hoverTip
+        hoverText: Power.deviceLabel(root.laptopBattery)
+        shown: pill.hovered
+        anchors.bottom: pill.top
+        anchors.horizontalCenter: pill.horizontalCenter
+        anchors.bottomMargin: Config.spaceSm
+        z: 10
     }
 
 }

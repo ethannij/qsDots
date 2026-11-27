@@ -23,6 +23,17 @@ Singleton {
     property alias temperatureState: adapter.temperatureState
     property alias gamma: adapter.gamma
     property alias notificationListHeldClosed: adapter.notificationListHeldClosed
+    property alias pinnedBatteries: adapter.pinnedBatteries
+    property alias pinBatteryOnAlert: adapter.pinBatteryOnAlert
+    property alias batteryLowPercent: adapter.batteryLowPercent
+    property alias showVolumeFace: adapter.showVolumeFace
+    property alias showWorkspaceFace: adapter.showWorkspaceFace
+    property alias showDoNotDisturb: adapter.showDoNotDisturb
+
+    function togglePinned(id) {
+        const current = pinnedBatteries;
+        pinnedBatteries = current.indexOf(id) === -1 ? current.concat([id]) : current.filter(x => x !== id);
+    }
 
     function markReady() {
         if (ready || !file.loaded)
@@ -38,6 +49,7 @@ Singleton {
         onLoadedChanged: root.markReady()
         onAdapterUpdated: if (loaded)
             writeAdapter()
+        onLoadFailed: writeAdapter()
         Component.onCompleted: root.markReady()
 
         JsonAdapter {
@@ -53,6 +65,12 @@ Singleton {
             property string temperatureState: "auto"
             property int gamma: 100
             property bool notificationListHeldClosed: false
+            property list<string> pinnedBatteries: []
+            property bool pinBatteryOnAlert: true
+            property int batteryLowPercent: 25
+            property bool showVolumeFace: true
+            property bool showWorkspaceFace: true
+            property bool showDoNotDisturb: true
         }
     }
 }

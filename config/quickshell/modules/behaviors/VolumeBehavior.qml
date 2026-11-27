@@ -34,6 +34,8 @@ Item {
 
 
     function show() {
+        if (!States.showVolumeFace)
+            return;
         PillController.showFace("volume");
     }
 }

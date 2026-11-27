@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import qs.services
 
 // Controller api for entire pill
 Singleton {
@@ -81,6 +82,9 @@ Singleton {
             return;
 
         if (faceHeld && name !== "gamebar" && name !== "agent")
+            return;
+
+        if (name === "workspaces" && !States.showWorkspaceFace)
             return;
 
         if (name === "clock") {

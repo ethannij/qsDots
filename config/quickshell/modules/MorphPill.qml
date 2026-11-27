@@ -277,7 +277,7 @@ Item {
             id: tap
             onTapped: {
                 enabled: morphPill.ready;
-                if (PillController.overlay !== "none")
+                if (doNotDisturbHover.hovered || PillController.overlay !== "none")
                     return;
                 PillController.showPanel();
             }
@@ -305,6 +305,39 @@ Item {
             const shellH = morphPill.panelTravel ? morphPill.restH + morphPill.hoverGrow * (1 - morphPill.morph) : morphPill.height;
             return (shellH - height) / 2;
         }
+
+    Item {
+    id: batterySlot
+    width: pinnedBatteries.shown ? pinnedBatteries.implicitWidth : 0
+    height: pinnedBatteries.implicitHeight
+    anchors.verticalCenter: parent.verticalCenter
+    clip: width < pinnedBatteries.implicitWidth
+    visible: width > 0 || opacity > 0
+    opacity: width > 0 ? 1 : 0
+
+    Behavior on width {
+        enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+        NumberAnimation {
+            duration: Config.animMsClose
+            easing.type: Easing[Config.animEasingIn]
+        }
+    }
+
+    Behavior on opacity {
+        enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+        NumberAnimation {
+            duration: Config.animMsClose
+            easing.type: Easing[Config.animEasingIn]
+        }
+    }
+
+    PinnedBatteries {
+        id: pinnedBatteries
+        readonly property bool shown: Power.shownDevices.length > 0
+        visible: shown || opacity > 0
+        opacity: shown ? 1 : 0
+    }
+}
 
         Item {
             id: mediaSlot
@@ -335,6 +368,7 @@ Item {
                 }
             }
 
+
             MediaChip {
                 id: mediaChip
                 readonly property bool shown: Media.active && !Media.isIdle && (!morphPill.gamebarOnly && !morphPill.agentOnly) && !PillController.pillLock
@@ -362,6 +396,49 @@ Item {
                 width: !morphPill.gamebarOnly && !morphPill.agentOnly ? clock.implicitWidth : 0
                 height: clock.implicitHeight
                 anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Item {
+                id: doNotDisturbSlot
+                property bool shown: Notifications.doNotDisturb && States.showDoNotDisturb && !gamebarOnly && !agentOnly && !PillController.pillLock
+                width: shown ? doNotDisturbChip.implicitWidth + Config.spaceSm : 0
+                height: doNotDisturbChip.implicitHeight
+                anchors.verticalCenter: parent.verticalCenter
+                clip: true
+                visible: shown || opacity > 0
+                opacity: shown ? 1 : 0
+
+                Behavior on width {
+                    enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingOut]
+                    }
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Config.animMs
+                        easing.type: Easing[Config.animEasingOut]
+                    }
+                }
+
+                DoNotDisturbChip {
+                    id: doNotDisturbChip
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: doNotDisturbHover.hovered ? Colors.md3.primary : Colors.md3.tertiary
+
+                    HoverHandler {
+                        id: doNotDisturbHover
+                    }
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Config.animMs
+                            easing.type: Easing[Config.animEasingOut]
+                        }
+                    }
+                }
             }
 
             Item {

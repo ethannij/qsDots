@@ -349,10 +349,156 @@ Window {
                     visible: root.activeTab === "Behavior"
                     anchors.margins: Config.spaceMd
 
-                    Text {
-                        text: "Behavior"
-                        font: StylizedFont.title
-                        color: Colors.md3.on_surface
+                    Column {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: Config.spaceXl
+
+                        Item {
+                            id: batterySettings
+                            implicitWidth: behaviorPage.width
+                            implicitHeight: batteryTitle.height + batteryColumn.height
+
+                            Text {
+                                id: batteryTitle
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: "Battery"
+                                font: StylizedFont.title
+                                color: Colors.md3.on_surface
+                            }
+
+                            Column {
+                                id: batteryColumn
+                                spacing: Config.spaceMd
+                                anchors.top: batteryTitle.bottom
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show when charging or low"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.pinBatteryOnAlert
+                                        onCheckedChanged: States.pinBatteryOnAlert = checked
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        id: batteryLowText
+                                        text: "Low battery percent"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    UserInput {
+                                        anchors.verticalCenter: batteryLowText.verticalCenter
+                                        text: States.batteryLowPercent
+                                        intOnly: true
+                                        onAccepted: {
+                                            const n = parseInt(text, 10);
+                                            if (Number.isFinite(n) && n > 0 && n < 100)
+                                                States.batteryLowPercent = n;
+                                            else
+                                                States.batteryLowPercent = 25;
+                                            focus = false;
+                                        }
+
+                                        Keys.onEscapePressed: {
+                                            text = States.batteryLowPercent;
+                                            focus = false;
+                                        }
+
+                                        Keys.onEnterPressed: {
+                                            accepted();
+                                            focus = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Item {
+                            id: pillSettings
+                            implicitWidth: behaviorPage.width
+                            implicitHeight: pillTitle.height + pillColumn.height
+
+                            Text {
+                                id: pillTitle
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: "Pill"
+                                font: StylizedFont.title
+                                color: Colors.md3.on_surface
+                            }
+
+                            Column {
+                                id: pillColumn
+                                spacing: Config.spaceMd
+                                anchors.top: pillTitle.bottom
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show volume changes"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        checked: States.showVolumeFace
+                                        onCheckedChanged: States.showVolumeFace = checked
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show workspace changes"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        id: workspaceSwitch
+                                        onClicked: States.showWorkspaceFace = !States.showWorkspaceFace
+
+                                        Binding {
+                                            target: workspaceSwitch
+                                            property: "checked"
+                                            value: States.showWorkspaceFace
+                                        }
+                                    }
+                                }
+
+                                Row {
+                                    spacing: Config.spaceMd
+
+                                    Text {
+                                        text: "Show do not disturb"
+                                        font: StylizedFont.bold
+                                        color: Colors.md3.on_surface
+                                    }
+
+                                    PillSwitch {
+                                        id: doNotDisturbSwitch
+                                        onClicked: States.showDoNotDisturb = !States.showDoNotDisturb
+
+                                        Binding {
+                                            target: doNotDisturbSwitch
+                                            property: "checked"
+                                            value: States.showDoNotDisturb
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 Item {
