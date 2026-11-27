@@ -45,9 +45,7 @@ Singleton {
         }
     }
 
-    onColorSchemeChanged: {
-        Wallpapers.reapply();
-    }
+    onColorSchemeChanged: Wallpapers.reapply()
 
     function setScheme(scheme) {
         States.colorScheme = scheme;

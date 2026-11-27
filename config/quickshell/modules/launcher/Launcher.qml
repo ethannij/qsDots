@@ -6,6 +6,7 @@ import QtQuick.Controls
 import qs.services
 import qs.config
 import qs.theme
+import qs.modules.elements
 
 Item {
     id: launcher
@@ -41,9 +42,10 @@ Item {
         spacing: Config.spaceSm
 
         RowLayout {
-            IconImage {
-                source: Qt.resolvedUrl("../img/launcher/search.svg")
-                implicitSize: Config.iconSize
+            ColorizedIcon {
+                source: Qt.resolvedUrl(Quickshell.shellPath("modules/img/launcher/search.svg"))
+                color: Colors.md3.on_surface
+                size: Config.iconSize
             }
 
             TextField {

@@ -64,7 +64,7 @@ Singleton {
         if (colorScheme === "oled")
             cmd.push("--import-json", Quickshell.env("HOME") + "/.config/matugen/oled.json");
         else if (colorScheme === "light")
-            cmd.push("--mode", "light");
+            cmd.push("--mode", "light", "--type", "scheme-neutral", "--contrast", "1");
         cmd.push("image", imagePath);
         return cmd;
     }
