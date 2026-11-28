@@ -70,6 +70,14 @@ Item {
     readonly property bool panelTravel: travelOverlay === "panel"
     // Stays on through the close so the row can fade back in after the shell is still.
     property bool fadeContent: false
+    property bool chromeSettled: false
+
+    function syncRestSize() {
+        if (morph !== 0)
+            return;
+        restW = liveRestW;
+        restH = liveRestH;
+    }
 
     onLiveRestWChanged: if (morph === 0)
         restW = liveRestW
@@ -78,8 +86,7 @@ Item {
         restH = liveRestH
 
     onMorphChanged: if (morph === 0) {
-        restW = liveRestW;
-        restH = liveRestH;
+        syncRestSize();
         const returning = travelOverlay === "panel";
         travelOverlay = "none";
         if (returning)
@@ -145,10 +152,20 @@ Item {
     readonly property real restOpacity: morph <= 0 ? 1 : morph >= 0.18 ? 0 : 1 - morph / 0.18
     readonly property real panelOpacity: Math.min(morph / 0.45, 1)
 
+    Timer {
+        id: chromeSettleTimer
+        interval: 1
+        onTriggered: {
+            morphPill.syncRestSize();
+            morphPill.chromeSettled = true;
+        }
+    }
+
     Component.onCompleted: {
         snapHostOpacity();
-        restW = liveRestW;
-        restH = liveRestH;
+        chromeSettled = false;
+        syncRestSize();
+        chromeSettleTimer.restart();
     }
 
     Connections {
@@ -326,18 +343,18 @@ Item {
             opacity: width > 0 ? 1 : 0
 
             Behavior on width {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing[Config.animEasingIn]
+                    easing.type: Easing[Config.animEasingSmooth]
                 }
             }
 
             Behavior on opacity {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing[Config.animEasingIn]
+                    easing.type: Easing[Config.animEasingSmooth]
                 }
             }
 
@@ -365,18 +382,18 @@ Item {
             opacity: width > 0 ? 1 : 0
 
             Behavior on width {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing[Config.animEasingIn]
+                    easing.type: Easing[Config.animEasingSmooth]
                 }
             }
 
             Behavior on opacity {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: Config.animMsClose
-                    easing.type: Easing[Config.animEasingIn]
+                    easing.type: Easing[Config.animEasingSmooth]
                 }
             }
 
@@ -403,18 +420,18 @@ Item {
             opacity: shown ? 1 : 0
 
             Behavior on width {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: mediaSlot.shown ? Config.animMsClose : Config.animMs
-                    easing.type: mediaSlot.shown ? Easing[Config.animEasingIn] : Easing[Config.animEasingOut]
+                    easing.type: mediaSlot.shown ? Easing[Config.animEasingSmoothIn] : Easing[Config.animEasingSmoothOut]
                 }
             }
 
             Behavior on opacity {
-                enabled: morphPill.ready && morphPill.morph === 0 && Config.animMs > 0
+                enabled: morphPill.ready && morphPill.chromeSettled && morphPill.morph === 0 && Config.animMs > 0
                 NumberAnimation {
                     duration: mediaSlot.shown ? Config.animMs : Config.animMsClose
-                    easing.type: mediaSlot.shown ? Easing[Config.animEasingOut] : Easing[Config.animEasingIn]
+                    easing.type: mediaSlot.shown ? Easing[Config.animEasingSmoothOut] : Easing[Config.animEasingSmoothIn]
                 }
             }
 

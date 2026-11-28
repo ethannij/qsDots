@@ -11,6 +11,13 @@ Item {
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
 
+    // Percent capped to 99% to avoid having to reserve space for a 3rd digit and mess up spacing.
+    TextMetrics {
+        id: percentMetrics
+        font: StylizedFont.body
+        text: "99%"
+    }
+
     Row {
         id: row
         spacing: Config.spaceLg
@@ -48,6 +55,7 @@ Item {
                         font: StylizedFont.body
                         color: hover.hovered ? Colors.md3.primary : chip.accent
                         anchors.verticalCenter: parent.verticalCenter
+                        width: Math.max(percentMetrics.width, contentWidth)
                     }
                 }
 

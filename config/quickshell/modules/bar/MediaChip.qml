@@ -9,6 +9,7 @@ PillShape {
     id: root
 
     property bool expanded: false
+    readonly property real waveWidth: wave.width
     cursorShape: Qt.ArrowCursor
 
     onVisibleChanged: {
@@ -71,7 +72,6 @@ PillShape {
                         id: bar
                         required property int index
                         width: wave.barWidth
-                        // Paused: height == width -> circle. Playing: grow toward full height.
                         height: wave.barWidth + bar.level * (wave.height - wave.barWidth)
                         radius: height / 2
                         x: index * (wave.barWidth + wave.barSpacing)
@@ -93,9 +93,11 @@ PillShape {
                             return 0.35 + bounce * 0.65;
                         }
 
+
                         Behavior on level {
+                            enabled: !States.liveMediaVisualizer
                             NumberAnimation {
-                                duration: States.liveMediaVisualizer ? 80 : 100
+                                duration: 100
                                 easing.type: Easing.OutCubic
                             }
                         }

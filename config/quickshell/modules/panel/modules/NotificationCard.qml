@@ -125,7 +125,6 @@ Item {
                         }
 
                         TapHandler {
-                            gesturePolicy: TapHandler.ReleaseWithinBounds
                             onTapped: {
                                 if (root.notification)
                                     root.notification.dismiss();

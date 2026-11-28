@@ -49,9 +49,14 @@ Singleton {
     readonly property bool memDetail: States.sysUsageDetail.indexOf("mem") !== -1
     readonly property bool gpuDetail: States.sysUsageDetail.indexOf("gpu") !== -1
 
-    readonly property string cpuText: cpuDetail ? formatTemp(cpuTemp) : cpuUsage + "%"
-    readonly property string memText: memDetail ? formatMemDetail() : memUsage + "%"
-    readonly property string gpuText: gpuDetail ? formatTemp(gpuTemp) : gpuUsage + "%"
+    readonly property string cpuText: cpuDetail ? formatTemp(cpuTemp) : formatPercent(cpuUsage)
+    readonly property string memText: memDetail ? formatMemDetail() : formatPercent(memUsage)
+    readonly property string gpuText: gpuDetail ? formatTemp(gpuTemp) : formatPercent(gpuUsage)
+
+    // Keep bar chips at most 3 characters ("99%") so the pill width stays put.
+    function formatPercent(n) {
+        return Math.min(99, Math.max(0, n | 0)) + "%";
+    }
 
     function formatMemDetail() {
         const used = Math.round(root.memUsedKiB / 1024 / 1024);
