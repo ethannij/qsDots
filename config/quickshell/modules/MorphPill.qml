@@ -361,7 +361,7 @@ Item {
             PinnedSysUsage {
                 id: pinnedSysUsage
                 anchors.verticalCenter: parent.verticalCenter
-                readonly property bool shown: SystemStats.shownStats.length > 0
+                readonly property bool shown: SystemStats.shownStats.length > 0 && !morphPill.gamebarOnly && !morphPill.agentOnly && !PillController.pillLock
                 visible: shown || opacity > 0
                 opacity: shown ? 1 : 0
             }
@@ -400,7 +400,7 @@ Item {
             PinnedBatteries {
                 id: pinnedBatteries
                 anchors.verticalCenter: parent.verticalCenter
-                readonly property bool shown: Power.shownDevices.length > 0
+                readonly property bool shown: Power.shownDevices.length > 0 && !morphPill.gamebarOnly && !morphPill.agentOnly && !PillController.pillLock
                 visible: shown || opacity > 0
                 opacity: shown ? 1 : 0
             }

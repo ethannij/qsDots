@@ -49,7 +49,9 @@ PillShape {
                 readonly property int barWidth: 3
                 readonly property int barCount: 11
                 readonly property real barSpacing: (width - barCount * barWidth) / (barCount - 1)
-                property int step: 0
+                // Continuous phase for the canned wave. Advanced on a low-rate
+                // timer so motion stays smooth without per-vsync Behaviors.
+                property real phase: 0
 
                 Binding {
                     target: Cava
@@ -57,12 +59,12 @@ PillShape {
                     value: wave.barCount
                 }
 
-                // Old canned bounce when live cava is disabled.
+                // Canned 20fps animation, sines themselves are continuous.
                 Timer {
-                    interval: 120
+                    interval: 50
                     running: !States.liveMediaVisualizer && Media.isPlaying && root.visible && root.opacity > 0
                     repeat: true
-                    onTriggered: wave.step = (wave.step + 1) % 8
+                    onTriggered: wave.phase += 0.28
                 }
 
                 Repeater {
@@ -73,14 +75,15 @@ PillShape {
                         required property int index
                         width: wave.barWidth
                         height: wave.barWidth + bar.level * (wave.height - wave.barWidth)
-                        radius: height / 2
+                        radius: wave.barWidth / 2
                         x: index * (wave.barWidth + wave.barSpacing)
                         y: (wave.height - height) / 2
                         color: titleHover.hovered ? Colors.role.accent : Colors.md3.secondary
                         antialiasing: true
                         smooth: true
 
-                        // 0 = dot. 1 = full bar.
+                        // 0 = dot. 1 = full bar. No Behavior — both live and
+                        // canned snap to their source rate (cava / timer).
                         property real level: {
                             if (!Media.isPlaying)
                                 return 0;
@@ -88,18 +91,8 @@ PillShape {
                                 const v = Cava.levels[index];
                                 return (v === undefined || v === null) ? 0 : v;
                             }
-                            const n = (wave.step + index) % 8;
-                            const bounce = (n < 4 ? n : 8 - n) / 4;
-                            return 0.35 + bounce * 0.65;
-                        }
-
-
-                        Behavior on level {
-                            enabled: !States.liveMediaVisualizer
-                            NumberAnimation {
-                                duration: 100
-                                easing.type: Easing.OutCubic
-                            }
+                            const t = wave.phase + index * 0.55;
+                            return 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t));
                         }
                     }
                 }
